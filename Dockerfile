@@ -1,30 +1,11 @@
-# Step 1: Use a base image with Java and Maven installed
-FROM maven:3.8.6-openjdk-11-slim as build
+FROM tomcat:9.0-jdk11
 
-# Step 2: Set working directory
-WORKDIR /app
+RUN rm -rf /usr/local/tomcat/webapps/*
 
-# Step 3: Copy the pom.xml and download dependencies
-COPY pom.xml .
-RUN mvn dependency:go-offline
+WORKDIR /usr/local/tomcat/webapps
 
-# Step 4: Copy the source code
-COPY src ./src
+COPY target/cookeat-1.0.0-BUILD-SNAPSHOT.war app.war
 
-# Step 5: Build the application
-RUN mvn clean package
-
-# Step 6: Use a smaller base image for the final image
-FROM openjdk:11-jre-slim
-
-# Step 7: Set working directory
-WORKDIR /app
-
-# Step 8: Copy the JAR file from the build stage
-COPY --from=build /app/target/cookeat-1.0.0-BUILD-SNAPSHOT.jar app.jar
-
-# Step 9: Specify the command to run the JAR file
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
-
-# Expose the port the application will run on
 EXPOSE 5000
+
+CMD ["catalina.sh", "run"]
