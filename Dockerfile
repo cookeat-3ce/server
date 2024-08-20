@@ -6,6 +6,6 @@ WORKDIR /usr/local/tomcat/webapps
 
 COPY target/cookeat-1.0.0-BUILD-SNAPSHOT.war app.war
 
-EXPOSE 5000
+EXPOSE 8080
 
 CMD ["catalina.sh", "run"]
