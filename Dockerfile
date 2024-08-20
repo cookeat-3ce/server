@@ -1,5 +1,5 @@
-# Step 1: Use a base image with Java installed
-FROM openjdk:11-jdk-slim as build
+# Step 1: Use a base image with Java and Maven installed
+FROM maven:3.8.6-openjdk-11-slim as build
 
 # Step 2: Set working directory
 WORKDIR /app
@@ -28,4 +28,3 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 
 # Expose the port the application will run on
 EXPOSE 5000
-
