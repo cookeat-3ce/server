@@ -13,6 +13,8 @@ jobs:
       # 1. Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          submodules: 'true'  # 서브모듈을 초기화하고 업데이트
 
       # 2. Set up JDK 11
       - name: Set up JDK
