@@ -345,6 +345,7 @@
 									<directory>${project.basedir}/secrets</directory>
 									<includes>
 										<include>application.properties</include>
+										<include>Wallet_cookeat</include>
 									</includes>
 								</resource>
 							</resources>
