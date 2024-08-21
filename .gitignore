@@ -2,6 +2,7 @@
 # Edit at https://www.gitignore.io/?templates=git,java,maven,windows,eclipse
 
 src/main/resources/application.properties
+Wallet_cookeat
 
 ### Eclipse ###
 .metadata
