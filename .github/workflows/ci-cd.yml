@@ -16,6 +16,9 @@ jobs:
         with:
           submodules: 'true'  # Initialize and update submodules
           token: ${{ secrets.PAT_TOKEN }}  # Use the GitHub token for private repositories
+      
+      - name: Update submodules to latest commit
+        run: git submodule update --remote
 
       # 2. Set up JDK 11
       - name: Set up JDK
