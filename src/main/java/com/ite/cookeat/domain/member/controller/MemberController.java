@@ -5,6 +5,8 @@ import com.ite.cookeat.domain.member.dto.PostLoginReq;
 import com.ite.cookeat.domain.member.dto.PostLoginRes;
 import com.ite.cookeat.domain.member.dto.PostSignUpReq;
 import com.ite.cookeat.domain.member.service.MemberService;
+import com.ite.cookeat.exception.CustomException;
+import com.ite.cookeat.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -37,13 +39,16 @@ public class MemberController {
 
     @PostMapping("/login")
     public ResponseEntity<PostLoginRes> login(HttpServletResponse response, @RequestBody PostLoginReq postLoginReq) {
-        PostLoginRes postLoginRes = memberService.login(postLoginReq);
-        response.setHeader(AUTHORIZATION_HEADER, PREFIX + postLoginRes.getAccessToken());
-        PostLoginRes modifiedRes = PostLoginRes.builder()
-                .nickname(postLoginRes.getNickname())
-                .profileImage(postLoginRes.getProfileImage())
-                .build();
-        return ResponseEntity.ok(modifiedRes);
+        try {
+            PostLoginRes postLoginRes = memberService.login(postLoginReq);
+            response.setHeader(AUTHORIZATION_HEADER, PREFIX + postLoginRes.getAccessToken());
+            PostLoginRes modifiedRes = PostLoginRes.builder()
+                    .nickname(postLoginRes.getNickname())
+                    .profileImage(postLoginRes.getProfileImage())
+                    .build();
+            return ResponseEntity.ok(modifiedRes);
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+        }
     }
-
 }
