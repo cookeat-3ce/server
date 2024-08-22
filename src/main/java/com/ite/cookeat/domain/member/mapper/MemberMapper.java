@@ -5,5 +5,6 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface MemberMapper {
-    GetUserDetailsRes selectUserDetails(String username);
+
+  GetUserDetailsRes selectUserDetails(String username);
 }

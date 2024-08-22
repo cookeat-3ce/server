@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MemberController {
 
-    private final MemberService memberService;
+  private final MemberService memberService;
 
-    @GetMapping("/{username}")
-    public ResponseEntity<GetUserDetailsRes> findUserDetails(@PathVariable String username) {
+  @GetMapping("/{username}")
+  public ResponseEntity<GetUserDetailsRes> findUserDetails(@PathVariable String username) {
 
-        GetUserDetailsRes getUserDetailsRes = memberService.findUserDetailsByUsername(username);
+    GetUserDetailsRes getUserDetailsRes = memberService.findUserDetailsByUsername(username);
 
-        return ResponseEntity.ok(getUserDetailsRes);
-    }
+    return ResponseEntity.ok(getUserDetailsRes);
+  }
 }

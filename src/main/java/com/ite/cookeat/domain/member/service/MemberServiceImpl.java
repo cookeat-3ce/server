@@ -9,19 +9,19 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MemberServiceImpl implements MemberService{
+public class MemberServiceImpl implements MemberService {
 
-    private final MemberMapper memberMapper;
+  private final MemberMapper memberMapper;
 
-    @Override
-    public GetUserDetailsRes findUserDetailsByUsername(String username) {
+  @Override
+  public GetUserDetailsRes findUserDetailsByUsername(String username) {
 
-        GetUserDetailsRes getUserDetailsRes = memberMapper.selectUserDetails(username);
+    GetUserDetailsRes getUserDetailsRes = memberMapper.selectUserDetails(username);
 
-        if(getUserDetailsRes == null){
-            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
-        }
-
-        return getUserDetailsRes;
+    if (getUserDetailsRes == null) {
+      throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
     }
+
+    return getUserDetailsRes;
+  }
 }

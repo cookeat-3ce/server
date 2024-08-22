@@ -10,9 +10,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 public class GetUserDetailsRes {
-    private String nickname;
-    private String profileImage;
-    private String oneLiner;
-    private Integer subscriptionCount;
-    private Integer sskcookCount;
+
+  private String nickname;
+  private String profileImage;
+  private String oneLiner;
+  private Integer subscriptionCount;
+  private Integer sskcookCount;
 }

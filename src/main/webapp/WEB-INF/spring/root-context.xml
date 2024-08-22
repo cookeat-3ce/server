@@ -1,58 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
-       xmlns:p="http://www.springframework.org/schema/p"
-       xmlns:c="http://www.springframework.org/schema/c"
-       xmlns:aop="http://www.springframework.org/schema/aop"
-       xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
-        http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+<beans xmlns:aop="http://www.springframework.org/schema/aop"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.springframework.org/schema/beans"
+  xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+
         http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
         http://www.springframework.org/schema/tx https://www.springframework.org/schema/tx/spring-tx-4.3.xsd
         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
 
-    <!-- Property placeholder to load properties from external file -->
-    <context:property-placeholder location="classpath:application.properties" />
+  <!-- Property placeholder to load properties from external file -->
+  <aop:aspectj-autoproxy/>
 
-    <!-- HikariCP -->
-    <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
-        <property name="driverClassName"
-                  value="${jdbc.driverClassName}"></property>
-        <property name="jdbcUrl"
-                  value="${jdbc.jdbcUrl}"></property>
-        <property name="username" value="${jdbc.username}"></property>
-        <property name="password" value="${jdbc.password}"></property>
-    </bean>
+  <!-- HikariCP -->
+  <bean class="com.zaxxer.hikari.HikariDataSource" destroy-method="close"
+    id="dataSource">
+    <constructor-arg ref="hikariConfig"/>
+  </bean>
 
-    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"
-          destroy-method="close">
-        <constructor-arg ref="hikariConfig"/>
-    </bean>
-
-    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"></property>
-        <property name="typeAliasesPackage"
-                  value="com.ite.cookeat.domain.alert,
+  <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactory">
+    <property name="dataSource" ref="dataSource"></property>
+    <property name="typeAliasesPackage"
+      value="com.ite.cookeat.domain.alert,
                          com.ite.cookeat.domain.event,
                          com.ite.cookeat.domain.live,
                          com.ite.cookeat.domain.longcook,
                          com.ite.cookeat.domain.member,
                          com.ite.cookeat.domain.sskcook">
 
-        </property>
-    </bean>
+    </property>
+  </bean>
 
-    <!-- 어노테이션 기반의 트랜잭션 설정 -->
-    <tx:annotation-driven/>
+  <bean class="com.zaxxer.hikari.HikariConfig" id="hikariConfig">
+    <property name="driverClassName"
+      value="${jdbc.driverClassName}"></property>
+    <property name="jdbcUrl"
+      value="${jdbc.jdbcUrl}"></property>
+    <property name="username" value="${jdbc.username}"></property>
+    <property name="password" value="${jdbc.password}"></property>
+  </bean>
 
-    <mybatis-spring:scan base-package="com.ite.cookeat.domain.**.mapper"/>
-    <context:component-scan base-package="com.ite.cookeat.**.service"/>
+  <!-- 어노테이션 기반의 트랜잭션 설정 -->
+  <context:component-scan base-package="com.ite.cookeat.**.service"/>
+
+  <context:property-placeholder location="classpath:application.properties"/>
+  <mybatis-spring:scan base-package="com.ite.cookeat.domain.**.mapper"/>
 
 
-
-    <aop:aspectj-autoproxy />
+  <tx:annotation-driven/>
 
 </beans>
