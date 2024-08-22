@@ -2,5 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ite.cookeat.domain.sskcook.mapper.SskcookMapper">
-
+    <select id="selectSearchRecentSskcook" parameterType="GetSearchRecentSskcookReq" resultType="GetSearchRecentSskcookRes">
+        <![CDATA[
+        SELECT a.sskcook_url as sskcookUrl, a.sskcook_id as sskcookId, a.regdate, b.nickname, a.member_id, a.title
+        FROM (
+                 SELECT
+                     s.*,
+                     ROW_NUMBER() OVER (ORDER BY s.regdate DESC) as row_num
+                 FROM sskcook s
+                 WHERE LOWER(s.title) LIKE '%' || LOWER(#{keyword}) || '%'
+             ) a
+                 INNER JOIN member b ON a.member_id = b.member_id
+        ORDER BY a.regdate DESC
+        OFFSET ((#{page}-1)*#{pageSize}) ROWS FETCH NEXT #{pageSize} ROWS ONLY
+        ]]>
+    </select>
 </mapper>

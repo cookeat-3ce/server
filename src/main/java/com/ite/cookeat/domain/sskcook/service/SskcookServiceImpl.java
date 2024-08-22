@@ -3,12 +3,16 @@ package com.ite.cookeat.domain.sskcook.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
+import com.ite.cookeat.domain.sskcook.dto.GetSearchRecentSskcookReq;
+import com.ite.cookeat.domain.sskcook.dto.GetSearchRecentSskcookRes;
+import com.ite.cookeat.domain.sskcook.mapper.SskcookMapper;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.exception.ErrorCode;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -16,6 +20,15 @@ import org.springframework.web.client.RestTemplate;
 public class SskcookServiceImpl implements SskcookService {
 
   private final RestTemplate restTemplate;
+
+  private final SskcookMapper sskcookMapper;
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<GetSearchRecentSskcookRes> findSearchRecentSskcook(
+      GetSearchRecentSskcookReq getSearchRecentSskcookReq) {
+    return sskcookMapper.selectSearchRecentSskcook(getSearchRecentSskcookReq);
+  }
 
   @Override
   public List<GetFridgeRecipeRes> findMyFridgeRecipe(String username) {

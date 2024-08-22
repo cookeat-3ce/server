@@ -1,6 +1,8 @@
 package com.ite.cookeat.domain.sskcook.controller;
 
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
+import com.ite.cookeat.domain.sskcook.dto.GetSearchRecentSskcookReq;
+import com.ite.cookeat.domain.sskcook.dto.GetSearchRecentSskcookRes;
 import com.ite.cookeat.domain.sskcook.service.SskcookService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -8,8 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 
 @RestController
 @RequiredArgsConstructor
@@ -22,5 +24,16 @@ public class SskcookController {
   public ResponseEntity<List<GetFridgeRecipeRes>> recommendFridgeList(
       @PathVariable String username) {
     return ResponseEntity.ok(sskcookService.findMyFridgeRecipe(username));
+  }
+
+  @GetMapping("/sskcook")
+  public ResponseEntity<List<GetSearchRecentSskcookRes>> findSearchRecentSskcookList(
+      @RequestParam String keyword, @RequestParam Integer page) {
+
+    GetSearchRecentSskcookReq modifiedReq = GetSearchRecentSskcookReq.builder()
+        .keyword(keyword)
+        .page(page)
+        .build();
+    return ResponseEntity.ok(sskcookService.findSearchRecentSskcook(modifiedReq));
   }
 }
