@@ -9,6 +9,7 @@ import com.ite.cookeat.domain.member.mapper.MemberMapper;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.exception.ErrorCode;
 import com.ite.cookeat.security.jwt.JwtTokenProvider;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,26 +19,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.authentication.AuthenticationManager;
 
-import java.sql.Blob;
-import java.sql.SQLException;
 import java.util.Optional;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService{
 
     private final AuthenticationManager authenticationManager;
     private final BCryptPasswordEncoder passwordEncoder;
     private final MemberMapper memberMapper;
     private final JwtTokenProvider jwtTokenProvider;
-
-    @Autowired
-    public MemberServiceImpl(AuthenticationManager authenticationManager, BCryptPasswordEncoder passwordEncoder, MemberMapper memberMapper, JwtTokenProvider jwtTokenProvider) {
-        this.authenticationManager = authenticationManager;
-        this.passwordEncoder = passwordEncoder;
-        this.memberMapper = memberMapper;
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
 
     @Override
     @Transactional

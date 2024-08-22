@@ -8,13 +8,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
 @Getter
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Builder
-@ToString
 public class Member {
 
     // 고유번호
