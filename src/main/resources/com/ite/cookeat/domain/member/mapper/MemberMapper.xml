@@ -13,8 +13,8 @@
 
     <insert id="insertMember" parameterType="Member" keyProperty="memberId">
          <![CDATA[
-        INSERT INTO member(member_id, username, password, nickname, profile_img, regdate, status, subscription_count, ssgcook_count, verified_status, roles)
-        VALUES (member_seq.nextval, #{username}, #{password}, #{nickname}, UTL_RAW.CAST_TO_RAW(#{profileImage}), CURRENT_TIMESTAMP, 'ACTIVE', 0, 0, 'UNVERIFIED', 'ROLE_USER')
+        INSERT INTO member(member_id, username, password, nickname, profile_img, regdate, status, subscription_count, ssgcook_count, verified_status, roles, one_liner)
+        VALUES (member_seq.nextval, #{username}, #{password}, #{nickname}, UTL_RAW.CAST_TO_RAW(#{profileImage}), CURRENT_TIMESTAMP, 'ACTIVE', 0, 0, 'UNVERIFIED', 'ROLE_USER', null)
         ]]>
     </insert>
 

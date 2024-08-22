@@ -12,6 +12,7 @@ import java.sql.Blob;
 @Getter
 @Builder
 public class PostLoginRes {
+    private String username;
     private String nickname;
     private String profileImage;
     private String accessToken;

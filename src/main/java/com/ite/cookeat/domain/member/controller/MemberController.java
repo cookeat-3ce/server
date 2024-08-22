@@ -43,6 +43,7 @@ public class MemberController {
             PostLoginRes postLoginRes = memberService.login(postLoginReq);
             response.setHeader(AUTHORIZATION_HEADER, PREFIX + postLoginRes.getAccessToken());
             PostLoginRes modifiedRes = PostLoginRes.builder()
+                    .username(postLoginRes.getUsername())
                     .nickname(postLoginRes.getNickname())
                     .profileImage(postLoginRes.getProfileImage())
                     .build();

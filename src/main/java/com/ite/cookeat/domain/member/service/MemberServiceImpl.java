@@ -66,6 +66,7 @@ public class MemberServiceImpl implements MemberService{
         optionalMember.orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         TokenDTO tokenDTO = jwtTokenProvider.generateToken(authentication);
         return PostLoginRes.builder()
+                .username(optionalMember.get().getUsername())
                 .nickname(optionalMember.get().getNickname())
                 .profileImage(optionalMember.get().getProfileImage())
                 .accessToken(tokenDTO.getAccessToken())
