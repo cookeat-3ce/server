@@ -2,6 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ite.cookeat.domain.member.mapper.MemberMapper">
+  <insert id="insertMember" keyProperty="memberId" parameterType="Member">
+    <![CDATA[
+    INSERT INTO member(member_id, username, password, nickname, profile_img, regdate, status,
+                       subscription_count, ssgcook_count, verified_status, roles, one_liner)
+    VALUES (member_seq.nextval, #{username}, #{password}, #{nickname},
+            UTL_RAW.CAST_TO_RAW(#{profileImage}), CURRENT_TIMESTAMP, 'ACTIVE', 0, 0, 'UNVERIFIED',
+            'ROLE_USER', null)
+    ]]>
+    </insert>
+  <select id="selectUsername" parameterType="String"
+    resultType="Member">
+    <![CDATA[
+    SELECT member_id as         memberId,
+           username,
+           password,
+           roles,
+           TO_CHAR(profile_img) profileImage,
+           nickname
+    FROM member
+    WHERE username = #{username}
+      AND deletedate IS NULL
+    ]]>
+	</select>
+
   <select id="selectUserDetails" parameterType="String" resultType="GetUserDetailsRes">
         <![CDATA[
     SELECT nickname,
@@ -13,30 +37,38 @@
     WHERE username = #{username}
       AND status = 'ACTIVE'
     ]]>
-    </select>
-    <select id="selectUsername" resultType="Member"
-            parameterType="String">
-        <![CDATA[
-        SELECT member_id as memberId, username, password, roles, TO_CHAR(profile_img) profileImage, nickname
-        FROM member
-        WHERE username = #{username} AND deletedate IS NULL
-        ]]>
-	</select>
+  </select>
 
-    <insert id="insertMember" parameterType="Member" keyProperty="memberId">
-         <![CDATA[
-        INSERT INTO member(member_id, username, password, nickname, profile_img, regdate, status, subscription_count, ssgcook_count, verified_status, roles, one_liner)
-        VALUES (member_seq.nextval, #{username}, #{password}, #{nickname}, UTL_RAW.CAST_TO_RAW(#{profileImage}), CURRENT_TIMESTAMP, 'ACTIVE', 0, 0, 'UNVERIFIED', 'ROLE_USER', null)
-        ]]>
-    </insert>
+  <select id="selectDuplicatedUsername" parameterType="String" resultType="Integer">
+    <![CDATA[
+    SELECT COUNT(username)
+    FROM member
+    WHERE username = #{username}
+      AND deletedate IS NULL
+    ]]>
+  </select>
 
-    <select id="selectDuplicatedUsername" parameterType="String" resultType="Integer">
-        <![CDATA[
-        SELECT COUNT(username)
-        FROM member
-        WHERE username = #{username} AND deletedate IS NULL
-        ]]>
-    </select>
+  <select id="selectMemberNotices" parameterType="Map" resultType="GetMemberNoticeRes">
+    <![CDATA[
+    SELECT n.notice_id AS noticeId, n.title, n.content
+    FROM member m
+           INNER JOIN notice n ON m.member_id = n.member_id
+    WHERE m.username = #{username}
+      AND n.deletedate IS NULL
+    ORDER BY n.regdate DESC
+    OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
+    ]]>
+  </select>
+
+  <select id="selectMemberNoticeCount" parameterType="String" resultType="Integer">
+    <![CDATA[
+    SELECT COUNT(notice_id)
+    FROM member m
+           INNER JOIN notice n ON m.member_id = n.member_id
+    WHERE username = #{username}
+      AND n.deletedate IS NULL
+    ]]>
+  </select>
 
   <select id="selectMemberId" parameterType="String" resultType="Integer">
     <![CDATA[
