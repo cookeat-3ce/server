@@ -3,4 +3,15 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ite.cookeat.domain.live.mapper.LiveMapper">
 
+  <insert id="insertLive" parameterType="PostLiveReq">
+    <selectKey keyProperty="liveId" order="BEFORE" resultType="Integer">
+      <![CDATA[
+        SELECT live_seq.nextval AS liveId FROM dual
+      ]]>
+    </selectKey>
+    <![CDATA[
+        INSERT INTO live (live_id, member_id, title, people, thumbnail, regdate, session_id)
+        VALUES (#{liveId}, #{memberId}, #{title}, #{people}, UTL_RAW.CAST_TO_RAW(#{thumbnail}), CURRENT_TIMESTAMP, #{sessionId})
+    ]]>
+  </insert>
 </mapper>

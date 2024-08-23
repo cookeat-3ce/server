@@ -38,4 +38,12 @@
         ]]>
     </select>
 
+  <select id="selectMemberId" parameterType="String" resultType="Integer">
+    <![CDATA[
+    SELECT member_id
+    FROM member
+    WHERE username = #{username}
+      AND status = 'ACTIVE'
+    ]]>
+  </select>
 </mapper>
