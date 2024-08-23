@@ -60,7 +60,7 @@ public class MemberController {
   }
 
   @GetMapping("/{username}/notice")
-  public ResponseEntity<GetMemberNoticePageRes> findMemberNotices(@PathVariable String username,
+  public ResponseEntity<GetMemberNoticePageRes> memberNoticeList(@PathVariable String username,
       @RequestParam Integer page) {
     return ResponseEntity.ok(memberService.findMemberNotices(username, page));
   }
