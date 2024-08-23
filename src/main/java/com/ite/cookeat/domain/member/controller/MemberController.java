@@ -1,4 +1,51 @@
 package com.ite.cookeat.domain.member.controller;
 
+
+import com.ite.cookeat.domain.member.dto.PostLoginReq;
+import com.ite.cookeat.domain.member.dto.PostLoginRes;
+import com.ite.cookeat.domain.member.dto.PostSignUpReq;
+import com.ite.cookeat.domain.member.service.MemberService;
+import com.ite.cookeat.exception.CustomException;
+import com.ite.cookeat.exception.ErrorCode;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletResponse;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/member")
 public class MemberController {
+
+    private final MemberService memberService;
+
+    private final static String AUTHORIZATION_HEADER = "auth";
+
+    private static final String PREFIX = "Bearer ";
+
+    @PostMapping("/sign-up")
+    public ResponseEntity<String> memberAdd(@RequestBody PostSignUpReq postSignUpReq) {
+        memberService.addMember(postSignUpReq);
+        return ResponseEntity.ok("success");
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<PostLoginRes> login(HttpServletResponse response, @RequestBody PostLoginReq postLoginReq) {
+        try {
+            PostLoginRes postLoginRes = memberService.login(postLoginReq);
+            response.setHeader(AUTHORIZATION_HEADER, PREFIX + postLoginRes.getAccessToken());
+            PostLoginRes modifiedRes = PostLoginRes.builder()
+                    .username(postLoginRes.getUsername())
+                    .nickname(postLoginRes.getNickname())
+                    .profileImage(postLoginRes.getProfileImage())
+                    .build();
+            return ResponseEntity.ok(modifiedRes);
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+    }
 }

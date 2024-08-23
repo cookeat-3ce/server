@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security.xsd
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- JWT Token Provider -->
+    <bean id="jwtTokenProvider"
+          class="com.ite.cookeat.security.jwt.JwtTokenProvider" />
+
+    <!-- JWT Authentication Entry Point -->
+    <bean id="jwtAuthenticationEntryPoint"
+          class="com.ite.cookeat.security.jwt.JwtAuthenticationEntryPoint" />
+
+    <!-- JWT Access Denied Handler -->
+    <bean id="jwtAccessDeniedHandler"
+          class="com.ite.cookeat.security.jwt.JwtAccessDeniedHandler" />
+
+    <!-- BCrypt Password Encoder -->
+    <bean id="passwordEncoder"
+          class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+
+    <!-- JWT Authentication Filter -->
+    <bean id="jwtAuthenticationFilter"
+          class="com.ite.cookeat.security.jwt.JwtAuthenticationFilter">
+        <constructor-arg ref="jwtTokenProvider" />
+    </bean>
+
+    <bean id="corsFilter" class="com.ite.cookeat.filter.CorsFilter" />
+
+    <bean id="principalDetailsService"
+          class="com.ite.cookeat.security.PrincipalDetailsService" />
+
+    <bean id="CustomLogoutHandler" class="com.ite.cookeat.security.CustomLogoutHandler"/>
+
+    <security:http auto-config="true" use-expressions="true">
+        <security:csrf disabled="true" />
+
+        <security:custom-filter ref="corsFilter" before="CHANNEL_FILTER" />
+        <security:custom-filter
+                ref="jwtAuthenticationFilter" position="PRE_AUTH_FILTER" />
+
+<!--        &lt;!&ndash; 인증이 필요 없는 URL 설정 &ndash;&gt;-->
+<!--        <security:intercept-url pattern="/member/sign-up"-->
+<!--                                access="permitAll" />-->
+
+<!--        <security:intercept-url pattern="/admin/**"-->
+<!--                                access="hasRole('ROLE_ADMIN')" />-->
+
+<!--        &lt;!&ndash; 완성된 책 목록 &ndash;&gt;-->
+<!--        <security:intercept-url pattern="/relay/book/all" access="permitAll" />-->
+<!--        &lt;!&ndash; 진행 중인 공모전 &ndash;&gt;-->
+<!--        <security:intercept-url pattern="/relay/all" access="permitAll" />-->
+<!--        &lt;!&ndash; 완성된 책 목록(페이징) &ndash;&gt;-->
+<!--        <security:intercept-url pattern="/relay/book" access="permitAll" />-->
+<!--        &lt;!&ndash; 공지사항 목록 조회 &ndash;&gt;-->
+<!--        <security:intercept-url pattern="/notice/list" access="permitAll" />-->
+
+<!--        &lt;!&ndash; 기타 모든 요청은 인증된 사용자만 접근 가능 &ndash;&gt;-->
+
+<!--        <security:intercept-url pattern="/**" access="hasRole('ROLE_USER')"/>-->
+
+        <!-- 로그아웃 -->
+        <security:logout logout-url="/api/member/logout" invalidate-session="true" delete-cookies="JSESSIONID" success-handler-ref="CustomLogoutHandler"/>
+
+        <!-- Access denied handler 설정 -->
+        <security:access-denied-handler
+                ref="jwtAccessDeniedHandler" />
+    </security:http>
+
+    <!-- AuthenticationManager 설정 -->
+    <security:authentication-manager
+            id="authenticationManager">
+        <!-- 사용자 정보를 제공하는 서비스 등록 -->
+        <security:authentication-provider
+                user-service-ref="principalDetailsService">
+            <security:password-encoder
+                    ref="passwordEncoder" />
+
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+</beans>
