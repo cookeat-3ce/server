@@ -4,6 +4,8 @@ import com.ite.cookeat.domain.notice.dto.PostNoticeReq;
 import com.ite.cookeat.domain.notice.service.NoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,5 +21,11 @@ public class NoticeController {
   @PostMapping
   public ResponseEntity<Integer> noticeAdd(@RequestBody PostNoticeReq req) {
     return ResponseEntity.ok(noticeService.addNotice(req));
+  }
+
+  @DeleteMapping("/{noticeId}")
+  public ResponseEntity<?> noticeDelete(@PathVariable Integer noticeId) {
+    noticeService.modifyNoticeDeletedate(noticeId);
+    return ResponseEntity.noContent().build();
   }
 }

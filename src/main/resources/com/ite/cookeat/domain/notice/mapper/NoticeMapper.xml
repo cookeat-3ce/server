@@ -13,4 +13,12 @@
     VALUES (#{noticeId}, #{memberId}, #{title}, #{content}, CURRENT_TIMESTAMP)
     ]]>
   </insert>
+
+  <update id="updateNoticeDeletedate" parameterType="Integer">
+    <![CDATA[
+    UPDATE notice
+    SET deletedate = CURRENT_TIMESTAMP
+    WHERE notice_id = #{noticeId}
+    ]]>
+  </update>
 </mapper>
