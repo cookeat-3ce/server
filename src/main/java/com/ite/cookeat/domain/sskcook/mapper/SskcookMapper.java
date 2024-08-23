@@ -9,4 +9,5 @@ import org.apache.ibatis.annotations.Mapper;
 public interface SskcookMapper {
   List<GetSearchSskcookRes> selectSearchRecentSskcook(GetSearchSskcookReq getSearchSskcookReq);
   List<GetSearchSskcookRes> selectSearchLikesSskcook(GetSearchSskcookReq getSearchSskcookReq);
+  List<GetSearchSskcookRes> selectRecentSskcook(GetSearchSskcookReq getSearchSskcookReq);
 }

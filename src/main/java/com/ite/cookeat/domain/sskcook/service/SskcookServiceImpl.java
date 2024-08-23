@@ -38,6 +38,12 @@ public class SskcookServiceImpl implements SskcookService {
   }
 
   @Override
+  @Transactional(readOnly = true)
+  public List<GetSearchSskcookRes> findRecentSskcook(GetSearchSskcookReq getSearchSskcookReq) {
+    return sskcookMapper.selectRecentSskcook(getSearchSskcookReq);
+  }
+
+  @Override
   public List<GetFridgeRecipeRes> findMyFridgeRecipe(String username) {
 
     // Flask API의 URL 구성

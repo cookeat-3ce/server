@@ -11,4 +11,5 @@ public interface SskcookService {
 
   List<GetSearchSskcookRes> findSearchRecentSskcook(GetSearchSskcookReq getSearchSskcookReq);
   List<GetSearchSskcookRes> findSearchLikesSskcook(GetSearchSskcookReq getSearchSskcookReq);
+  List<GetSearchSskcookRes> findRecentSskcook(GetSearchSskcookReq getSearchSskcookReq);
 }

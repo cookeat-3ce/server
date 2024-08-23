@@ -28,8 +28,8 @@ public class SskcookController {
 
   @GetMapping
   public ResponseEntity<List<GetSearchSskcookRes>> findSearchSskcookList(
-      @RequestParam String keyword,
-      @RequestParam Integer page,
+      @RequestParam(value = "keyword", required = false) String keyword,
+      @RequestParam(defaultValue = "1") Integer page,
       @RequestParam(defaultValue = "latest") String sort) {
 
     GetSearchSskcookReq modifiedReq = GetSearchSskcookReq.builder()
@@ -38,15 +38,10 @@ public class SskcookController {
         .sort(sort)
         .build();
 
-    List<GetSearchSskcookRes> response;
-
-    if ("likes".equals(sort)) {
-      response = sskcookService.findSearchLikesSskcook(modifiedReq);
-    } else {
-      response = sskcookService.findSearchRecentSskcook(modifiedReq);
+    if (keyword == null && "latest".equals(sort)) return ResponseEntity.ok(sskcookService.findRecentSskcook(modifiedReq));
+    else{
+      if ("likes".equals(sort)) return ResponseEntity.ok(sskcookService.findSearchLikesSskcook(modifiedReq));
     }
-
-    return ResponseEntity.ok(response);
+    return ResponseEntity.ok(sskcookService.findSearchRecentSskcook(modifiedReq));
   }
-
 }
