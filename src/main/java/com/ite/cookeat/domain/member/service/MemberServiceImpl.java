@@ -9,9 +9,11 @@ import com.ite.cookeat.domain.member.dto.PostLoginRes;
 import com.ite.cookeat.domain.member.dto.PostSignUpReq;
 import com.ite.cookeat.domain.member.dto.TokenDTO;
 import com.ite.cookeat.domain.member.mapper.MemberMapper;
+import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.exception.ErrorCode;
 import com.ite.cookeat.security.jwt.JwtTokenProvider;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -90,4 +92,11 @@ public class MemberServiceImpl implements MemberService {
     }
     return result.get();
   }
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<GetUserDetailsRes> findSearchMember(GetSearchSskcookReq getSearchSskcookReq) {
+    return memberMapper.selectSearchMember(getSearchSskcookReq);
+  }
+
 }
