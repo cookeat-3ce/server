@@ -13,4 +13,5 @@ public interface MemberMapper {
   Optional<Member> selectUsername(String username);
   void insertMember(Member member);
   Integer selectDuplicatedUsername(String username);
+  Optional<Integer> selectMemberId(String username);
 }
