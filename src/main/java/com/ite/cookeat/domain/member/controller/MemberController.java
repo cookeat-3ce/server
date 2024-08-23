@@ -1,6 +1,5 @@
 package com.ite.cookeat.domain.member.controller;
 
-
 import com.ite.cookeat.domain.member.dto.PostLoginReq;
 import com.ite.cookeat.domain.member.dto.PostLoginRes;
 import com.ite.cookeat.domain.member.dto.PostSignUpReq;
@@ -11,6 +10,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+  
+import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
+import com.ite.cookeat.domain.member.service.MemberService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,4 +56,13 @@ public class MemberController {
             throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
         }
     }
+  
+
+  @GetMapping("/{username}")
+  public ResponseEntity<GetUserDetailsRes> findUserDetails(@PathVariable String username) {
+
+    GetUserDetailsRes getUserDetailsRes = memberService.findUserDetailsByUsername(username);
+
+    return ResponseEntity.ok(getUserDetailsRes);
+  }
 }

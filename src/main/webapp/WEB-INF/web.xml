@@ -13,24 +13,36 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
-	<!-- UTF-8 필터 -->
-	<filter>
-		<filter-name>encodingFilter</filter-name>
-		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-		<init-param>
-			<param-name>encoding</param-name>
-			<param-value>UTF-8</param-value>
-		</init-param>
-		<init-param>
-			<param-name>forceEncoding</param-name>
-			<param-value>true</param-value>
-		</init-param>
-	</filter>
-	<filter-mapping>
-		<filter-name>encodingFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-		<servlet-name>appServlet</servlet-name>
-	</filter-mapping>
+  <!-- UTF-8 필터 -->
+  <filter>
+    <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
+    <filter-name>CorsFilter</filter-name>
+    <init-param>
+      <param-name>cors.allowed.origins</param-name>
+      <param-value>http://localhost:3000</param-value>
+    </init-param>
+    <init-param>
+      <param-name>cors.allowed.methods</param-name>
+      <param-value>GET,POST,PUT,PATCH,DELETE,OPTIONS</param-value>
+    </init-param>
+    <init-param>
+      <param-name>cors.allowed.headers</param-name>
+      <param-value>Content-Type,Authorization</param-value>
+    </init-param>
+    <init-param>
+      <param-name>cors.exposed.headers</param-name>
+      <param-value>Content-Type,Authorization</param-value>
+    </init-param>
+    <init-param>
+      <param-name>cors.support.credentials</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>encodingFilter</filter-name>
+    <servlet-name>appServlet</servlet-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
 
 	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
 	<context-param>
@@ -41,23 +53,24 @@
 		</param-value>
 	</context-param>
 
-	<!-- Creates the Spring Container shared by all Servlets and Filters -->
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
+  <!-- Creates the Spring Container shared by all Servlets and Filters -->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
 
-	<!-- Processes application requests -->
-	<servlet>
-		<servlet-name>appServlet</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<init-param>
-			<param-name>contextConfigLocation</param-name>
-			<param-value>
-				/WEB-INF/spring/appServlet/servlet-context.xml
-			</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
+  <!-- Processes application requests -->
+  <servlet>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>
+        /WEB-INF/spring/appServlet/servlet-context.xml
+      </param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <servlet-name>appServlet</servlet-name>
+  </servlet>
+
 
 
 	<servlet-mapping>
