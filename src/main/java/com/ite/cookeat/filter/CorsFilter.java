@@ -21,7 +21,7 @@ public class CorsFilter implements Filter {
     response.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT, PATCH");
     response.setHeader("Access-Control-Max-Age", "3600");
     response.setHeader("Access-Control-Allow-Headers",
-        "x-requested-with, origin, content-type, accept, auth");
+        "x-requested-with, origin, content-type, accept, Authorization");
     response.setHeader("Access-Control-Expose-Headers", "auth");
 
     // preflight request 가 들어왔을 때 OK 응답
