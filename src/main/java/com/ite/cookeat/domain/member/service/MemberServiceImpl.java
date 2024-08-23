@@ -1,7 +1,8 @@
 package com.ite.cookeat.domain.member.service;
 
-import com.ite.cookeat.domain.member.dto.GetMemberNoticePageRes;
 import static com.ite.cookeat.exception.ErrorCode.MEMBER_NOT_FOUND;
+
+import com.ite.cookeat.domain.member.dto.GetMemberNoticePageRes;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.Member;
 import com.ite.cookeat.domain.member.dto.PostLoginReq;
@@ -91,7 +92,7 @@ public class MemberServiceImpl implements MemberService {
     }
     return result.get();
   }
-  
+
   @Override
   public GetMemberNoticePageRes findMemberNotices(String username, Integer page) {
     Criteria cri = Criteria.builder()
@@ -104,4 +105,5 @@ public class MemberServiceImpl implements MemberService {
         .total(memberMapper.selectMemberNoticeCount(username))
         .notices(memberMapper.selectMemberNotices(cri, username))
         .build();
+  }
 }
