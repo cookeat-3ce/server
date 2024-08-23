@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ite.cookeat.domain.member.mapper.MemberMapper">
+
   <insert id="insertMember" keyProperty="memberId" parameterType="Member">
     <![CDATA[
     INSERT INTO member(member_id, username, password, nickname, profile_img, regdate, status,
@@ -11,26 +12,12 @@
             'ROLE_USER', null)
     ]]>
     </insert>
-  <select id="selectUsername" parameterType="String"
-    resultType="Member">
-    <![CDATA[
-    SELECT member_id as         memberId,
-           username,
-           password,
-           roles,
-           TO_CHAR(profile_img) profileImage,
-           nickname
-    FROM member
-    WHERE username = #{username}
-      AND deletedate IS NULL
-    ]]>
-	</select>
 
   <select id="selectUserDetails" parameterType="String" resultType="GetUserDetailsRes">
         <![CDATA[
     SELECT nickname,
            TO_CHAR(profile_img) as profileImage,
-           one_liner,
+           one_liner            AS oneLiner,
            subscription_count   as subscriptionCount,
            ssgcook_count        as sskcookCount
     FROM member
@@ -78,4 +65,27 @@
       AND status = 'ACTIVE'
     ]]>
   </select>
+
+  <select id="selectUsername" parameterType="String"
+    resultType="Member">
+    <![CDATA[
+    SELECT member_id as         memberId,
+           username,
+           password,
+           roles,
+           TO_CHAR(profile_img) profileImage,
+           nickname
+    FROM member
+    WHERE username = #{username}
+      AND deletedate IS NULL
+    ]]>
+	</select>
+
+  <update id="updateMemberOneLiner" parameterType="PostMemberOneLinerReq">
+  <![CDATA[
+    UPDATE member
+    SET one_liner = #{oneLiner}
+    WHERE username = #{username}
+    ]]>
+  </update>
 </mapper>

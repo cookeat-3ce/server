@@ -7,6 +7,7 @@ import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.Member;
 import com.ite.cookeat.domain.member.dto.PostLoginReq;
 import com.ite.cookeat.domain.member.dto.PostLoginRes;
+import com.ite.cookeat.domain.member.dto.PostMemberOneLinerReq;
 import com.ite.cookeat.domain.member.dto.PostSignUpReq;
 import com.ite.cookeat.domain.member.dto.TokenDTO;
 import com.ite.cookeat.domain.member.mapper.MemberMapper;
@@ -91,6 +92,15 @@ public class MemberServiceImpl implements MemberService {
       throw new CustomException(MEMBER_NOT_FOUND);
     }
     return result.get();
+  }
+
+  @Override
+  public Integer modifyMemberOneLiner(PostMemberOneLinerReq req) {
+    Integer result = memberMapper.updateMemberOneLiner(req);
+    if (result <= 0) {
+      throw new CustomException(MEMBER_NOT_FOUND);
+    }
+    return result;
   }
 
   @Override
