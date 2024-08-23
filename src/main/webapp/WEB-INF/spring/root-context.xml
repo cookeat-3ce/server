@@ -29,7 +29,8 @@
                          com.ite.cookeat.domain.live,
                          com.ite.cookeat.domain.longcook,
                          com.ite.cookeat.domain.member,
-                         com.ite.cookeat.domain.sskcook">
+                         com.ite.cookeat.domain.sskcook,
+                         com.ite.cookeat.domain.fridge">
 
     </property>
   </bean>
@@ -43,19 +44,20 @@
     <property name="password" value="${jdbc.password}"></property>
   </bean>
 
-  <context:property-placeholder location="classpath:application.properties"/>
-  <mybatis-spring:scan base-package="com.ite.cookeat.domain.**.mapper"/>
-  <context:component-scan base-package="com.ite.cookeat.**.service"/>
-  <context:component-scan base-package="com.ite.cookeat.**.dto"/>
-
   <!-- 어노테이션 기반의 트랜잭션 설정 -->
-  <bean id="transactionManager"
-    class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+  <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+    id="transactionManager">
     <property name="dataSource" ref="dataSource"></property>
   </bean>
 
   <!-- RestTemplate 빈 등록 -->
-  <bean id="restTemplate" class="org.springframework.web.client.RestTemplate"/>
+  <bean class="org.springframework.web.client.RestTemplate" id="restTemplate"/>
+  <context:component-scan base-package="com.ite.cookeat.**.service"/>
+  <context:component-scan base-package="com.ite.cookeat.**.dto"/>
+
+  <context:property-placeholder location="classpath:application.properties"/>
+
+  <mybatis-spring:scan base-package="com.ite.cookeat.domain.**.mapper"/>
 
   <tx:annotation-driven/>
 

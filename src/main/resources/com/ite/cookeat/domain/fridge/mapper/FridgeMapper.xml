@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ite.cookeat.domain.fridge.mapper.FridgeMapper">
+
+  <select id="selectIngredients" parameterType="Integer" resultType="GetIngredientsRes">
+    <![CDATA[
+    SELECT name, amount, icon
+    FROM ingredient_member
+    WHERE member_id = #{memberId}
+      AND deletedate IS NULL
+    ]]>
+  </select>
+</mapper>
