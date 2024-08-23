@@ -1,3 +1,4 @@
 [submodule "secrets"]
 	path = secrets
 	url = git@github.com:cookeat-3ce/secrets.git
+	branch = main
