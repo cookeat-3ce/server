@@ -3,8 +3,8 @@ package com.ite.cookeat.domain.sskcook.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
-import com.ite.cookeat.domain.sskcook.dto.GetSearchRecentSskcookReq;
-import com.ite.cookeat.domain.sskcook.dto.GetSearchRecentSskcookRes;
+import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
+import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
 import com.ite.cookeat.domain.sskcook.mapper.SskcookMapper;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.exception.ErrorCode;
@@ -25,9 +25,16 @@ public class SskcookServiceImpl implements SskcookService {
 
   @Override
   @Transactional(readOnly = true)
-  public List<GetSearchRecentSskcookRes> findSearchRecentSskcook(
-      GetSearchRecentSskcookReq getSearchRecentSskcookReq) {
-    return sskcookMapper.selectSearchRecentSskcook(getSearchRecentSskcookReq);
+  public List<GetSearchSskcookRes> findSearchRecentSskcook(
+      GetSearchSskcookReq getSearchSskcookReq) {
+    return sskcookMapper.selectSearchRecentSskcook(getSearchSskcookReq);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<GetSearchSskcookRes> findSearchLikesSskcook(
+      GetSearchSskcookReq getSearchSskcookReq) {
+    return sskcookMapper.selectSearchLikesSskcook(getSearchSskcookReq);
   }
 
   @Override

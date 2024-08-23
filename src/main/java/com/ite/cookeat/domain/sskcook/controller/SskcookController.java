@@ -1,8 +1,8 @@
 package com.ite.cookeat.domain.sskcook.controller;
 
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
-import com.ite.cookeat.domain.sskcook.dto.GetSearchRecentSskcookReq;
-import com.ite.cookeat.domain.sskcook.dto.GetSearchRecentSskcookRes;
+import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
+import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
 import com.ite.cookeat.domain.sskcook.service.SskcookService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -26,14 +26,27 @@ public class SskcookController {
     return ResponseEntity.ok(sskcookService.findMyFridgeRecipe(username));
   }
 
-  @GetMapping("/sskcook")
-  public ResponseEntity<List<GetSearchRecentSskcookRes>> findSearchRecentSskcookList(
-      @RequestParam String keyword, @RequestParam Integer page) {
+  @GetMapping
+  public ResponseEntity<List<GetSearchSskcookRes>> findSearchSskcookList(
+      @RequestParam String keyword,
+      @RequestParam Integer page,
+      @RequestParam(defaultValue = "latest") String sort) {
 
-    GetSearchRecentSskcookReq modifiedReq = GetSearchRecentSskcookReq.builder()
+    GetSearchSskcookReq modifiedReq = GetSearchSskcookReq.builder()
         .keyword(keyword)
         .page(page)
+        .sort(sort)
         .build();
-    return ResponseEntity.ok(sskcookService.findSearchRecentSskcook(modifiedReq));
+
+    List<GetSearchSskcookRes> response;
+
+    if ("likes".equals(sort)) {
+      response = sskcookService.findSearchLikesSskcook(modifiedReq);
+    } else {
+      response = sskcookService.findSearchRecentSskcook(modifiedReq);
+    }
+
+    return ResponseEntity.ok(response);
   }
+
 }

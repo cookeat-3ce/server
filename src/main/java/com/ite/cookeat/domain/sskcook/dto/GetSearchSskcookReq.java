@@ -7,10 +7,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class GetSearchRecentSskcookReq {
+public class GetSearchSskcookReq {
 
   private String keyword;
   private Integer page;
+  private String sort;
 
   @Builder.Default
   private Integer pageSize = 10;

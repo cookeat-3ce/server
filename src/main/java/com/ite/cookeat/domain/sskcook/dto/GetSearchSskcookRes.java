@@ -9,10 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Getter
-public class GetSearchRecentSskcookRes {
-
+public class GetSearchSskcookRes {
   private Integer sskcookId;
   private String nickname;
   private String sskcookUrl;
   private String title;
+  private String regdate;
+  private Integer countLikes;
 }
