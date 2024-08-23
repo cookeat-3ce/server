@@ -38,10 +38,13 @@ public class SskcookController {
         .sort(sort)
         .build();
 
-    if (keyword == null && "latest".equals(sort)) return ResponseEntity.ok(sskcookService.findRecentSskcook(modifiedReq));
-    else{
-      if ("likes".equals(sort)) return ResponseEntity.ok(sskcookService.findSearchLikesSskcook(modifiedReq));
-    }
-    return ResponseEntity.ok(sskcookService.findSearchRecentSskcook(modifiedReq));
+    // 최신순 10개
+    if (keyword == null)
+      return ResponseEntity.ok(sskcookService.findRecentSskcook(modifiedReq));
+
+    if ("latest".equals(sort))
+      return ResponseEntity.ok(sskcookService.findSearchRecentSskcook(modifiedReq));
+
+    return ResponseEntity.ok(sskcookService.findSearchLikesSskcook(modifiedReq));
   }
 }
