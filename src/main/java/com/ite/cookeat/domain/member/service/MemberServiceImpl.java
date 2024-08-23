@@ -1,6 +1,7 @@
 package com.ite.cookeat.domain.member.service;
 
 import com.ite.cookeat.domain.member.dto.GetMemberNoticePageRes;
+import static com.ite.cookeat.exception.ErrorCode.MEMBER_NOT_FOUND;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.Member;
 import com.ite.cookeat.domain.member.dto.PostLoginReq;
@@ -39,7 +40,7 @@ public class MemberServiceImpl implements MemberService {
     GetUserDetailsRes getUserDetailsRes = memberMapper.selectUserDetails(username);
 
     if (getUserDetailsRes == null) {
-      throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+      throw new CustomException(MEMBER_NOT_FOUND);
     }
 
     return getUserDetailsRes;
@@ -72,7 +73,7 @@ public class MemberServiceImpl implements MemberService {
     Authentication authentication = authenticationManager.authenticate(authenticationToken);
     Optional<Member> optionalMember = memberMapper.selectUsername(postLoginReq.getUsername());
     System.out.println(optionalMember.get().getProfileImage());
-    optionalMember.orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    optionalMember.orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
     TokenDTO tokenDTO = jwtTokenProvider.generateToken(authentication);
     return PostLoginRes.builder()
         .username(optionalMember.get().getUsername())
@@ -82,6 +83,15 @@ public class MemberServiceImpl implements MemberService {
         .build();
   }
 
+  @Override
+  public Integer findMemberId(String username) {
+    Optional<Integer> result = memberMapper.selectMemberId(username);
+    if (result.isEmpty()) {
+      throw new CustomException(MEMBER_NOT_FOUND);
+    }
+    return result.get();
+  }
+  
   @Override
   public GetMemberNoticePageRes findMemberNotices(String username, Integer page) {
     Criteria cri = Criteria.builder()
@@ -94,5 +104,4 @@ public class MemberServiceImpl implements MemberService {
         .total(memberMapper.selectMemberNoticeCount(username))
         .notices(memberMapper.selectMemberNotices(cri, username))
         .build();
-  }
 }

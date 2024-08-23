@@ -20,9 +20,11 @@ public interface MemberMapper {
   void insertMember(Member member);
 
   Integer selectDuplicatedUsername(String username);
-
+  
   List<GetMemberNoticeRes> selectMemberNotices(@Param("cri") Criteria cri,
       @Param("username") String username);
 
   Integer selectMemberNoticeCount(String username);
+  
+  Optional<Integer> selectMemberId(String username);
 }

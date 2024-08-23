@@ -37,7 +37,7 @@
     WHERE username = #{username}
       AND status = 'ACTIVE'
     ]]>
-    </select>
+  </select>
 
   <select id="selectDuplicatedUsername" parameterType="String" resultType="Integer">
     <![CDATA[
@@ -46,7 +46,7 @@
     WHERE username = #{username}
       AND deletedate IS NULL
     ]]>
-    </select>
+  </select>
 
   <select id="selectMemberNotices" parameterType="Map" resultType="GetMemberNoticeRes">
     <![CDATA[
@@ -67,6 +67,15 @@
            INNER JOIN notice n ON m.member_id = n.member_id
     WHERE username = #{username}
       AND n.deletedate IS NULL
+    ]]>
+  </select>
+
+  <select id="selectMemberId" parameterType="String" resultType="Integer">
+    <![CDATA[
+    SELECT member_id
+    FROM member
+    WHERE username = #{username}
+      AND status = 'ACTIVE'
     ]]>
   </select>
 </mapper>
