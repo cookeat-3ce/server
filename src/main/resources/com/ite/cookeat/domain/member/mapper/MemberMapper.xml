@@ -68,7 +68,7 @@
     FROM member
     WHERE LOWER(nickname) LIKE '%' || LOWER(#{keyword}) || '%'
       AND status = 'ACTIVE'
-    ORDER BY subscription_count DESC
+    ORDER BY subscription_count DESC, ssgcook_count DESC, regdate DESC
     OFFSET (#{page} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
     ]]>
   </select>
