@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-  
+
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +56,7 @@ public class MemberController {
             throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
         }
     }
-  
+
 
   @GetMapping("/{username}")
   public ResponseEntity<GetUserDetailsRes> findUserDetails(@PathVariable String username) {

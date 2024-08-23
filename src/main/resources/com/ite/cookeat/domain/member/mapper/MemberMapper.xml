@@ -37,5 +37,5 @@
         WHERE username = #{username} AND deletedate IS NULL
         ]]>
     </select>
-    
+
 </mapper>
