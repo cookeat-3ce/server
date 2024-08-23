@@ -2,5 +2,60 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ite.cookeat.domain.sskcook.mapper.SskcookMapper">
-
+    <select id="selectSearchRecentSskcook" parameterType="GetSearchSskcookReq" resultType="GetSearchSskcookRes">
+        <![CDATA[
+        SELECT a.sskcook_url as sskcookUrl, a.sskcook_id as sskcookId, TO_CHAR(a.regdate, 'YYYY-MM-DD HH24:MI:SS') AS regdate, b.nickname, a.member_id, a.title
+        FROM (
+                 SELECT
+                     s.title, s.sskcook_url, s.sskcook_id, s.regdate, s.member_id, s.status,
+                     ROW_NUMBER() OVER (ORDER BY s.regdate DESC) as row_num
+                 FROM sskcook s
+                 WHERE LOWER(s.title) LIKE '%' || LOWER(#{keyword}) || '%' AND s.status = 'ACTIVE'
+             ) a
+                 INNER JOIN member b ON a.member_id = b.member_id
+        ORDER BY a.regdate DESC
+        OFFSET ((#{page}-1)*#{pageSize}) ROWS FETCH NEXT #{pageSize} ROWS ONLY
+        ]]>
+    </select>
+    <select id="selectSearchLikesSskcook" parameterType="GetSearchSskcookReq" resultType="GetSearchSskcookRes">
+        <![CDATA[SELECT
+            c.sskcook_url AS sskcookUrl,
+            c.sskcook_id AS sskcookId,
+            TO_CHAR(c.regdate, 'YYYY-MM-DD HH24:MI:SS') AS regdate,
+            b.nickname,
+            c.member_id,
+            c.title,
+            NVL(a.countLikes, 0) AS countLikes
+        FROM (
+                 SELECT
+                     sskcook_id,
+                     sskcook_url,
+                     title,
+                     regdate,
+                     member_id,
+                     status
+                 FROM sskcook
+                 WHERE LOWER(title) LIKE '%' || LOWER(#{keyword}) || '%' AND status = 'ACTIVE'
+             ) c
+                 LEFT JOIN (
+            SELECT
+                COUNT(sskcook_id) AS countLikes,
+                sskcook_id
+            FROM likes
+            GROUP BY sskcook_id
+        ) a ON a.sskcook_id = c.sskcook_id
+                 INNER JOIN member b ON b.member_id = c.member_id
+        ORDER BY countLikes DESC, c.regdate DESC
+        OFFSET (#{page} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY]]>
+    </select>
+    <select id="selectRecentSskcook" parameterType="GetSearchSskcookReq" resultType="GetSearchSskcookRes">
+        <![CDATA[
+            SELECT a.sskcook_url as sskcookUrl, a.sskcook_id as sskcookId, a.title, TO_CHAR(a.regdate, 'YYYY-MM-DD HH24:MI:SS') AS regdate, a.member_id, b.nickname, b.profile_img
+            FROM sskcook a
+            INNER JOIN member b ON a.member_id = b.member_id
+            WHERE a.status = 'ACTIVE'
+            ORDER BY a.regdate DESC
+            OFFSET (#{page} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+        ]]>
+    </select>
 </mapper>

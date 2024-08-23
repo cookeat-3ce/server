@@ -57,6 +57,4 @@
   <!-- RestTemplate 빈 등록 -->
   <bean id="restTemplate" class="org.springframework.web.client.RestTemplate"/>
 
-  <tx:annotation-driven/>
-
 </beans>
