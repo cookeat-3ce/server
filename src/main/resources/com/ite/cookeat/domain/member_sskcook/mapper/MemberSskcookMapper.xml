@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ite.cookeat.domain.member_sskcook.mapper.MemberSskcookMapper">
+
+  <delete id="deleteMemberSskcook" parameterType="PostMemberSskcookReq">
+    <![CDATA[
+    DELETE
+    FROM member_sskcook
+    WHERE #{memberId} = member_id
+      AND #{sskcookId} = sskcook_id
+    ]]>
+  </delete>
+
+  <insert id="insertMemberSskcook" parameterType="PostMemberSskcookReq">
+    <![CDATA[
+    INSERT INTO member_sskcook(member_sskcook_id, member_id, sskcook_id, regdate)
+    VALUES (member_sskcook_seq.nextval, #{memberId}, #{sskcookId}, CURRENT_TIMESTAMP)
+    ]]>
+  </insert>
+
+  <select id="selectMemberSskcookCount" parameterType="PostMemberSskcookReq" resultType="Integer">
+    <![CDATA[
+    SELECT COUNT(member_id)
+    FROM member_sskcook
+    WHERE member_id = #{memberId}
+      AND sskcook_id = #{sskcookId}
+    ]]>
+  </select>
+</mapper>

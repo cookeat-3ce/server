@@ -30,7 +30,8 @@
                          com.ite.cookeat.domain.member,
                          com.ite.cookeat.domain.sskcook,
                          com.ite.cookeat.domain.notice,
-                         com.ite.cookeat.domain.fridge">
+                         com.ite.cookeat.domain.fridge,
+                         com.ite.cookeat.domain.member_sskcook">
 
     </property>
   </bean>

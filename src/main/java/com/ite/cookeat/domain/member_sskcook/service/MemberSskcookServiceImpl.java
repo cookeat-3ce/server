@@ -1,0 +1,37 @@
+package com.ite.cookeat.domain.member_sskcook.service;
+
+import com.ite.cookeat.domain.member_sskcook.dto.PostMemberSskcookReq;
+import com.ite.cookeat.domain.member_sskcook.mapper.MemberSskcookMapper;
+import com.ite.cookeat.exception.CustomException;
+import com.ite.cookeat.exception.ErrorCode;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class MemberSskcookServiceImpl implements MemberSskcookService {
+
+  private final MemberSskcookMapper memberSskcookMapper;
+
+  @Override
+  public void addMemberSskcook(PostMemberSskcookReq postMemberSskcookReq) {
+    int cnt = memberSskcookMapper.insertMemberSskcook(postMemberSskcookReq);
+    if (cnt == 0) {
+      throw new CustomException(ErrorCode.MEMBER_SSKCOOK_INSERT_FAIL);
+    }
+  }
+
+  @Override
+  public void removeMemberSskcook(PostMemberSskcookReq postMemberSskcookReq) {
+    int cnt = memberSskcookMapper.deleteMemberSskcook(postMemberSskcookReq);
+    if (cnt == 0) {
+      throw new CustomException(ErrorCode.MEMBER_SSKCOOK_DELETE_FAIL);
+    }
+
+  }
+
+  @Override
+  public Integer findMemberSskcook(PostMemberSskcookReq postMemberSskcookReq) {
+    return memberSskcookMapper.selectMemberSskcookCount(postMemberSskcookReq);
+  }
+}
