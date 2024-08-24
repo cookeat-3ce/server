@@ -32,7 +32,7 @@
     SET sskcook_count = (SELECT COUNT(*)
                          FROM sskcook
                          WHERE member_id = #{memberId}
-                           AND STATUS LIKE 'ACTIVE')
+                           AND STATUS = 'ACTIVE')
     WHERE member_id = #{memberId}
     ]]>
   </update>

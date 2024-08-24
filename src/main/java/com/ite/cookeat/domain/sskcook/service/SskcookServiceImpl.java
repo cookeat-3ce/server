@@ -2,6 +2,7 @@ package com.ite.cookeat.domain.sskcook.service;
 
 import static com.ite.cookeat.exception.ErrorCode.FILE_UPLOAD_FAIL;
 import static com.ite.cookeat.exception.ErrorCode.FIND_FAIL_SSKCOOK;
+import static com.ite.cookeat.exception.ErrorCode.INVALID_JSON;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,6 +29,7 @@ public class SskcookServiceImpl implements SskcookService {
   private final RestTemplate restTemplate;
   private final SskcookMapper sskcookMapper;
   private final S3UploadService s3UploadService;
+  private final ObjectMapper objectMapper;
 
   @Override
   public List<GetFridgeRecipeRes> findMyFridgeRecipe(String username) {
@@ -51,8 +53,16 @@ public class SskcookServiceImpl implements SskcookService {
 
   @Override
   @Transactional
-  public Integer addSskcook(PostSskcookReq postSskcookReq, MultipartFile file) {
+  public Integer addSskcook(String request, MultipartFile file) {
+
     String sskcookUrl = null;
+    PostSskcookReq postSskcookReq = null;
+    try {
+      postSskcookReq = objectMapper.readValue(request, PostSskcookReq.class);
+    } catch (IOException e) {
+      throw new CustomException(INVALID_JSON);
+    }
+
     try {
       sskcookUrl = s3UploadService.saveFile(file);
     } catch (IOException e) {

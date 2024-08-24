@@ -1,8 +1,6 @@
 package com.ite.cookeat.domain.sskcook.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
-import com.ite.cookeat.domain.sskcook.dto.PostSskcookReq;
 import com.ite.cookeat.domain.sskcook.service.SskcookService;
 import java.io.IOException;
 import java.util.List;
@@ -23,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class SskcookController {
 
   private final SskcookService sskcookService;
-  private final ObjectMapper objectMapper;
 
   @GetMapping("/fridge/{username}")
   public ResponseEntity<List<GetFridgeRecipeRes>> recommendFridgeList(
@@ -35,7 +32,6 @@ public class SskcookController {
   public ResponseEntity<Integer> sskcookAdd(
       @RequestPart("file") MultipartFile file,
       @RequestPart("sskcook") String request) throws IOException {
-    PostSskcookReq postSskcookReq = objectMapper.readValue(request, PostSskcookReq.class);
-    return ResponseEntity.ok(sskcookService.addSskcook(postSskcookReq, file));
+    return ResponseEntity.ok(sskcookService.addSskcook(request, file));
   }
 }
