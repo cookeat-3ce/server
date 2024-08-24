@@ -3,8 +3,8 @@ package com.ite.cookeat.domain.sskcook.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
-import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
+import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
 import com.ite.cookeat.domain.sskcook.mapper.SskcookMapper;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.exception.ErrorCode;
@@ -41,6 +41,11 @@ public class SskcookServiceImpl implements SskcookService {
   @Transactional(readOnly = true)
   public List<GetSearchSskcookRes> findRecentSskcook(GetSearchSskcookReq getSearchSskcookReq) {
     return sskcookMapper.selectRecentSskcook(getSearchSskcookReq);
+  }
+
+  @Override
+  public List<GetSearchSskcookRes> findMonthlySskcook(GetSearchSskcookReq getSearchSskcookReq) {
+    return sskcookMapper.selectMonthlySskcook(getSearchSskcookReq);
   }
 
   @Override

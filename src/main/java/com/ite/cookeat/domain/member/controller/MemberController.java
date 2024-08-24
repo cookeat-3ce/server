@@ -6,8 +6,10 @@ import com.ite.cookeat.domain.member.dto.PostLoginReq;
 import com.ite.cookeat.domain.member.dto.PostLoginRes;
 import com.ite.cookeat.domain.member.dto.PostSignUpReq;
 import com.ite.cookeat.domain.member.service.MemberService;
+import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.exception.ErrorCode;
+import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +61,17 @@ public class MemberController {
     return ResponseEntity.ok(getUserDetailsRes);
   }
 
+  @GetMapping
+  public ResponseEntity<List<GetUserDetailsRes>> findSearchMemberList(
+      @RequestParam(value = "keyword", required = false) String keyword,
+      @RequestParam(defaultValue = "1") Integer page) {
+
+    GetSearchSskcookReq modifiedReq = GetSearchSskcookReq.builder()
+        .keyword(keyword)
+        .page(page)
+        .build();
+
+    return ResponseEntity.ok(memberService.findSearchMember(modifiedReq));
   @GetMapping("/{username}/notice")
   public ResponseEntity<GetMemberNoticePageRes> memberNoticeList(@PathVariable String username,
       @RequestParam Integer page) {
