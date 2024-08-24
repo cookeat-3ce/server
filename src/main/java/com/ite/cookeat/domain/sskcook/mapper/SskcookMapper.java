@@ -24,5 +24,5 @@ public interface SskcookMapper {
 
   Integer selectRecentSskcookListCount();
 
-  Integer selectMonthlySskcookListCount(String data);
+  Integer selectMonthlySskcookListCount(String date);
 }
