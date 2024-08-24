@@ -2,6 +2,7 @@ package com.ite.cookeat.domain.member.service;
 
 import static com.ite.cookeat.exception.ErrorCode.MEMBER_NOT_FOUND;
 
+import com.ite.cookeat.domain.member.dto.GetMemberNoticePageRes;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.Member;
 import com.ite.cookeat.domain.member.dto.PostLoginReq;
@@ -12,6 +13,7 @@ import com.ite.cookeat.domain.member.mapper.MemberMapper;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.exception.ErrorCode;
+import com.ite.cookeat.global.dto.Criteria;
 import com.ite.cookeat.security.jwt.JwtTokenProvider;
 import java.util.List;
 import java.util.Optional;
@@ -99,4 +101,16 @@ public class MemberServiceImpl implements MemberService {
     return memberMapper.selectSearchMember(getSearchSskcookReq);
   }
 
+  public GetMemberNoticePageRes findMemberNotices(String username, Integer page) {
+    Criteria cri = Criteria.builder()
+        .pageSize(10)
+        .pageNum(page)
+        .build();
+
+    return GetMemberNoticePageRes.builder()
+        .cri(cri)
+        .total(memberMapper.selectMemberNoticeCount(username))
+        .notices(memberMapper.selectMemberNotices(cri, username))
+        .build();
+  }
 }

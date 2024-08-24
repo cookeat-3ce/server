@@ -1,5 +1,6 @@
 package com.ite.cookeat.domain.member.controller;
 
+import com.ite.cookeat.domain.member.dto.GetMemberNoticePageRes;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.PostLoginReq;
 import com.ite.cookeat.domain.member.dto.PostLoginRes;
@@ -52,7 +53,6 @@ public class MemberController {
     }
   }
 
-
   @GetMapping("/{username}")
   public ResponseEntity<GetUserDetailsRes> findUserDetails(@PathVariable String username) {
 
@@ -72,5 +72,9 @@ public class MemberController {
         .build();
 
     return ResponseEntity.ok(memberService.findSearchMember(modifiedReq));
+  @GetMapping("/{username}/notice")
+  public ResponseEntity<GetMemberNoticePageRes> memberNoticeList(@PathVariable String username,
+      @RequestParam Integer page) {
+    return ResponseEntity.ok(memberService.findMemberNotices(username, page));
   }
 }
