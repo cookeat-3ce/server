@@ -1,7 +1,7 @@
 package com.ite.cookeat.domain.member.service;
 
 import com.ite.cookeat.domain.member.dto.GetMemberNoticePageRes;
-import com.ite.cookeat.domain.member.dto.GetUserDetailPageRes;
+import com.ite.cookeat.domain.member.dto.GetSubscriptionUserDetailsPageRes;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.PostLoginReq;
 import com.ite.cookeat.domain.member.dto.PostLoginRes;
@@ -23,6 +23,6 @@ public interface MemberService {
 
   List<GetUserDetailsRes> findSearchMember(GetSearchSskcookReq getSearchSskcookReq);
 
-  GetUserDetailPageRes findMemberSubscriptionList(String username, Integer page);
+  GetSubscriptionUserDetailsPageRes findMemberSubscriptionList(String username, Integer page);
 
 }

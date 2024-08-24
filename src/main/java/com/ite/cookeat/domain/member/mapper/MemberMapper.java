@@ -1,6 +1,7 @@
 package com.ite.cookeat.domain.member.mapper;
 
 import com.ite.cookeat.domain.member.dto.GetMemberNoticeRes;
+import com.ite.cookeat.domain.member.dto.GetSubscriptionUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.Member;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
@@ -32,7 +33,7 @@ public interface MemberMapper {
 
   List<GetUserDetailsRes> selectSearchMember(GetSearchSskcookReq getSearchSskcookReq);
 
-  List<GetUserDetailsRes> selectMemberSubscriptionList(@Param("cri") Criteria cri,
+  List<GetSubscriptionUserDetailsRes> selectMemberSubscriptionList(@Param("cri") Criteria cri,
       @Param("username") String username);
 
   Integer selectMemberSubscriptionListCount(String username);

@@ -95,7 +95,8 @@
     ]]>
   </select>
 
-  <select id="selectMemberSubscriptionList" parameterType="Map" resultType="GetUserDetailsRes">
+  <select id="selectMemberSubscriptionList" parameterType="Map"
+    resultType="GetSubscriptionUserDetailsRes">
     <![CDATA[
     SELECT d.username, TO_CHAR(d.profile_img) as profileImage
     FROM member b
