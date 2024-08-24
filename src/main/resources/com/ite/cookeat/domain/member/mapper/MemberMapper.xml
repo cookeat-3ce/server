@@ -48,15 +48,6 @@
     ]]>
     </select>
 
-  <select id="selectDuplicatedUsername" parameterType="String" resultType="Integer">
-    <![CDATA[
-    SELECT COUNT(username)
-    FROM member
-    WHERE username = #{username}
-      AND deletedate IS NULL
-    ]]>
-  </select>
-
   <select id="selectMemberNotices" parameterType="Map" resultType="GetMemberNoticeRes">
     <![CDATA[
     SELECT n.notice_id AS noticeId, n.title, n.content

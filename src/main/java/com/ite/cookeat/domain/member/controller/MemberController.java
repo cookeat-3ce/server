@@ -72,6 +72,8 @@ public class MemberController {
         .build();
 
     return ResponseEntity.ok(memberService.findSearchMember(modifiedReq));
+  }
+
   @GetMapping("/{username}/notice")
   public ResponseEntity<GetMemberNoticePageRes> memberNoticeList(@PathVariable String username,
       @RequestParam Integer page) {
