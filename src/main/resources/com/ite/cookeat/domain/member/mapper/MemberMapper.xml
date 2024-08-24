@@ -37,16 +37,16 @@
     WHERE username = #{username}
       AND status = 'ACTIVE'
     ]]>
-  </select>
+    </select>
 
   <select id="selectDuplicatedUsername" parameterType="String" resultType="Integer">
-    <![CDATA[
+        <![CDATA[
     SELECT COUNT(username)
     FROM member
     WHERE username = #{username}
       AND deletedate IS NULL
     ]]>
-  </select>
+    </select>
 
   <select id="selectMemberNotices" parameterType="Map" resultType="GetMemberNoticeRes">
     <![CDATA[
@@ -76,6 +76,22 @@
     FROM member
     WHERE username = #{username}
       AND status = 'ACTIVE'
+    ]]>
+  </select>
+
+  <select id="selectSearchMember" parameterType="GetSearchSskcookReq"
+    resultType="GetUserDetailsRes">
+    <![CDATA[
+    SELECT username,
+           nickname,
+           TO_CHAR(profile_img) as profileImage,
+           subscription_count   as subscriptionCount,
+           ssgcook_count        as sskcookCount
+    FROM member
+    WHERE LOWER(nickname) LIKE '%' || LOWER(#{keyword}) || '%'
+      AND status = 'ACTIVE'
+    ORDER BY subscription_count DESC, ssgcook_count DESC, regdate DESC
+    OFFSET (#{page} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
     ]]>
   </select>
 </mapper>

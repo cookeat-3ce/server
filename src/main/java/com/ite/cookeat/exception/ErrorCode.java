@@ -20,7 +20,9 @@ public enum ErrorCode {
   MEMBER_NOT_FOUND(UNAUTHORIZED, "회원 정보를 찾을 수 없습니다."),
 
   /* code: 404 */
-  LONGCOOK_NOT_FOUND(NOT_FOUND, "스윽쿡(롱쿡) 정보를 찾을 수 없습니다.");
+  LONGCOOK_NOT_FOUND(NOT_FOUND, "스윽쿡(롱쿡) 정보를 찾을 수 없습니다."),
+  NOTICE_NOT_FOUND(NOT_FOUND, "공지 정보를 찾을 수 없습니다.");
+
   /* code: 409 */
   /* code: 500 */
 
