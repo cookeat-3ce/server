@@ -25,7 +25,6 @@
       AND deletedate IS NULL
     ]]>
 	</select>
-
   <select id="selectUserDetails" parameterType="String" resultType="GetUserDetailsRes">
         <![CDATA[
     SELECT nickname,
@@ -94,4 +93,13 @@
     OFFSET (#{page} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
     ]]>
   </select>
+
+  <update id="updateMemberDeletedate" parameterType="String">
+    <![CDATA[
+    UPDATE member
+    SET deletedate = CURRENT_TIMESTAMP,
+        status     = 'INACTIVE'
+    WHERE username = #{username}
+    ]]>
+  </update>
 </mapper>

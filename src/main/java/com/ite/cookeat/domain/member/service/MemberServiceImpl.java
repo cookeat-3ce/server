@@ -101,6 +101,16 @@ public class MemberServiceImpl implements MemberService {
     return memberMapper.selectSearchMember(getSearchSskcookReq);
   }
 
+  @Override
+  @Transactional
+  public Boolean modifyMemberDeletedate(String username) {
+    Integer result = memberMapper.updateMemberDeletedate(username);
+    if (result <= 0) {
+      throw new CustomException(MEMBER_NOT_FOUND);
+    }
+    return true;
+  }
+
   public GetMemberNoticePageRes findMemberNotices(String username, Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)
