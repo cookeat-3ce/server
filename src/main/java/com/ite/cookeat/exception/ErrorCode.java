@@ -15,6 +15,7 @@ public enum ErrorCode {
   /* code: 400*/
   DUPLICATED_MEMBER(BAD_REQUEST, "중복된 아이디 입니다."),
   FIND_FAIL_SSKCOOK(BAD_REQUEST, "원하는 슥쿡 목록을 불러올 수 없습니다."),
+  VERIFYING_FAILED(BAD_REQUEST, "인증 요청에 실패했습니다."),
 
   /* code: 401 */
   MEMBER_NOT_FOUND(UNAUTHORIZED, "회원 정보를 찾을 수 없습니다."),

@@ -1,6 +1,7 @@
 package com.ite.cookeat.domain.member.service;
 
 import static com.ite.cookeat.exception.ErrorCode.MEMBER_NOT_FOUND;
+import static com.ite.cookeat.exception.ErrorCode.VERIFYING_FAILED;
 
 import com.ite.cookeat.domain.member.dto.GetMemberNoticePageRes;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
@@ -99,6 +100,15 @@ public class MemberServiceImpl implements MemberService {
   @Transactional(readOnly = true)
   public List<GetUserDetailsRes> findSearchMember(GetSearchSskcookReq getSearchSskcookReq) {
     return memberMapper.selectSearchMember(getSearchSskcookReq);
+  }
+
+  @Override
+  @Transactional
+  public void modifyVerifyStatus(String username, String status) {
+    Integer result = memberMapper.updateVerifiedStatus(username, status);
+    if (result <= 0) {
+      throw new CustomException(VERIFYING_FAILED);
+    }
   }
 
   public GetMemberNoticePageRes findMemberNotices(String username, Integer page) {

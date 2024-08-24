@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +30,12 @@ public class MemberController {
   private final static String AUTHORIZATION_HEADER = "auth";
   private static final String PREFIX = "Bearer ";
   private final MemberService memberService;
+
+  @PatchMapping(value = "/{username}/verify", produces = "application/json; charset=UTF-8")
+  public ResponseEntity<String> verifyStatusModify(@PathVariable String username) {
+    memberService.modifyVerifyStatus(username, "REQUEST_VERIFY");
+    return ResponseEntity.ok("인증 요청이 완료되었습니다.");
+  }
 
   @PostMapping("/sign-up")
   public ResponseEntity<String> memberAdd(@RequestBody PostSignUpReq postSignUpReq) {

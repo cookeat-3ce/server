@@ -15,8 +15,12 @@ public interface MemberService {
   void addMember(PostSignUpReq postSignUpReq);
 
   PostLoginRes login(PostLoginReq postLoginReq);
+
   GetMemberNoticePageRes findMemberNotices(String username, Integer page);
+
   Integer findMemberId(String username);
 
   List<GetUserDetailsRes> findSearchMember(GetSearchSskcookReq getSearchSskcookReq);
+
+  void modifyVerifyStatus(String username, String status);
 }
