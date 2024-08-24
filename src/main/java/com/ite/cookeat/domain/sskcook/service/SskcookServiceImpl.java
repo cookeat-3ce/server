@@ -3,16 +3,15 @@ package com.ite.cookeat.domain.sskcook.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
-import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
-import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
+import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookPageRes;
 import com.ite.cookeat.domain.sskcook.mapper.SskcookMapper;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.exception.ErrorCode;
+import com.ite.cookeat.global.dto.Criteria;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -24,28 +23,61 @@ public class SskcookServiceImpl implements SskcookService {
   private final SskcookMapper sskcookMapper;
 
   @Override
-  @Transactional(readOnly = true)
-  public List<GetSearchSskcookRes> findSearchRecentSskcook(
-      GetSearchSskcookReq getSearchSskcookReq) {
-    return sskcookMapper.selectSearchRecentSskcook(getSearchSskcookReq);
+  public GetSearchSskcookPageRes findSearchRecentSskcook(
+      String keyword, Integer page) {
+    Criteria cri = Criteria.builder()
+        .pageSize(10)
+        .pageNum(page)
+        .keyword(keyword)
+        .build();
+
+    return GetSearchSskcookPageRes.builder()
+        .cri(cri)
+        .total(sskcookMapper.selectSearchSskcookCount(keyword))
+        .sskcooks(sskcookMapper.selectSearchRecentSskcook(cri, keyword))
+        .build();
   }
 
   @Override
-  @Transactional(readOnly = true)
-  public List<GetSearchSskcookRes> findSearchLikesSskcook(
-      GetSearchSskcookReq getSearchSskcookReq) {
-    return sskcookMapper.selectSearchLikesSskcook(getSearchSskcookReq);
+  public GetSearchSskcookPageRes findSearchLikesSskcook(
+      String keyword, Integer page) {
+    Criteria cri = Criteria.builder()
+        .pageSize(10)
+        .pageNum(page)
+        .keyword(keyword)
+        .build();
+    return GetSearchSskcookPageRes.builder()
+        .cri(cri)
+        .total(sskcookMapper.selectSearchSskcookCount(keyword))
+        .sskcooks(sskcookMapper.selectSearchLikesSskcook(cri, keyword))
+        .build();
   }
 
   @Override
-  @Transactional(readOnly = true)
-  public List<GetSearchSskcookRes> findRecentSskcook(GetSearchSskcookReq getSearchSskcookReq) {
-    return sskcookMapper.selectRecentSskcook(getSearchSskcookReq);
+  public GetSearchSskcookPageRes findRecentSskcook(Integer page) {
+    Criteria cri = Criteria.builder()
+        .pageSize(10)
+        .pageNum(page)
+        .build();
+    return GetSearchSskcookPageRes.builder()
+        .cri(cri)
+        .total(sskcookMapper.selectRecentSskcookCount())
+        .sskcooks(sskcookMapper.selectRecentSskcook(cri))
+        .build();
   }
 
   @Override
-  public List<GetSearchSskcookRes> findMonthlySskcook(GetSearchSskcookReq getSearchSskcookReq) {
-    return sskcookMapper.selectMonthlySskcook(getSearchSskcookReq);
+  public GetSearchSskcookPageRes findMonthlySskcook(String date, Integer page) {
+    Criteria cri = Criteria.builder()
+        .pageSize(10)
+        .pageNum(page)
+        .date(date)
+        .build();
+    return GetSearchSskcookPageRes.builder()
+        .cri(cri)
+        .total(sskcookMapper.selectMonthlySskcookCount(date))
+        .sskcooks(sskcookMapper.selectMonthlySskcook(cri, date))
+        .build();
   }
 
   @Override

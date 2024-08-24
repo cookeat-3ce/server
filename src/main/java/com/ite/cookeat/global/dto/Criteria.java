@@ -20,4 +20,6 @@ public class Criteria {
   private String type;
   // 검색 시 사용되는 키워드
   private String keyword;
+  
+  private String date;
 }

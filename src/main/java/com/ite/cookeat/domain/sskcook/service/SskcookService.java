@@ -1,19 +1,18 @@
 package com.ite.cookeat.domain.sskcook.service;
 
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
-import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
-import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
+import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookPageRes;
 import java.util.List;
 
 public interface SskcookService {
 
   List<GetFridgeRecipeRes> findMyFridgeRecipe(String username);
 
-  List<GetSearchSskcookRes> findSearchRecentSskcook(GetSearchSskcookReq getSearchSskcookReq);
+  GetSearchSskcookPageRes findSearchRecentSskcook(String keyword, Integer page);
 
-  List<GetSearchSskcookRes> findSearchLikesSskcook(GetSearchSskcookReq getSearchSskcookReq);
+  GetSearchSskcookPageRes findSearchLikesSskcook(String keyword, Integer page);
 
-  List<GetSearchSskcookRes> findRecentSskcook(GetSearchSskcookReq getSearchSskcookReq);
+  GetSearchSskcookPageRes findRecentSskcook(Integer page);
 
-  List<GetSearchSskcookRes> findMonthlySskcook(GetSearchSskcookReq getSearchSskcookReq);
+  GetSearchSskcookPageRes findMonthlySskcook(String date, Integer page);
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ite.cookeat.domain.sskcook.mapper.SskcookMapper">
-  <select id="selectSearchRecentSskcook" parameterType="GetSearchSskcookReq"
+  <select id="selectSearchRecentSskcook" parameterType="Map"
     resultType="GetSearchSskcookRes">
         <![CDATA[
     SELECT a.sskcook_url                               as sskcookUrl,
@@ -23,10 +23,19 @@
             AND s.status = 'ACTIVE') a
            INNER JOIN member b ON a.member_id = b.member_id
     ORDER BY a.regdate DESC
-    OFFSET ((#{page}-1)*#{pageSize}) ROWS FETCH NEXT #{pageSize} ROWS ONLY
+    OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
     ]]>
     </select>
-  <select id="selectSearchLikesSskcook" parameterType="GetSearchSskcookReq"
+  <select id="selectSearchSskcookCount" parameterType="String" resultType="Integer">
+    <![CDATA[
+    SELECT COUNT(a.sskcook_id)
+    FROM sskcook a
+           INNER JOIN member b ON a.member_id = b.member_id
+    WHERE LOWER(a.title) LIKE '%' || LOWER(#{keyword}) || '%'
+      AND a.status = 'ACTIVE'
+    ]]>
+  </select>
+  <select id="selectSearchLikesSskcook" parameterType="Map"
     resultType="GetSearchSskcookRes">
         <![CDATA[
     SELECT c.sskcook_url                               AS sskcookUrl,
@@ -51,10 +60,10 @@
                       GROUP BY sskcook_id) a ON a.sskcook_id = c.sskcook_id
            INNER JOIN member b ON b.member_id = c.member_id
     ORDER BY countLikes DESC, c.regdate DESC
-    OFFSET (#{page} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+    OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
     ]]>
     </select>
-  <select id="selectRecentSskcook" parameterType="GetSearchSskcookReq"
+  <select id="selectRecentSskcook" parameterType="Map"
     resultType="GetSearchSskcookRes">
         <![CDATA[
     SELECT a.sskcook_url                               as sskcookUrl,
@@ -68,10 +77,18 @@
            INNER JOIN member b ON a.member_id = b.member_id
     WHERE a.status = 'ACTIVE'
     ORDER BY a.regdate DESC
-    OFFSET (#{page} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+    OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
     ]]>
     </select>
-  <select id="selectMonthlySskcook" parameterType="GetSearchSskcookReq"
+  <select id="selectRecentSskcookCount" resultType="Integer">
+  <![CDATA[
+    SELECT COUNT(a.sskcook_id)
+    FROM sskcook a
+           INNER JOIN member b ON a.member_id = b.member_id
+      AND a.status = 'ACTIVE'
+    ]]>
+  </select>
+  <select id="selectMonthlySskcook" parameterType="Map"
     resultType="GetSearchSskcookRes">
 <![CDATA[
     SELECT c.sskcook_url                    AS sskcookUrl,
@@ -97,7 +114,19 @@
                       GROUP BY sskcook_id) a ON a.sskcook_id = c.sskcook_id
            INNER JOIN member b ON b.member_id = c.member_id
     ORDER BY countLikes DESC, c.regdate DESC
-    OFFSET (#{page} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+    OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
+    ]]>
+  </select>
+  <select id="selectMonthlySskcookCount" parameterType="String" resultType="Integer">
+    <![CDATA[
+    SELECT COUNT(a.sskcook_id)
+    FROM sskcook a
+           INNER JOIN member b ON a.member_id = b.member_id
+    WHERE EXTRACT(MONTH FROM a.regdate) = EXTRACT(MONTH FROM TO_DATE(#{date}
+      , 'YYYY-MM'))
+      AND EXTRACT(YEAR FROM a.regdate) = EXTRACT(YEAR FROM TO_DATE(#{date}
+      , 'YYYY-MM'))
+      AND a.status = 'ACTIVE'
     ]]>
   </select>
 </mapper>

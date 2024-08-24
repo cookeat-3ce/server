@@ -95,11 +95,11 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
-  @Transactional(readOnly = true)
   public GetUserDetailPageRes findSearchMember(String keyword, Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)
         .pageNum(page)
+        .keyword(keyword)
         .build();
     return GetUserDetailPageRes.builder()
         .cri(cri)
