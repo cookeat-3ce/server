@@ -94,4 +94,25 @@
     OFFSET (#{page} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
     ]]>
   </select>
+
+  <select id="selectMemberSubscriptionList" parameterType="Map" resultType="GetUserDetailsRes">
+    <![CDATA[
+    SELECT d.username, TO_CHAR(d.profile_img) as profileImage
+    FROM member b
+           INNER JOIN subscription c ON b.member_id = c.follower_id
+           INNER JOIN member d ON d.member_id = c.following_id
+    WHERE b.username = #{username}
+    OFFSET(#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
+    ]]>
+  </select>
+
+  <select id="selectMemberSubscriptionListCount" parameterType="String" resultType="Integer">
+    <![CDATA[
+    SELECT COUNT(d.username)
+    FROM member b
+           INNER JOIN subscription c ON b.member_id = c.follower_id
+           INNER JOIN member d ON d.member_id = c.following_id
+    WHERE b.username = #{username}
+    ]]>
+  </select>
 </mapper>
