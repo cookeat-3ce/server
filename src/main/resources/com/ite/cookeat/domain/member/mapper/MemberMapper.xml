@@ -47,7 +47,6 @@
       AND deletedate IS NULL
     ]]>
     </select>
-  </select>
 
   <select id="selectDuplicatedUsername" parameterType="String" resultType="Integer">
     <![CDATA[
