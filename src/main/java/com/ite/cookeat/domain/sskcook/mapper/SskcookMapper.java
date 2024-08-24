@@ -9,20 +9,20 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface SskcookMapper {
 
-  List<GetSearchSskcookRes> selectSearchRecentSskcook(@Param("cri") Criteria cri,
+  List<GetSearchSskcookRes> selectSearchRecentSskcookList(@Param("cri") Criteria cri,
       @Param("keyword") String keyword);
 
-  List<GetSearchSskcookRes> selectSearchLikesSskcook(@Param("cri") Criteria cri,
+  List<GetSearchSskcookRes> selectSearchLikesSskcookList(@Param("cri") Criteria cri,
       @Param("keyword") String keyword);
 
-  List<GetSearchSskcookRes> selectRecentSskcook(@Param("cri") Criteria cri);
+  List<GetSearchSskcookRes> selectRecentSskcookList(@Param("cri") Criteria cri);
 
-  List<GetSearchSskcookRes> selectMonthlySskcook(
+  List<GetSearchSskcookRes> selectMonthlySskcookList(
       @Param("cri") Criteria cri, @Param("date") String date);
 
-  Integer selectSearchSskcookCount(String keyword);
+  Integer selectSearchSskcookListCount(String keyword);
 
-  Integer selectRecentSskcookCount();
+  Integer selectRecentSskcookListCount();
 
-  Integer selectMonthlySskcookCount(String data);
+  Integer selectMonthlySskcookListCount(String data);
 }

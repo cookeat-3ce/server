@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ite.cookeat.domain.sskcook.mapper.SskcookMapper">
-  <select id="selectSearchRecentSskcook" parameterType="Map"
+  <select id="selectSearchRecentSskcookList" parameterType="Map"
     resultType="GetSearchSskcookRes">
         <![CDATA[
     SELECT a.sskcook_url                               as sskcookUrl,
@@ -26,7 +26,7 @@
     OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
     ]]>
     </select>
-  <select id="selectSearchSskcookCount" parameterType="String" resultType="Integer">
+  <select id="selectSearchSskcookListCount" parameterType="String" resultType="Integer">
     <![CDATA[
     SELECT COUNT(a.sskcook_id)
     FROM sskcook a
@@ -35,7 +35,7 @@
       AND a.status = 'ACTIVE'
     ]]>
   </select>
-  <select id="selectSearchLikesSskcook" parameterType="Map"
+  <select id="selectSearchLikesSskcookList" parameterType="Map"
     resultType="GetSearchSskcookRes">
         <![CDATA[
     SELECT c.sskcook_url                               AS sskcookUrl,
@@ -63,7 +63,7 @@
     OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
     ]]>
     </select>
-  <select id="selectRecentSskcook" parameterType="Map"
+  <select id="selectRecentSskcookList" parameterType="Map"
     resultType="GetSearchSskcookRes">
         <![CDATA[
     SELECT a.sskcook_url                               as sskcookUrl,
@@ -80,7 +80,7 @@
     OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
     ]]>
     </select>
-  <select id="selectRecentSskcookCount" resultType="Integer">
+  <select id="selectRecentSskcookListCount" resultType="Integer">
   <![CDATA[
     SELECT COUNT(a.sskcook_id)
     FROM sskcook a
@@ -88,7 +88,7 @@
       AND a.status = 'ACTIVE'
     ]]>
   </select>
-  <select id="selectMonthlySskcook" parameterType="Map"
+  <select id="selectMonthlySskcookList" parameterType="Map"
     resultType="GetSearchSskcookRes">
 <![CDATA[
     SELECT c.sskcook_url                    AS sskcookUrl,
@@ -117,7 +117,7 @@
     OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
     ]]>
   </select>
-  <select id="selectMonthlySskcookCount" parameterType="String" resultType="Integer">
+  <select id="selectMonthlySskcookListCount" parameterType="String" resultType="Integer">
     <![CDATA[
     SELECT COUNT(a.sskcook_id)
     FROM sskcook a

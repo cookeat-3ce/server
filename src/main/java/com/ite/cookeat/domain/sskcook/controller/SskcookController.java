@@ -33,19 +33,19 @@ public class SskcookController {
       @RequestParam(defaultValue = "", required = false) String date) {
 
     if (!date.isEmpty()) {
-      return ResponseEntity.ok(sskcookService.findMonthlySskcook(date, page));
+      return ResponseEntity.ok(sskcookService.findMonthlySskcookList(date, page));
     }
 
     // 최신순 10개
 
     if (keyword == null) {
-      return ResponseEntity.ok(sskcookService.findRecentSskcook(page));
+      return ResponseEntity.ok(sskcookService.findRecentSskcookList(page));
     }
 
     if ("latest".equals(sort)) {
-      return ResponseEntity.ok(sskcookService.findSearchRecentSskcook(keyword, page));
+      return ResponseEntity.ok(sskcookService.findSearchRecentSskcookList(keyword, page));
     }
 
-    return ResponseEntity.ok(sskcookService.findSearchLikesSskcook(keyword, page));
+    return ResponseEntity.ok(sskcookService.findSearchLikesSskcookList(keyword, page));
   }
 }

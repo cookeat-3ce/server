@@ -8,11 +8,11 @@ public interface SskcookService {
 
   List<GetFridgeRecipeRes> findMyFridgeRecipe(String username);
 
-  GetSearchSskcookPageRes findSearchRecentSskcook(String keyword, Integer page);
+  GetSearchSskcookPageRes findSearchRecentSskcookList(String keyword, Integer page);
 
-  GetSearchSskcookPageRes findSearchLikesSskcook(String keyword, Integer page);
+  GetSearchSskcookPageRes findSearchLikesSskcookList(String keyword, Integer page);
 
-  GetSearchSskcookPageRes findRecentSskcook(Integer page);
+  GetSearchSskcookPageRes findRecentSskcookList(Integer page);
 
-  GetSearchSskcookPageRes findMonthlySskcook(String date, Integer page);
+  GetSearchSskcookPageRes findMonthlySskcookList(String date, Integer page);
 }

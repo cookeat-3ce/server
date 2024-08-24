@@ -1,11 +1,9 @@
 package com.ite.cookeat.domain.longcook.service;
 
-import com.ite.cookeat.domain.longcook.dto.GetLongcookReq;
-import com.ite.cookeat.domain.longcook.dto.GetLongcookRes;
-import java.util.List;
+import com.ite.cookeat.domain.longcook.dto.GetLongCookPageRes;
 
 public interface LongcookService {
 
-  List<GetLongcookRes> findLongcook(GetLongcookReq getLongcookReq);
+  GetLongCookPageRes findLongcookList(String username, Integer page);
 
 }

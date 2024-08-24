@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ite.cookeat.domain.longcook.mapper.LongcookMapper">
-  <select id="selectLongcook" parameterType="GetLongcookReq" resultType="GetLongcookRes">
+  <select id="selectLongcookList" parameterType="Map" resultType="GetLongcookRes">
     <![CDATA[
     SELECT a.longcook_id                               as longcookId,
            a.title,
@@ -13,7 +13,16 @@
     WHERE #{username} = b.username
       AND b.status = 'ACTIVE'
     ORDER BY a.regdate DESC
-    OFFSET (#{page} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+    OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
+    ]]>
+  </select>
+  <select id="selectLongcookListCount" parameterType="String" resultType="Integer">
+    <![CDATA[
+    SELECT COUNT(a.longcook_id)
+    FROM longcook a
+           INNER JOIN member b ON b.member_id = a.member_id
+    WHERE #{username} = b.username
+      AND b.status = 'ACTIVE'
     ]]>
   </select>
 </mapper>
