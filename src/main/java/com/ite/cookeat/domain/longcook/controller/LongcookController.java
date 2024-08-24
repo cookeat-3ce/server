@@ -18,6 +18,6 @@ public class LongcookController {
 
   @GetMapping("/{longcookId}")
   public ResponseEntity<GetLongcookRes> longcookDetail(@PathVariable Integer longcookId) {
-    return ResponseEntity.ok(longcookService.findLongcookService(longcookId));
+    return ResponseEntity.ok(longcookService.findLongcook(longcookId));
   }
 }

@@ -4,5 +4,5 @@ import com.ite.cookeat.domain.longcook.dto.GetLongcookRes;
 
 public interface LongcookService {
 
-  GetLongcookRes findLongcookService(Integer longcookId);
+  GetLongcookRes findLongcook(Integer longcookId);
 }

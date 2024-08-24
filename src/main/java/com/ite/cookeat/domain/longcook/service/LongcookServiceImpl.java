@@ -18,7 +18,7 @@ public class LongcookServiceImpl implements LongcookService {
 
   @Override
   @Transactional(readOnly = true)
-  public GetLongcookRes findLongcookService(Integer longcookId) {
+  public GetLongcookRes findLongcook(Integer longcookId) {
     Optional<GetLongcookRes> result = longcookMapper.selectLongcook(longcookId);
     return result.orElseThrow(() -> new CustomException(LONGCOOK_NOT_FOUND));
   }
