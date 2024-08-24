@@ -9,4 +9,6 @@ public interface FridgeMapper {
   List<GetIngredientsRes> selectIngredients(Integer memberId);
 
   void insertIngredient(PostIngredientReq req);
+
+  Integer updateIngredientDeletedate(Integer ingredientId);
 }

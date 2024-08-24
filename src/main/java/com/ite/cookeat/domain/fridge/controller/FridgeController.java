@@ -6,6 +6,7 @@ import com.ite.cookeat.domain.fridge.service.FridgeService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,5 +29,11 @@ public class FridgeController {
   @PostMapping
   public ResponseEntity<Integer> ingredientAdd(@RequestBody PostIngredientReq req) {
     return ResponseEntity.ok(fridgeService.saveIngredient(req));
+  }
+
+  @DeleteMapping("/{ingredientId}")
+  public ResponseEntity<Integer> ingredientDeletedateModify(@PathVariable Integer ingredientId) {
+    fridgeService.modifyIngredientDeletedate(ingredientId);
+    return ResponseEntity.noContent().build();
   }
 }

@@ -9,4 +9,6 @@ public interface FridgeService {
   List<GetIngredientsRes> findIngredients(String username);
 
   Integer saveIngredient(PostIngredientReq req);
+
+  void modifyIngredientDeletedate(Integer ingredientId);
 }

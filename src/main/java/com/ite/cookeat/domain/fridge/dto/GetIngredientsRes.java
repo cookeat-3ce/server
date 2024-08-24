@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class GetIngredientsRes {
 
+  private Integer ingredientId;
   private String name;
   private String amount;
   private String icon;
