@@ -10,12 +10,26 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Builder
 public class GetLivePageRes {
 
   private boolean prev, next;
   private Integer total;
   private Criteria cri;
   private List<GetLiveRes> lives;
+
+  @Builder
+  public GetLivePageRes(Integer total, Criteria cri, List<GetLiveRes> lives) {
+    this.cri = cri;
+    this.total = total;
+    this.lives = lives;
+
+    int pageSize = cri.getPageSize();
+    int pageNum = cri.getPageNum();
+
+    int realEnd = (int) (Math.ceil(total * 1.0 / pageSize));
+
+    this.prev = pageNum > 1;
+    this.next = pageNum < realEnd;
+  }
 
 }
