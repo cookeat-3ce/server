@@ -13,7 +13,11 @@
            regdate
     FROM event
     WHERE deletedate IS NULL
-    ORDER BY regdate DESC
+    ORDER BY CASE
+               WHEN enddate >= CURRENT_DATE THEN 0
+               ELSE 1
+               END,
+             regdate DESC
     OFFSET (#{pageNum} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
     ]]>
   </select>
