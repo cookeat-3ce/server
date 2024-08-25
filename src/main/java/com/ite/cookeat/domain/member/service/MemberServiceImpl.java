@@ -101,6 +101,8 @@ public class MemberServiceImpl implements MemberService {
     return memberMapper.selectSearchMember(getSearchSskcookReq);
   }
 
+  @Override
+  @Transactional(readOnly = true)
   public GetMemberNoticePageRes findMemberNotices(String username, Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)

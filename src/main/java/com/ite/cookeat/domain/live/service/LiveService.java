@@ -9,3 +9,4 @@ public interface LiveService {
 
   GetLivePageRes findLiveList(String keyword, Integer page);
 }
+
