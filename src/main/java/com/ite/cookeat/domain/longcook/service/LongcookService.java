@@ -9,4 +9,6 @@ public interface LongcookService {
   GetLongcookRes findLongcook(Integer longcookId);
 
   List<GetLongcookRes> findLongcookList(GetLongcookReq getLongcookReq);
+
+  Integer modifyLongcookDeletedate(Integer longcookId);
 }
