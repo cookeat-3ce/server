@@ -1,9 +1,11 @@
 package com.ite.cookeat.domain.member_sskcook.service;
 
+import com.ite.cookeat.domain.member_sskcook.dto.GetMemberSskcookPageRes;
 import com.ite.cookeat.domain.member_sskcook.dto.PostMemberSskcookReq;
 import com.ite.cookeat.domain.member_sskcook.mapper.MemberSskcookMapper;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.exception.ErrorCode;
+import com.ite.cookeat.global.dto.Criteria;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,5 +35,19 @@ public class MemberSskcookServiceImpl implements MemberSskcookService {
   @Override
   public Integer findMemberSskcook(PostMemberSskcookReq postMemberSskcookReq) {
     return memberSskcookMapper.selectMemberSskcookCount(postMemberSskcookReq);
+  }
+
+  @Override
+  public GetMemberSskcookPageRes findMemberSskcookList(String username, Integer page) {
+    Criteria cri = Criteria.builder()
+        .pageSize(10)
+        .pageNum(page)
+        .build();
+
+    return GetMemberSskcookPageRes.builder()
+        .cri(cri)
+        .total(memberSskcookMapper.selectMemberSskcookListCount(username))
+        .memberSskcooks(memberSskcookMapper.selectMemberSskcookList(cri, username))
+        .build();
   }
 }
