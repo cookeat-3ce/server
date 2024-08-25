@@ -5,6 +5,7 @@ import com.ite.cookeat.domain.member.dto.GetUserDetailPageRes;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.PostLoginReq;
 import com.ite.cookeat.domain.member.dto.PostLoginRes;
+import com.ite.cookeat.domain.member.dto.PostMemberOneLinerReq;
 import com.ite.cookeat.domain.member.dto.PostSignUpReq;
 
 public interface MemberService {
@@ -20,4 +21,9 @@ public interface MemberService {
   Integer findMemberId(String username);
 
   GetUserDetailPageRes findSearchMember(String keyword, Integer page);
+
+  Integer modifyMemberOneLiner(PostMemberOneLinerReq req);
+
+
+  Integer modifyVerifyStatus(String username, String status);
 }

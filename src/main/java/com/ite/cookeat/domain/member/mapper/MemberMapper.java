@@ -3,6 +3,7 @@ package com.ite.cookeat.domain.member.mapper;
 import com.ite.cookeat.domain.member.dto.GetMemberNoticeRes;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.Member;
+import com.ite.cookeat.domain.member.dto.PostMemberOneLinerReq;
 import com.ite.cookeat.global.dto.Criteria;
 import java.util.List;
 import java.util.Optional;
@@ -32,4 +33,9 @@ public interface MemberMapper {
       @Param("keyword") String keyword);
 
   Integer selectSearchMemberCount(String keyword);
+
+  Integer updateMemberOneLiner(PostMemberOneLinerReq req);
+
+
+  Integer updateVerifiedStatus(@Param("username") String username, @Param("status") String status);
 }
