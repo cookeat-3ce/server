@@ -4,6 +4,7 @@ import com.ite.cookeat.domain.member.dto.GetMemberNoticePageRes;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.PostLoginReq;
 import com.ite.cookeat.domain.member.dto.PostLoginRes;
+import com.ite.cookeat.domain.member.dto.PostMemberOneLinerReq;
 import com.ite.cookeat.domain.member.dto.PostSignUpReq;
 import com.ite.cookeat.domain.member.service.MemberService;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +31,16 @@ public class MemberController {
   private final static String AUTHORIZATION_HEADER = "auth";
   private static final String PREFIX = "Bearer ";
   private final MemberService memberService;
+
+  @PatchMapping(value = "/{username}/verify", produces = "application/json; charset=UTF-8")
+  public ResponseEntity<Integer> verifyStatusModify(@PathVariable String username) {
+    return ResponseEntity.ok(memberService.modifyVerifyStatus(username, "REQUEST_VERIFY"));
+  }
+
+  @PostMapping("/one-liner")
+  public ResponseEntity<Integer> memberOneLinerModify(@RequestBody PostMemberOneLinerReq req) {
+    return ResponseEntity.ok(memberService.modifyMemberOneLiner(req));
+  }
 
   @PostMapping("/sign-up")
   public ResponseEntity<String> memberAdd(@RequestBody PostSignUpReq postSignUpReq) {
@@ -51,6 +63,12 @@ public class MemberController {
     } catch (Exception e) {
       throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
     }
+  }
+
+  @PatchMapping("/{username}/withdraw")
+  public ResponseEntity<Boolean> memberDelete(@PathVariable String username) {
+    memberService.modifyMemberDeletedate(username);
+    return ResponseEntity.noContent().build();
   }
 
   @GetMapping("/{username}")

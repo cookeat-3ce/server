@@ -1,8 +1,12 @@
 package com.ite.cookeat.domain.fridge.service;
 
-import com.ite.cookeat.domain.fridge.dto.GetIngredientsRes;
+import static com.ite.cookeat.exception.ErrorCode.INGREDIENT_NOT_FOUND;
+
+import com.ite.cookeat.domain.fridge.dto.GetMemberIngredientsRes;
+import com.ite.cookeat.domain.fridge.dto.PostMemberIngredientReq;
 import com.ite.cookeat.domain.fridge.mapper.FridgeMapper;
 import com.ite.cookeat.domain.member.service.MemberService;
+import com.ite.cookeat.exception.CustomException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +21,23 @@ public class FridgeServiceImpl implements FridgeService {
 
   @Override
   @Transactional(readOnly = true)
-  public List<GetIngredientsRes> findIngredients(String username) {
+  public List<GetMemberIngredientsRes> findIngredients(String username) {
     return fridgeMapper.selectIngredients(memberService.findMemberId(username));
+  }
+
+  @Override
+  @Transactional
+  public Integer saveIngredient(PostMemberIngredientReq req) {
+    req.setMemberId(memberService.findMemberId(req.getUsername()));
+    fridgeMapper.insertIngredient(req);
+    return req.getIngredientId();
+  }
+
+  @Override
+  @Transactional
+  public void modifyIngredientDeletedate(Integer ingredientId) {
+    if (fridgeMapper.updateIngredientDeletedate(ingredientId) <= 0) {
+      throw new CustomException(INGREDIENT_NOT_FOUND);
+    }
   }
 }

@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ite.cookeat.domain.member.mapper.MemberMapper">
+
   <insert id="insertMember" keyProperty="memberId" parameterType="Member">
     <![CDATA[
     INSERT INTO member(member_id, username, password, nickname, profile_img, regdate, status,
@@ -30,7 +31,7 @@
         <![CDATA[
     SELECT nickname,
            TO_CHAR(profile_img) as profileImage,
-           one_liner,
+           one_liner            AS oneLiner,
            subscription_count   as subscriptionCount,
            ssgcook_count        as sskcookCount
     FROM member
@@ -86,7 +87,7 @@
            nickname,
            TO_CHAR(profile_img) as profileImage,
            subscription_count   as subscriptionCount,
-           ssgcook_count        as sskcookCount
+           sskcook_count        as sskcookCount
     FROM member
     WHERE LOWER(nickname) LIKE '%' || LOWER(#{keyword}) || '%'
       AND status = 'ACTIVE'
@@ -94,4 +95,28 @@
     OFFSET (#{page} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
     ]]>
   </select>
+
+  <update id="updateMemberOneLiner" parameterType="PostMemberOneLinerReq">
+  <![CDATA[
+    UPDATE member
+    SET one_liner = #{oneLiner}
+    WHERE username = #{username}
+    ]]>
+  </update>
+
+  <update id="updateMemberDeletedate" parameterType="String">
+    <![CDATA[
+    UPDATE member
+    SET deletedate = CURRENT_TIMESTAMP,
+        status     = 'INACTIVE'
+    ]]>
+  </update>
+
+  <update id="updateVerifiedStatus">
+    <![CDATA[
+    UPDATE member
+    SET verified_status = #{status}
+    WHERE username = #{username}
+    ]]>
+  </update>
 </mapper>
