@@ -30,6 +30,8 @@
                          com.ite.cookeat.domain.member,
                          com.ite.cookeat.domain.sskcook,
                          com.ite.cookeat.domain.notice,
+                         com.ite.cookeat.domain.admin,
+                         com.ite.cookeat.global.dto,
                          com.ite.cookeat.domain.fridge">
 
     </property>
@@ -51,18 +53,18 @@
     <property name="dataSource" ref="dataSource"></property>
   </bean>
 
+  <bean class="org.springframework.web.client.RestTemplate" id="restTemplate"/>
+
   <context:component-scan base-package="com.ite.cookeat.**.config"/>
 
+  <context:component-scan base-package="com.ite.cookeat.**.service"/>
+
+  <!-- RestTemplate 빈 등록 -->
+  <context:component-scan base-package="com.ite.cookeat.**.dto"/>
+  <context:property-placeholder location="classpath:application.properties"/>
   <context:property-placeholder location="classpath:application.properties"/>
 
   <mybatis-spring:scan base-package="com.ite.cookeat.domain.**.mapper"/>
-
-  <!-- RestTemplate 빈 등록 -->
-  <bean class="org.springframework.web.client.RestTemplate" id="restTemplate"/>
-  <context:component-scan base-package="com.ite.cookeat.**.service"/>
-  <context:component-scan base-package="com.ite.cookeat.**.dto"/>
-
-  <context:property-placeholder location="classpath:application.properties"/>
 
   <mybatis-spring:scan base-package="com.ite.cookeat.domain.**.mapper"/>
 
