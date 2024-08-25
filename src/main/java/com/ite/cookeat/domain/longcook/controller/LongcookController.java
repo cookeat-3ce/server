@@ -6,6 +6,7 @@ import com.ite.cookeat.domain.longcook.service.LongcookService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,5 +30,11 @@ public class LongcookController {
       @PathVariable("username") String username, @RequestParam(defaultValue = "1") Integer page) {
     GetLongcookReq modifiedReq = GetLongcookReq.builder().username(username).page(page).build();
     return ResponseEntity.ok(longcookService.findLongcookList(modifiedReq));
+  }
+
+  @DeleteMapping("/{longcookId}")
+  public ResponseEntity<?> longcookDelete(@PathVariable Integer longcookId) {
+    longcookService.modifyLongcookDeletedate(longcookId);
+    return ResponseEntity.noContent().build();
   }
 }

@@ -27,5 +27,8 @@ public interface MemberService {
   List<GetUserDetailsRes> findSearchMember(GetSearchSskcookReq getSearchSskcookReq);
 
   GetSubscriptionUserDetailsPageRes findMemberSubscriptionList(String username, Integer page);
+  void modifyMemberDeletedate(String username);
+
+  Integer modifyVerifyStatus(String username, String status);
 
 }

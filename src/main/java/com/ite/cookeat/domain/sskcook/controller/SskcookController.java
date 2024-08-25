@@ -73,4 +73,17 @@ public class SskcookController {
     sskcookService.modifySskcookDeletedate(sskcookId);
     return ResponseEntity.noContent().build();
   }
+
+  @PostMapping("/likes")
+  public ResponseEntity<String> sskcookLikesSave(@RequestParam("username") String username,
+      @RequestParam("sskcookId") Integer sskcookId) {
+
+    int cnt = sskcookService.findLikes(username, sskcookId);
+    if (cnt > 0) {
+      sskcookService.removeLikes(username, sskcookId);
+      return ResponseEntity.ok("likes deleted");
+    }
+    sskcookService.addLikes(username, sskcookId);
+    return ResponseEntity.ok("likes added");
+  }
 }

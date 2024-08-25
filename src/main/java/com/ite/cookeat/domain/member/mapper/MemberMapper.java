@@ -40,5 +40,8 @@ public interface MemberMapper {
       @Param("username") String username);
 
   Integer selectMemberSubscriptionListCount(String username);
+  Integer updateMemberDeletedate(String username);
+
+  Integer updateVerifiedStatus(@Param("username") String username, @Param("status") String status);
 
 }

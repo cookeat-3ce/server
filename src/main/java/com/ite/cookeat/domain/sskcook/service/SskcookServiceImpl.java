@@ -7,14 +7,17 @@ import static com.ite.cookeat.exception.ErrorCode.SSKCOOK_NOT_FOUND;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ite.cookeat.domain.member.service.MemberService;
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
 import com.ite.cookeat.domain.sskcook.dto.PostHashtagReq;
-import com.ite.cookeat.domain.sskcook.dto.PostIngredientReq;
+import com.ite.cookeat.domain.sskcook.dto.PostLikesReq;
+import com.ite.cookeat.domain.sskcook.dto.PostSskcookIngredientReq;
 import com.ite.cookeat.domain.sskcook.dto.PostSskcookReq;
 import com.ite.cookeat.domain.sskcook.mapper.SskcookMapper;
 import com.ite.cookeat.exception.CustomException;
+import com.ite.cookeat.exception.ErrorCode;
 import com.ite.cookeat.s3.service.S3UploadService;
 import java.io.IOException;
 import java.util.List;
@@ -33,6 +36,7 @@ public class SskcookServiceImpl implements SskcookService {
   private final SskcookMapper sskcookMapper;
   private final S3UploadService s3UploadService;
   private final ObjectMapper objectMapper;
+  private final MemberService memberService;
 
   @Override
   @Transactional(readOnly = true)
@@ -68,6 +72,42 @@ public class SskcookServiceImpl implements SskcookService {
   @Transactional
   public List<GetSearchSskcookRes> findMonthlySskcook(GetSearchSskcookReq getSearchSskcookReq) {
     return sskcookMapper.selectMonthlySskcook(getSearchSskcookReq);
+  }
+
+  @Override
+  public void addLikes(String username, Integer sskcookId) {
+    PostLikesReq modifiedReq = PostLikesReq.builder()
+        .memberId(memberService.findMemberId(username))
+        .sskcookId(sskcookId)
+        .build();
+    int cnt = sskcookMapper.insertLikes(modifiedReq);
+
+    if (cnt == 0) {
+      throw new CustomException(ErrorCode.LIKES_INSERT_FAIL);
+    }
+  }
+
+
+  @Override
+  public void removeLikes(String username, Integer sskcookId) {
+    PostLikesReq modifiedReq = PostLikesReq.builder()
+        .memberId(memberService.findMemberId(username))
+        .sskcookId(sskcookId)
+        .build();
+    int cnt = sskcookMapper.deleteLikes(modifiedReq);
+
+    if (cnt == 0) {
+      throw new CustomException(ErrorCode.LIKES_DELETE_FAIL);
+    }
+  }
+
+  @Override
+  public Integer findLikes(String username, Integer sskcookId) {
+    PostLikesReq modifiedReq = PostLikesReq.builder()
+        .memberId(memberService.findMemberId(username))
+        .sskcookId(sskcookId)
+        .build();
+    return sskcookMapper.selectLikesCount(modifiedReq);
   }
 
   @Override
@@ -118,9 +158,9 @@ public class SskcookServiceImpl implements SskcookService {
     }
     Integer sskcookId = postSskcookReq.getSskcookId();
 
-    List<PostIngredientReq> ingredients = postSskcookReq.getIngredient();
+    List<PostSskcookIngredientReq> ingredients = postSskcookReq.getIngredient();
     if (ingredients != null && !ingredients.isEmpty()) {
-      for (PostIngredientReq ingredient : ingredients) {
+      for (PostSskcookIngredientReq ingredient : ingredients) {
         ingredient.setSskcookId(sskcookId);
         sskcookMapper.insertIngredientSskcook(ingredient);
       }
@@ -136,6 +176,4 @@ public class SskcookServiceImpl implements SskcookService {
     return sskcookId;
 
   }
-
-
 }
