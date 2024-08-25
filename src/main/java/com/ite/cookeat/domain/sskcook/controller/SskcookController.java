@@ -30,8 +30,13 @@ public class SskcookController {
       @RequestParam(value = "keyword", required = false) String keyword,
       @RequestParam(defaultValue = "1") Integer page,
       @RequestParam(defaultValue = "latest") String sort,
+      @RequestParam(defaultValue = "", required = false) String tag,
       @RequestParam(defaultValue = "", required = false) String date) {
 
+    if (!tag.isEmpty()) {
+      return ResponseEntity.ok(sskcookService.findTagSskcookList(tag, page));
+    }
+    
     if (!date.isEmpty()) {
       return ResponseEntity.ok(sskcookService.findMonthlySskcookList(date, page));
     }
