@@ -128,6 +128,8 @@ public class MemberServiceImpl implements MemberService {
         .total(memberMapper.selectMemberSubscriptionListCount(username))
         .users(memberMapper.selectMemberSubscriptionList(cri, username))
         .build();
+  }
+
   public void modifyMemberDeletedate(String username) {
     Integer result = memberMapper.updateMemberDeletedate(username);
     if (result <= 0) {
