@@ -10,7 +10,7 @@ public interface SskcookService {
 
   List<GetFridgeRecipeRes> findMyFridgeRecipe(String username);
 
-  Integer addSskcook(String postSskcookReq, MultipartFile file);
+  Integer addSskcook(String request, MultipartFile file);
 
   List<GetSearchSskcookRes> findSearchRecentSskcook(GetSearchSskcookReq getSearchSskcookReq);
 

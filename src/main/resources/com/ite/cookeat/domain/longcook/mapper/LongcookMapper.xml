@@ -3,20 +3,17 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ite.cookeat.domain.longcook.mapper.LongcookMapper">
 
-  <select id="selectLongcook" parameterType="Integer" resultType="GetLongcookRes">
+  <insert id="insertLongcook" parameterType="PostLongcookReq">
+    <selectKey keyProperty="longcookId" order="BEFORE" resultType="Integer">
+      <![CDATA[
+        SELECT longcook_seq.nextval AS longcookId FROM dual
+      ]]>
+    </selectKey>
     <![CDATA[
-    SELECT l.longcook_id          AS longcookId,
-           m.username             AS username,
-           m.nickname             AS nickname,
-           l.title                AS title,
-           l.longcook_url         AS longcookUrl,
-           l.regdate              AS regdate,
-           TO_CHAR(m.profile_img) AS profileImage
-    FROM longcook l
-           INNER JOIN member m on l.member_id = m.member_id
-    WHERE l.longcook_id = #{longcookId}
+        INSERT INTO longcook (longcook_id, longcook_url, member_id, title)
+        VALUES (#{longcookId}, #{longcookUrl}, #{memberId}, #{title})
     ]]>
-  </select>
+  </insert>
 
   <select id="selectLongcookList" parameterType="GetLongcookReq" resultType="GetLongcookRes">
     <![CDATA[
@@ -33,6 +30,20 @@
       AND b.status = 'ACTIVE'
     ORDER BY a.regdate DESC
     OFFSET (#{page} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+    ]]>
+  </select>
+  <select id="selectLongcook" parameterType="Integer" resultType="GetLongcookRes">
+    <![CDATA[
+    SELECT l.longcook_id          AS longcookId,
+           m.username             AS username,
+           m.nickname             AS nickname,
+           l.title                AS title,
+           l.longcook_url         AS longcookUrl,
+           l.regdate              AS regdate,
+           TO_CHAR(m.profile_img) AS profileImage
+    FROM longcook l
+           INNER JOIN member m on l.member_id = m.member_id
+    WHERE l.longcook_id = #{longcookId}
     ]]>
   </select>
   <update id="updateLongcookDeletedate" parameterType="Integer">

@@ -4,7 +4,6 @@ import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
 import com.ite.cookeat.domain.sskcook.service.SskcookService;
-import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +33,7 @@ public class SskcookController {
   @PostMapping(consumes = {"multipart/form-data"})
   public ResponseEntity<Integer> sskcookAdd(
       @RequestPart("file") MultipartFile file,
-      @RequestPart("sskcook") String request) throws IOException {
+      @RequestPart("sskcook") String request) {
     return ResponseEntity.ok(sskcookService.addSskcook(request, file));
   }
 
