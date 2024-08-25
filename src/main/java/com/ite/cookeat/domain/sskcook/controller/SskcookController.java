@@ -48,4 +48,10 @@ public class SskcookController {
 
     return ResponseEntity.ok(sskcookService.findSearchLikesSskcookList(keyword, page));
   }
+
+  @GetMapping("/list/{username}")
+  public ResponseEntity<GetSearchSskcookPageRes> findUserSskcookList(
+      @PathVariable String username, @RequestParam(defaultValue = "1") Integer page) {
+    return ResponseEntity.ok(sskcookService.findUserSskcookList(username, page));
+  }
 }

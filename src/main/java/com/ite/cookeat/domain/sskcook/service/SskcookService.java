@@ -15,4 +15,6 @@ public interface SskcookService {
   GetSearchSskcookPageRes findRecentSskcookList(Integer page);
 
   GetSearchSskcookPageRes findMonthlySskcookList(String date, Integer page);
+
+  GetSearchSskcookPageRes findUserSskcookList(String username, Integer page);
 }

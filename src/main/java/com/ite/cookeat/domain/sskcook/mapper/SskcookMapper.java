@@ -20,9 +20,14 @@ public interface SskcookMapper {
   List<GetSearchSskcookRes> selectMonthlySskcookList(
       @Param("cri") Criteria cri, @Param("date") String date);
 
+  List<GetSearchSskcookRes> selectUserSskcookList(@Param("cri") Criteria cri,
+      @Param("username") String username);
+
   Integer selectSearchSskcookListCount(String keyword);
 
   Integer selectRecentSskcookListCount();
 
   Integer selectMonthlySskcookListCount(String date);
+
+  Integer selectUserSskcookListCount(String username);
 }

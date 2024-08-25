@@ -81,6 +81,19 @@ public class SskcookServiceImpl implements SskcookService {
   }
 
   @Override
+  public GetSearchSskcookPageRes findUserSskcookList(String username, Integer page) {
+    Criteria cri = Criteria.builder()
+        .pageSize(10)
+        .pageNum(page)
+        .build();
+    return GetSearchSskcookPageRes.builder()
+        .cri(cri)
+        .total(sskcookMapper.selectUserSskcookListCount(username))
+        .sskcooks(sskcookMapper.selectUserSskcookList(cri, username))
+        .build();
+  }
+
+  @Override
   public List<GetFridgeRecipeRes> findMyFridgeRecipe(String username) {
 
     // Flask API의 URL 구성
