@@ -12,6 +12,20 @@
             'ROLE_USER', null)
     ]]>
     </insert>
+  <select id="selectUsername" parameterType="String"
+    resultType="Member">
+    <![CDATA[
+    SELECT member_id as         memberId,
+           username,
+           password,
+           roles,
+           TO_CHAR(profile_img) profileImage,
+           nickname
+    FROM member
+    WHERE username = #{username}
+      AND deletedate IS NULL
+    ]]>
+	</select>
 
   <select id="selectUserDetails" parameterType="String" resultType="GetUserDetailsRes">
         <![CDATA[
@@ -66,29 +80,6 @@
     ]]>
   </select>
 
-  <select id="selectUsername" parameterType="String"
-    resultType="Member">
-    <![CDATA[
-    SELECT member_id as         memberId,
-           username,
-           password,
-           roles,
-           TO_CHAR(profile_img) profileImage,
-           nickname
-    FROM member
-    WHERE username = #{username}
-      AND deletedate IS NULL
-    ]]>
-	</select>
-
-  <update id="updateMemberOneLiner" parameterType="PostMemberOneLinerReq">
-  <![CDATA[
-    UPDATE member
-    SET one_liner = #{oneLiner}
-    WHERE username = #{username}
-    ]]>
-  </update>
-
   <select id="selectSearchMember" parameterType="GetSearchSskcookReq"
     resultType="GetUserDetailsRes">
     <![CDATA[
@@ -104,4 +95,28 @@
     OFFSET (#{page} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
     ]]>
   </select>
+
+  <update id="updateMemberOneLiner" parameterType="PostMemberOneLinerReq">
+  <![CDATA[
+    UPDATE member
+    SET one_liner = #{oneLiner}
+    WHERE username = #{username}
+    ]]>
+  </update>
+
+  <update id="updateMemberDeletedate" parameterType="String">
+    <![CDATA[
+    UPDATE member
+    SET deletedate = CURRENT_TIMESTAMP,
+        status     = 'INACTIVE'
+    ]]>
+  </update>
+
+  <update id="updateVerifiedStatus">
+    <![CDATA[
+    UPDATE member
+    SET verified_status = #{status}
+    WHERE username = #{username}
+    ]]>
+  </update>
 </mapper>

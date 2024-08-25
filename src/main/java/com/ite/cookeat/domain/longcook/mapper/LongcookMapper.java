@@ -10,4 +10,6 @@ public interface LongcookMapper {
   Optional<GetLongcookRes> selectLongcook(Integer longcookId);
 
   List<GetLongcookRes> selectLongcookList(GetLongcookReq getLongcookReq);
+
+  Integer updateLongcookDeletedate(Integer longcookId);
 }
