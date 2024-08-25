@@ -10,6 +10,8 @@ import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
 import com.ite.cookeat.domain.sskcook.dto.PostHashtagReq;
 import com.ite.cookeat.domain.sskcook.dto.PostIngredientReq;
 import com.ite.cookeat.domain.sskcook.dto.PostSskcookReq;
+import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
+import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
 import com.ite.cookeat.domain.sskcook.mapper.SskcookMapper;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.s3.service.S3UploadService;
@@ -30,6 +32,33 @@ public class SskcookServiceImpl implements SskcookService {
   private final SskcookMapper sskcookMapper;
   private final S3UploadService s3UploadService;
   private final ObjectMapper objectMapper;
+
+  private final SskcookMapper sskcookMapper;
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<GetSearchSskcookRes> findSearchRecentSskcook(
+      GetSearchSskcookReq getSearchSskcookReq) {
+    return sskcookMapper.selectSearchRecentSskcook(getSearchSskcookReq);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<GetSearchSskcookRes> findSearchLikesSskcook(
+      GetSearchSskcookReq getSearchSskcookReq) {
+    return sskcookMapper.selectSearchLikesSskcook(getSearchSskcookReq);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<GetSearchSskcookRes> findRecentSskcook(GetSearchSskcookReq getSearchSskcookReq) {
+    return sskcookMapper.selectRecentSskcook(getSearchSskcookReq);
+  }
+
+  @Override
+  public List<GetSearchSskcookRes> findMonthlySskcook(GetSearchSskcookReq getSearchSskcookReq) {
+    return sskcookMapper.selectMonthlySskcook(getSearchSskcookReq);
+  }
 
   @Override
   public List<GetFridgeRecipeRes> findMyFridgeRecipe(String username) {

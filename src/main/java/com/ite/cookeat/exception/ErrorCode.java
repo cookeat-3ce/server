@@ -1,6 +1,7 @@
 package com.ite.cookeat.exception;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 import lombok.AllArgsConstructor;
@@ -19,6 +20,11 @@ public enum ErrorCode {
 
   /* code: 401 */
   MEMBER_NOT_FOUND(UNAUTHORIZED, "회원 정보를 찾을 수 없습니다.");
+
+  /* code: 404 */
+  LONGCOOK_NOT_FOUND(NOT_FOUND, "스윽쿡(롱쿡) 정보를 찾을 수 없습니다."),
+  NOTICE_NOT_FOUND(NOT_FOUND, "공지 정보를 찾을 수 없습니다.");
+
   /* code: 409 */
   /* code: 500 */
 

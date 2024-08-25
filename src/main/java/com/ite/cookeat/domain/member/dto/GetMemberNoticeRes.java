@@ -9,12 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Builder
-public class GetUserDetailsRes {
+public class GetMemberNoticeRes {
 
-  private String username;
-  private String nickname;
-  private String profileImage;
-  private String oneLiner;
-  private Integer subscriptionCount;
-  private Integer sskcookCount;
+  private Integer noticeId;
+  private String title;
+  private String content;
 }
