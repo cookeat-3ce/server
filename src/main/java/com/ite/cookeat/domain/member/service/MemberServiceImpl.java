@@ -104,11 +104,12 @@ public class MemberServiceImpl implements MemberService {
 
   @Override
   @Transactional
-  public void modifyVerifyStatus(String username, String status) {
+  public Integer modifyVerifyStatus(String username, String status) {
     Integer result = memberMapper.updateVerifiedStatus(username, status);
     if (result <= 0) {
       throw new CustomException(VERIFYING_FAILED);
     }
+    return result;
   }
 
   public GetMemberNoticePageRes findMemberNotices(String username, Integer page) {

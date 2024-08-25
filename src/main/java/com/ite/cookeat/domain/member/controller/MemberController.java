@@ -32,9 +32,8 @@ public class MemberController {
   private final MemberService memberService;
 
   @PatchMapping(value = "/{username}/verify", produces = "application/json; charset=UTF-8")
-  public ResponseEntity<String> verifyStatusModify(@PathVariable String username) {
-    memberService.modifyVerifyStatus(username, "REQUEST_VERIFY");
-    return ResponseEntity.ok("인증 요청이 완료되었습니다.");
+  public ResponseEntity<Integer> verifyStatusModify(@PathVariable String username) {
+    return ResponseEntity.ok(memberService.modifyVerifyStatus(username, "REQUEST_VERIFY"));
   }
 
   @PostMapping("/sign-up")
