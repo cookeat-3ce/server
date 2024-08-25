@@ -1,12 +1,12 @@
 package com.ite.cookeat.domain.sskcook.mapper;
 
-import com.ite.cookeat.domain.sskcook.dto.PostHashtagReq;
-import com.ite.cookeat.domain.sskcook.dto.PostIngredientReq;
-import com.ite.cookeat.domain.sskcook.dto.PostSskcookReq;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
+import com.ite.cookeat.domain.sskcook.dto.PostHashtagReq;
+import com.ite.cookeat.domain.sskcook.dto.PostIngredientReq;
+import com.ite.cookeat.domain.sskcook.dto.PostLikesReq;
+import com.ite.cookeat.domain.sskcook.dto.PostSskcookReq;
 import java.util.List;
-import org.apache.ibatis.annotations.Mapper;
 
 public interface SskcookMapper {
 
@@ -27,5 +27,11 @@ public interface SskcookMapper {
   Integer updateSskcookDeletedate(Integer sskcookId);
 
   List<GetSearchSskcookRes> selectMonthlySskcook(GetSearchSskcookReq getSearchSskcookReq);
+
+  Integer deleteLikes(PostLikesReq postLikesReq);
+
+  Integer insertLikes(PostLikesReq postLikesReq);
+
+  Integer selectLikesCount(PostLikesReq postLikesReq);
 
 }

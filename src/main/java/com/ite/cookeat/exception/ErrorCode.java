@@ -21,6 +21,8 @@ public enum ErrorCode {
   MEMBER_NOT_FOUND(UNAUTHORIZED, "회원 정보를 찾을 수 없습니다."),
 
   /* code: 404 */
+  LIKES_DELETE_FAIL(NOT_FOUND, "좋아요 취소 실패했습니다."),
+  LIKES_INSERT_FAIL(NOT_FOUND, "좋아요 실패했습니다."),
   SSKCOOK_NOT_FOUND(NOT_FOUND, "슥쿡 정보를 찾을 수 없습니다."),
   FILE_UPLOAD_FAIL(BAD_REQUEST, "파일 업로드에 실패했습니다."),
   INVALID_JSON(BAD_REQUEST, "잘못된 JSON 형식입니다."),
