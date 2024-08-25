@@ -1,5 +1,6 @@
 package com.ite.cookeat.domain.member_sskcook.service;
 
+import com.ite.cookeat.domain.member.service.MemberService;
 import com.ite.cookeat.domain.member_sskcook.dto.GetMemberSskcookPageRes;
 import com.ite.cookeat.domain.member_sskcook.dto.PostMemberSskcookReq;
 import com.ite.cookeat.domain.member_sskcook.mapper.MemberSskcookMapper;
@@ -14,18 +15,28 @@ import org.springframework.stereotype.Service;
 public class MemberSskcookServiceImpl implements MemberSskcookService {
 
   private final MemberSskcookMapper memberSskcookMapper;
+  private final MemberService memberService;
+
 
   @Override
-  public void addMemberSskcook(PostMemberSskcookReq postMemberSskcookReq) {
-    int cnt = memberSskcookMapper.insertMemberSskcook(postMemberSskcookReq);
+  public void addMemberSskcook(String username, Integer sskcookId) {
+    PostMemberSskcookReq modifiedReq = PostMemberSskcookReq.builder()
+        .memberId(memberService.findMemberId(username))
+        .sskcookId(sskcookId)
+        .build();
+    int cnt = memberSskcookMapper.insertMemberSskcook(modifiedReq);
     if (cnt == 0) {
       throw new CustomException(ErrorCode.MEMBER_SSKCOOK_INSERT_FAIL);
     }
   }
 
   @Override
-  public void removeMemberSskcook(PostMemberSskcookReq postMemberSskcookReq) {
-    int cnt = memberSskcookMapper.deleteMemberSskcook(postMemberSskcookReq);
+  public void removeMemberSskcook(String username, Integer sskcookId) {
+    PostMemberSskcookReq modifiedReq = PostMemberSskcookReq.builder()
+        .memberId(memberService.findMemberId(username))
+        .sskcookId(sskcookId)
+        .build();
+    int cnt = memberSskcookMapper.deleteMemberSskcook(modifiedReq);
     if (cnt == 0) {
       throw new CustomException(ErrorCode.MEMBER_SSKCOOK_DELETE_FAIL);
     }
@@ -33,8 +44,12 @@ public class MemberSskcookServiceImpl implements MemberSskcookService {
   }
 
   @Override
-  public Integer findMemberSskcook(PostMemberSskcookReq postMemberSskcookReq) {
-    return memberSskcookMapper.selectMemberSskcookCount(postMemberSskcookReq);
+  public Integer findMemberSskcook(String username, Integer sskcookId) {
+    PostMemberSskcookReq modifiedReq = PostMemberSskcookReq.builder()
+        .memberId(memberService.findMemberId(username))
+        .sskcookId(sskcookId)
+        .build();
+    return memberSskcookMapper.selectMemberSskcookCount(modifiedReq);
   }
 
   @Override

@@ -1,8 +1,6 @@
 package com.ite.cookeat.domain.member_sskcook.controller;
 
-import com.ite.cookeat.domain.member.service.MemberService;
 import com.ite.cookeat.domain.member_sskcook.dto.GetMemberSskcookPageRes;
-import com.ite.cookeat.domain.member_sskcook.dto.PostMemberSskcookReq;
 import com.ite.cookeat.domain.member_sskcook.service.MemberSskcookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,26 +17,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberSskcookController {
 
   private final MemberSskcookService memberSskcookService;
-  private final MemberService memberService;
 
   @PostMapping
-  public ResponseEntity<String> MemberSskcookSave(@RequestParam("username") String username,
+  public ResponseEntity<String> memberSskcookSave(@RequestParam("username") String username,
       @RequestParam("sskcookId") Integer sskcookId) {
-    PostMemberSskcookReq modifiedReq = PostMemberSskcookReq.builder()
-        .memberId(memberService.findMemberId(username))
-        .sskcookId(sskcookId)
-        .build();
-    int cnt = memberSskcookService.findMemberSskcook(modifiedReq);
+    int cnt = memberSskcookService.findMemberSskcook(username, sskcookId);
     if (cnt > 0) {
-      memberSskcookService.removeMemberSskcook(modifiedReq);
+      memberSskcookService.removeMemberSskcook(username, sskcookId);
       return ResponseEntity.ok("store failed");
     }
-    memberSskcookService.addMemberSskcook(modifiedReq);
+    memberSskcookService.addMemberSskcook(username, sskcookId);
     return ResponseEntity.ok("store completed");
   }
 
   @GetMapping("/{username}")
-  public ResponseEntity<GetMemberSskcookPageRes> findMemberSskcookList(
+  public ResponseEntity<GetMemberSskcookPageRes> memberSskcookList(
       @PathVariable String username, @RequestParam Integer page) {
     return ResponseEntity.ok(memberSskcookService.findMemberSskcookList(username, page));
   }

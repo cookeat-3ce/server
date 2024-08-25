@@ -1,15 +1,14 @@
 package com.ite.cookeat.domain.member_sskcook.service;
 
 import com.ite.cookeat.domain.member_sskcook.dto.GetMemberSskcookPageRes;
-import com.ite.cookeat.domain.member_sskcook.dto.PostMemberSskcookReq;
 
 public interface MemberSskcookService {
 
-  void addMemberSskcook(PostMemberSskcookReq postMemberSskcookReq);
+  void addMemberSskcook(String username, Integer sskcookId);
 
-  void removeMemberSskcook(PostMemberSskcookReq postMemberSskcookReq);
+  void removeMemberSskcook(String username, Integer sskcookId);
 
-  Integer findMemberSskcook(PostMemberSskcookReq postMemberSskcookReq);
+  Integer findMemberSskcook(String username, Integer sskcookId);
 
   GetMemberSskcookPageRes findMemberSskcookList(String username, Integer page);
 }
