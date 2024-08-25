@@ -65,6 +65,12 @@ public class MemberController {
     }
   }
 
+  @PatchMapping("/{username}/withdraw")
+  public ResponseEntity<Boolean> memberDelete(@PathVariable String username) {
+    memberService.modifyMemberDeletedate(username);
+    return ResponseEntity.noContent().build();
+  }
+
   @GetMapping("/{username}")
   public ResponseEntity<GetUserDetailsRes> findUserDetails(@PathVariable String username) {
 

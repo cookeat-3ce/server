@@ -34,5 +34,8 @@ public interface MemberMapper {
 
   List<GetUserDetailsRes> selectSearchMember(GetSearchSskcookReq getSearchSskcookReq);
 
+  Integer updateMemberDeletedate(String username);
+
   Integer updateVerifiedStatus(@Param("username") String username, @Param("status") String status);
+
 }
