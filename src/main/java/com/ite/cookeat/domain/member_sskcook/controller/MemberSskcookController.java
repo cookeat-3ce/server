@@ -24,10 +24,10 @@ public class MemberSskcookController {
     int cnt = memberSskcookService.findMemberSskcook(username, sskcookId);
     if (cnt > 0) {
       memberSskcookService.removeMemberSskcook(username, sskcookId);
-      return ResponseEntity.ok("store failed");
+      return ResponseEntity.ok("store deleted");
     }
     memberSskcookService.addMemberSskcook(username, sskcookId);
-    return ResponseEntity.ok("store completed");
+    return ResponseEntity.ok("store added");
   }
 
   @GetMapping("/{username}")
