@@ -56,7 +56,8 @@ public class MemberController {
 
   @PatchMapping("/{username}/withdraw")
   public ResponseEntity<Boolean> memberDelete(@PathVariable String username) {
-    return ResponseEntity.ok(memberService.modifyMemberDeletedate(username));
+    memberService.modifyMemberDeletedate(username);
+    return ResponseEntity.noContent().build();
   }
 
   @GetMapping("/{username}")

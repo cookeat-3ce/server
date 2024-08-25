@@ -103,14 +103,14 @@ public class MemberServiceImpl implements MemberService {
 
   @Override
   @Transactional
-  public Boolean modifyMemberDeletedate(String username) {
+  public void modifyMemberDeletedate(String username) {
     Integer result = memberMapper.updateMemberDeletedate(username);
     if (result <= 0) {
       throw new CustomException(MEMBER_NOT_FOUND);
     }
-    return true;
   }
 
+  @Override
   public GetMemberNoticePageRes findMemberNotices(String username, Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)
