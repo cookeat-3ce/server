@@ -35,6 +35,7 @@ public class MemberController {
   @PatchMapping(value = "/{username}/verify", produces = "application/json; charset=UTF-8")
   public ResponseEntity<Integer> verifyStatusModify(@PathVariable String username) {
     return ResponseEntity.ok(memberService.modifyVerifyStatus(username, "REQUEST_VERIFY"));
+  }
 
   @PostMapping("/one-liner")
   public ResponseEntity<Integer> memberOneLinerModify(@RequestBody PostMemberOneLinerReq req) {
