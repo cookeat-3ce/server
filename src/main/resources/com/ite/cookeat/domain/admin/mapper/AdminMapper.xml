@@ -29,4 +29,10 @@
       AND m.deletedate IS NULL
       AND m.verified_status = 'REQUEST_VERIFY'
   </select>
+
+  <update id="updateVerifyRequestMemberStatus" parameterType="String">
+    UPDATE member
+    SET verified_status = 'VERIFIED'
+    WHERE username = #{username}
+  </update>
 </mapper>

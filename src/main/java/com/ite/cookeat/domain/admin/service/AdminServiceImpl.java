@@ -1,7 +1,11 @@
 package com.ite.cookeat.domain.admin.service;
 
+import static com.ite.cookeat.exception.ErrorCode.MEMBER_NOT_FOUND;
+
 import com.ite.cookeat.domain.admin.dto.GetVerifyRequestPageRes;
+import com.ite.cookeat.domain.admin.dto.PostVerifyRequestReq;
 import com.ite.cookeat.domain.admin.mapper.AdminMapper;
+import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.global.dto.Criteria;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,5 +30,14 @@ public class AdminServiceImpl implements AdminService {
         .cri(cri)
         .requests(adminMapper.selectVerifyRequestList(cri))
         .build();
+  }
+
+  @Override
+  public Integer modifyVerifyMemberStatus(PostVerifyRequestReq req) {
+    Integer result = adminMapper.updateVerifyRequestMemberStatus(req);
+    if (result <= 0) {
+      throw new CustomException(MEMBER_NOT_FOUND);
+    }
+    return result;
   }
 }
