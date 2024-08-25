@@ -6,6 +6,8 @@ import com.ite.cookeat.domain.member.dto.PostLoginReq;
 import com.ite.cookeat.domain.member.dto.PostLoginRes;
 import com.ite.cookeat.domain.member.dto.PostMemberOneLinerReq;
 import com.ite.cookeat.domain.member.dto.PostSignUpReq;
+import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
+import java.util.List;
 
 public interface MemberService {
 
@@ -20,4 +22,6 @@ public interface MemberService {
   Integer findMemberId(String username);
 
   Integer modifyMemberOneLiner(PostMemberOneLinerReq req);
+
+  List<GetUserDetailsRes> findSearchMember(GetSearchSskcookReq getSearchSskcookReq);
 }

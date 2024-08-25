@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class GetUserDetailsRes {
 
+  private String username;
   private String nickname;
   private String profileImage;
   private String oneLiner;

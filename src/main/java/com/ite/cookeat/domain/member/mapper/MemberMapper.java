@@ -4,6 +4,10 @@ import com.ite.cookeat.domain.member.dto.GetMemberNoticeRes;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.Member;
 import com.ite.cookeat.domain.member.dto.PostMemberOneLinerReq;
+import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
+import java.util.List;
+import java.util.Optional;
+import org.apache.ibatis.annotations.Mapper;
 import com.ite.cookeat.global.dto.Criteria;
 import java.util.List;
 import java.util.Optional;
@@ -30,4 +34,6 @@ public interface MemberMapper {
   Optional<Integer> selectMemberId(String username);
 
   Integer updateMemberOneLiner(PostMemberOneLinerReq req);
+
+  List<GetUserDetailsRes> selectSearchMember(GetSearchSskcookReq getSearchSskcookReq);
 }

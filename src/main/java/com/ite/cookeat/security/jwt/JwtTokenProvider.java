@@ -32,13 +32,11 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class JwtTokenProvider implements InitializingBean {
 
-  @Value("${jwt.secret}")
-  private String secret;
-
   private static final String AUTHORITIES_KEY = "auth";
   private static final String PREFIX = "Bearer";
   private static long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30; // 30분
-
+  @Value("${jwt.secret}")
+  private String secret;
   private Key key;
 
   @Override
