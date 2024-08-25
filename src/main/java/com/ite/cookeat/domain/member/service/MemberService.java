@@ -7,6 +7,7 @@ import com.ite.cookeat.domain.member.dto.PostLoginReq;
 import com.ite.cookeat.domain.member.dto.PostLoginRes;
 import com.ite.cookeat.domain.member.dto.PostMemberOneLinerReq;
 import com.ite.cookeat.domain.member.dto.PostSignUpReq;
+import com.ite.cookeat.domain.member.dto.PostSubscriptionReq;
 import com.ite.cookeat.global.dto.PaginatedRes;
 
 public interface MemberService {
@@ -34,4 +35,6 @@ public interface MemberService {
   Integer modifyVerifyStatus(String username, String status);
 
   String findMemberVerifiedStatus(String username);
+  
+  Integer addSubscription(PostSubscriptionReq req);
 }

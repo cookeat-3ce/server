@@ -36,7 +36,8 @@ public enum ErrorCode {
   MEMBER_SSKCOOK_INSERT_FAIL(NOT_FOUND, "보관 실패했습니다."),
 
   /* code: 409 */
-  ADD_MEMBER_TO_ALERT_CONFLICT(CONFLICT, "알림받기 등록에 실패했습니다.");
+  ADD_MEMBER_TO_ALERT_CONFLICT(CONFLICT, "알림받기 등록에 실패했습니다."),
+  SUBSCRIPTION_CONFLICT(CONFLICT, "구독에 실패했습니다.");
   /* code: 500 */
 
   private final HttpStatus httpStatus;
