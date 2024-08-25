@@ -4,6 +4,7 @@ import com.ite.cookeat.domain.member.dto.GetMemberNoticePageRes;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.PostLoginReq;
 import com.ite.cookeat.domain.member.dto.PostLoginRes;
+import com.ite.cookeat.domain.member.dto.PostMemberOneLinerReq;
 import com.ite.cookeat.domain.member.dto.PostSignUpReq;
 import com.ite.cookeat.domain.member.service.MemberService;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
@@ -29,6 +30,11 @@ public class MemberController {
   private final static String AUTHORIZATION_HEADER = "auth";
   private static final String PREFIX = "Bearer ";
   private final MemberService memberService;
+
+  @PostMapping("/one-liner")
+  public ResponseEntity<Integer> memberOneLinerModify(@RequestBody PostMemberOneLinerReq req) {
+    return ResponseEntity.ok(memberService.modifyMemberOneLiner(req));
+  }
 
   @PostMapping("/sign-up")
   public ResponseEntity<String> memberAdd(@RequestBody PostSignUpReq postSignUpReq) {
