@@ -22,4 +22,9 @@ public interface SskcookService {
 
   List<GetSearchSskcookRes> findMonthlySskcook(GetSearchSskcookReq getSearchSskcookReq);
 
+  void addLikes(String username, Integer sskcookId);
+
+  void removeLikes(String username, Integer sskcookId);
+
+  Integer findLikes(String username, Integer sskcookId);
 }
