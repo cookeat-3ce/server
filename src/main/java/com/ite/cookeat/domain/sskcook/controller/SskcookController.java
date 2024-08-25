@@ -2,6 +2,7 @@ package com.ite.cookeat.domain.sskcook.controller;
 
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookPageRes;
+import com.ite.cookeat.domain.sskcook.dto.GetTotalSskcookDetailsRes;
 import com.ite.cookeat.domain.sskcook.service.SskcookService;
 import java.io.IOException;
 import java.util.List;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -23,6 +25,12 @@ import org.springframework.web.multipart.MultipartFile;
 public class SskcookController {
 
   private final SskcookService sskcookService;
+
+  @GetMapping("/{sskcookId}")
+  public ResponseEntity<GetTotalSskcookDetailsRes> sskcookDetails(@PathVariable Integer sskcookId,
+      @RequestBody String username) throws IOException {
+    return ResponseEntity.ok(sskcookService.findSskcookTotalDetails(username, sskcookId));
+  }
 
   @GetMapping("/fridge/{username}")
   public ResponseEntity<List<GetFridgeRecipeRes>> recommendFridgeList(
@@ -48,7 +56,7 @@ public class SskcookController {
     if (!tag.isEmpty()) {
       return ResponseEntity.ok(sskcookService.findTagSskcookList(tag, page));
     }
-    
+
     if (!date.isEmpty()) {
       return ResponseEntity.ok(sskcookService.findMonthlySskcookList(date, page));
     }

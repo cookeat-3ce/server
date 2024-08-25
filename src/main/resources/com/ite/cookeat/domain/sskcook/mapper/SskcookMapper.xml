@@ -246,8 +246,71 @@
     ]]>
   </select>
 
-  <update id="updateSskcookCount" parameterType="Integer">
+  <select id="selectSskcookDetails" parameterType="GetSskcookDetailsReq"
+    resultType="GetSskcookDetailsRes">
     <![CDATA[
+    SELECT a.sskcook_id                   AS sskcookId,
+           a.sskcook_url                  AS sskcookUrl,
+           a.title,
+           a.recipe,
+           b.nickname,
+           TO_CHAR(b.profile_img)         AS profileImage,
+           CASE
+             WHEN c.member_id IS NOT NULL THEN 'Liked'
+             ELSE 'Not Liked'
+             END                          AS likeStatus,
+           CASE
+             WHEN d.member_id IS NOT NULL THEN 'Saved'
+             ELSE 'Not Saved'
+             END                          AS saveStatus,
+           CASE
+             WHEN e.follower_id IS NOT NULL THEN 'Following'
+             ELSE 'Not Following'
+             END                          AS followStatus,
+           NVL(like_counts.like_count, 0) AS likeCount
+    FROM sskcook a
+           INNER JOIN member b ON b.member_id = a.member_id
+           LEFT JOIN likes c
+                     ON c.sskcook_id = a.sskcook_id
+                       AND
+                        c.member_id = (SELECT member_id FROM member WHERE username = #{username})
+           LEFT JOIN member_sskcook d
+                     ON d.sskcook_id = a.sskcook_id
+                       AND
+                        d.member_id = (SELECT member_id FROM member WHERE username = #{username})
+           LEFT JOIN subscription e
+                     ON e.following_id = a.member_id
+                       AND
+                        e.follower_id = (SELECT member_id FROM member WHERE username = #{username})
+           LEFT JOIN (SELECT sskcook_id, COUNT(*) AS like_count
+                      FROM likes
+                      GROUP BY sskcook_id) like_counts
+                     ON like_counts.sskcook_id = a.sskcook_id
+    WHERE b.status = 'ACTIVE'
+      AND a.sskcook_id = #{sskcookId}
+    ]]>
+
+</select>
+
+  <select id="selectSskcookTags" parameterType="Integer" resultType="String">
+<![CDATA[
+    SELECT a.hashtag_name
+    FROM hashtag a
+           INNER JOIN sskcook_hashtag b ON a.hashtag_id = b.hashtag_id
+    WHERE b.sskcook_id = #{sskcookId}
+    ]]>
+</select>
+
+  <select id="selectSskcookIngredients" parameterType="Integer"
+    resultType="GetSskcookIngredientsRes">
+<![CDATA[
+    SELECT name, amount
+    FROM ingredient_sskcook
+    WHERE #{sskcookId} = sskcook_id
+    ]]>
+  </select>
+  <update id="updateSskcookCount" parameterType="Integer">
+<![CDATA[
     UPDATE member
     SET sskcook_count = (SELECT COUNT(*)
                          FROM sskcook
@@ -256,8 +319,9 @@
     WHERE member_id = #{memberId}
     ]]>
   </update>
+
   <update id="updateSskcookDeletedate" parameterType="Integer">
-    <![CDATA[
+<![CDATA[
     UPDATE sskcook
     SET deletedate = CURRENT_TIMESTAMP
     WHERE sskcook_id = #{sskcookId}

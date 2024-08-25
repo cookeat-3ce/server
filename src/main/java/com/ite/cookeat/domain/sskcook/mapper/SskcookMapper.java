@@ -1,6 +1,9 @@
 package com.ite.cookeat.domain.sskcook.mapper;
 
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
+import com.ite.cookeat.domain.sskcook.dto.GetSskcookDetailsReq;
+import com.ite.cookeat.domain.sskcook.dto.GetSskcookDetailsRes;
+import com.ite.cookeat.domain.sskcook.dto.GetSskcookIngredientsRes;
 import com.ite.cookeat.domain.sskcook.dto.PostHashtagReq;
 import com.ite.cookeat.domain.sskcook.dto.PostIngredientReq;
 import com.ite.cookeat.domain.sskcook.dto.PostLikesReq;
@@ -57,4 +60,9 @@ public interface SskcookMapper {
 
   Integer selectLikesCount(PostLikesReq postLikesReq);
 
+  List<GetSskcookIngredientsRes> selectSskcookIngredients(Integer sskcookId);
+
+  List<String> selectSskcookTags(Integer sskcookId);
+
+  GetSskcookDetailsRes selectSskcookDetails(GetSskcookDetailsReq getSskcookDetailsReq);
 }

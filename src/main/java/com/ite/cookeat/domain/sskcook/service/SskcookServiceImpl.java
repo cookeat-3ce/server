@@ -6,10 +6,15 @@ import static com.ite.cookeat.exception.ErrorCode.INVALID_JSON;
 import static com.ite.cookeat.exception.ErrorCode.SSKCOOK_NOT_FOUND;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ite.cookeat.domain.member.service.MemberService;
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookPageRes;
+import com.ite.cookeat.domain.sskcook.dto.GetSskcookDetailsReq;
+import com.ite.cookeat.domain.sskcook.dto.GetSskcookDetailsRes;
+import com.ite.cookeat.domain.sskcook.dto.GetSskcookIngredientsRes;
+import com.ite.cookeat.domain.sskcook.dto.GetTotalSskcookDetailsRes;
 import com.ite.cookeat.domain.sskcook.dto.PostHashtagReq;
 import com.ite.cookeat.domain.sskcook.dto.PostIngredientReq;
 import com.ite.cookeat.domain.sskcook.dto.PostLikesReq;
@@ -172,6 +177,27 @@ public class SskcookServiceImpl implements SskcookService {
         .sskcookId(sskcookId)
         .build();
     return sskcookMapper.selectLikesCount(modifiedReq);
+  }
+
+  @Override
+  @Transactional
+  public GetTotalSskcookDetailsRes findSskcookTotalDetails(String username, Integer sskcookId)
+      throws IOException {
+    JsonNode jsonNode = objectMapper.readTree(username);
+    String name = jsonNode.get("username").asText();
+    GetSskcookDetailsReq getSskcookDetailsReq = GetSskcookDetailsReq.builder()
+        .username(name)
+        .sskcookId(sskcookId)
+        .build();
+    System.out.println(username + " " + sskcookId);
+    List<String> tags = sskcookMapper.selectSskcookTags(sskcookId);
+    GetSskcookDetailsRes details = sskcookMapper.selectSskcookDetails(getSskcookDetailsReq);
+    List<GetSskcookIngredientsRes> ingredients = sskcookMapper.selectSskcookIngredients(sskcookId);
+    return GetTotalSskcookDetailsRes.builder()
+        .details(details)
+        .tags(tags)
+        .ingredients(ingredients)
+        .build();
   }
 
   @Override

@@ -2,17 +2,21 @@ package com.ite.cookeat.domain.sskcook.service;
 
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookPageRes;
+import com.ite.cookeat.domain.sskcook.dto.GetTotalSskcookDetailsRes;
+import java.io.IOException;
 import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface SskcookService {
+
+  GetTotalSskcookDetailsRes findSskcookTotalDetails(String username, Integer sskcookId)
+      throws IOException;
 
   List<GetFridgeRecipeRes> findMyFridgeRecipe(String username);
 
   GetSearchSskcookPageRes findSearchRecentSskcookList(String keyword, Integer page);
 
   Integer addSskcook(String postSskcookReq, MultipartFile file);
-
 
   GetSearchSskcookPageRes findSearchLikesSskcookList(String keyword, Integer page);
 
@@ -25,7 +29,6 @@ public interface SskcookService {
   GetSearchSskcookPageRes findTagSskcookList(String tag, Integer page);
 
   Integer modifySskcookDeletedate(Integer sskcookId);
-
 
   void addLikes(String username, Integer sskcookId);
 
