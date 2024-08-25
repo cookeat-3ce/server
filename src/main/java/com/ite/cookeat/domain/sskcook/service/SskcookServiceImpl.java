@@ -1,18 +1,18 @@
 package com.ite.cookeat.domain.sskcook.service;
 
-import static com.ite.cookeat.exception.ErrorCode.SSKCOOK_NOT_FOUND;
 import static com.ite.cookeat.exception.ErrorCode.FILE_UPLOAD_FAIL;
 import static com.ite.cookeat.exception.ErrorCode.FIND_FAIL_SSKCOOK;
 import static com.ite.cookeat.exception.ErrorCode.INVALID_JSON;
+import static com.ite.cookeat.exception.ErrorCode.SSKCOOK_NOT_FOUND;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
+import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
+import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
 import com.ite.cookeat.domain.sskcook.dto.PostHashtagReq;
 import com.ite.cookeat.domain.sskcook.dto.PostIngredientReq;
 import com.ite.cookeat.domain.sskcook.dto.PostSskcookReq;
-import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
-import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
 import com.ite.cookeat.domain.sskcook.mapper.SskcookMapper;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.s3.service.S3UploadService;
@@ -33,8 +33,6 @@ public class SskcookServiceImpl implements SskcookService {
   private final SskcookMapper sskcookMapper;
   private final S3UploadService s3UploadService;
   private final ObjectMapper objectMapper;
-
-  private final SskcookMapper sskcookMapper;
 
   @Override
   @Transactional(readOnly = true)
@@ -64,6 +62,10 @@ public class SskcookServiceImpl implements SskcookService {
       throw new CustomException(SSKCOOK_NOT_FOUND);
     }
     return sskcookId;
+  }
+
+  @Override
+  @Transactional
   public List<GetSearchSskcookRes> findMonthlySskcook(GetSearchSskcookReq getSearchSskcookReq) {
     return sskcookMapper.selectMonthlySskcook(getSearchSskcookReq);
   }
