@@ -19,6 +19,7 @@ public class LongcookServiceImpl implements LongcookService {
   private final LongcookMapper longcookMapper;
 
   @Override
+  @Transactional
   public GetLongcookPageRes findLongcookList(String username, Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(9)
@@ -32,6 +33,7 @@ public class LongcookServiceImpl implements LongcookService {
   }
 
   @Override
+  @Transactional
   public GetLongcookPageRes findRecentLongcookList(Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(9)

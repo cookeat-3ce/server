@@ -12,6 +12,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -23,6 +24,7 @@ public class SskcookServiceImpl implements SskcookService {
   private final SskcookMapper sskcookMapper;
 
   @Override
+  @Transactional
   public GetSearchSskcookPageRes findSearchRecentSskcookList(
       String keyword, Integer page) {
     Criteria cri = Criteria.builder()
@@ -39,6 +41,7 @@ public class SskcookServiceImpl implements SskcookService {
   }
 
   @Override
+  @Transactional
   public GetSearchSskcookPageRes findSearchLikesSskcookList(
       String keyword, Integer page) {
     Criteria cri = Criteria.builder()
@@ -54,6 +57,7 @@ public class SskcookServiceImpl implements SskcookService {
   }
 
   @Override
+  @Transactional
   public GetSearchSskcookPageRes findRecentSskcookList(Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)
@@ -67,6 +71,7 @@ public class SskcookServiceImpl implements SskcookService {
   }
 
   @Override
+  @Transactional
   public GetSearchSskcookPageRes findMonthlySskcookList(String date, Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)
@@ -81,6 +86,7 @@ public class SskcookServiceImpl implements SskcookService {
   }
 
   @Override
+  @Transactional
   public GetSearchSskcookPageRes findUserSskcookList(String username, Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)
@@ -94,6 +100,7 @@ public class SskcookServiceImpl implements SskcookService {
   }
 
   @Override
+  @Transactional
   public GetSearchSskcookPageRes findTagSskcookList(String tag, Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)
