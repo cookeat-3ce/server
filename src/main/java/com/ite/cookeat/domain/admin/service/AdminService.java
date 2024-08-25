@@ -11,4 +11,6 @@ public interface AdminService {
   Integer modifyVerifyMemberStatus(PostVerifyRequestReq req);
 
   GetReportSskcookPageRes findReportSskcookList(Integer page);
+
+  Integer modifyReportSskcookStatus(Integer sskcookId);
 }

@@ -6,7 +6,9 @@ import com.ite.cookeat.domain.admin.dto.PostVerifyRequestReq;
 import com.ite.cookeat.domain.admin.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,5 +35,10 @@ public class AdminController {
   @GetMapping("/report")
   public ResponseEntity<GetReportSskcookPageRes> reportList(@RequestParam Integer page) {
     return ResponseEntity.ok(adminService.findReportSskcookList(page));
+  }
+
+  @DeleteMapping("/sskcook/{sskcookId}")
+  public ResponseEntity<Integer> reportSskcookStatusModify(@PathVariable Integer sskcookId) {
+    return ResponseEntity.ok(adminService.modifyReportSskcookStatus(sskcookId));
   }
 }

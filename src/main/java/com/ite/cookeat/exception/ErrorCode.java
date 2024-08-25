@@ -1,6 +1,7 @@
 package com.ite.cookeat.exception;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
@@ -31,10 +32,10 @@ public enum ErrorCode {
   LONGCOOK_NOT_FOUND(NOT_FOUND, "스윽쿡(롱쿡) 정보를 찾을 수 없습니다."),
   NOTICE_NOT_FOUND(NOT_FOUND, "공지 정보를 찾을 수 없습니다."),
   MEMBER_SSKCOOK_DELETE_FAIL(NOT_FOUND, "삭제 실패했습니다."),
-  MEMBER_SSKCOOK_INSERT_FAIL(NOT_FOUND, "보관 실패했습니다.");
-
+  MEMBER_SSKCOOK_INSERT_FAIL(NOT_FOUND, "보관 실패했습니다."),
 
   /* code: 409 */
+  REPORTED_SSKCOOK_CONFLICT(CONFLICT, "신고된 슥쿡에 대한 삭제처리가 실패했습니다.");
   /* code: 500 */
 
   private final HttpStatus httpStatus;
