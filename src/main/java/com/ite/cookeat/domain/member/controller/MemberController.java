@@ -97,4 +97,9 @@ public class MemberController {
       @RequestParam Integer page) {
     return ResponseEntity.ok(memberService.findMemberNotices(username, page));
   }
+
+  @GetMapping("/verify/{username}")
+  public ResponseEntity<String> memberVerifyStatus(@PathVariable String username) {
+    return ResponseEntity.ok(memberService.findMemberVerifiedStatus(username));
+  }
 }

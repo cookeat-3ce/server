@@ -29,4 +29,5 @@ public interface MemberService {
 
   Integer modifyVerifyStatus(String username, String status);
 
+  String findMemberVerifiedStatus(String username);
 }
