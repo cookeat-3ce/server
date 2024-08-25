@@ -24,6 +24,8 @@ public interface SskcookMapper {
 
   List<GetSearchSskcookRes> selectRecentSskcook(GetSearchSskcookReq getSearchSskcookReq);
 
+  Integer updateSskcookDeletedate(Integer sskcookId);
+
   List<GetSearchSskcookRes> selectMonthlySskcook(GetSearchSskcookReq getSearchSskcookReq);
 
 }

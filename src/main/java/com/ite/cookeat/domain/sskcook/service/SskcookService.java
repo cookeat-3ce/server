@@ -18,5 +18,8 @@ public interface SskcookService {
 
   List<GetSearchSskcookRes> findRecentSskcook(GetSearchSskcookReq getSearchSskcookReq);
 
+  Integer modifySskcookDeletedate(Integer sskcookId);
+
   List<GetSearchSskcookRes> findMonthlySskcook(GetSearchSskcookReq getSearchSskcookReq);
+
 }

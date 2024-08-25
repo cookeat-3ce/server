@@ -1,5 +1,6 @@
 package com.ite.cookeat.domain.sskcook.service;
 
+import static com.ite.cookeat.exception.ErrorCode.SSKCOOK_NOT_FOUND;
 import static com.ite.cookeat.exception.ErrorCode.FILE_UPLOAD_FAIL;
 import static com.ite.cookeat.exception.ErrorCode.FIND_FAIL_SSKCOOK;
 import static com.ite.cookeat.exception.ErrorCode.INVALID_JSON;
@@ -56,11 +57,19 @@ public class SskcookServiceImpl implements SskcookService {
   }
 
   @Override
+  @Transactional
+  public Integer modifySskcookDeletedate(Integer sskcookId) {
+    Integer result = sskcookMapper.updateSskcookDeletedate(sskcookId);
+    if (result <= 0) {
+      throw new CustomException(SSKCOOK_NOT_FOUND);
+    }
+    return sskcookId;
   public List<GetSearchSskcookRes> findMonthlySskcook(GetSearchSskcookReq getSearchSskcookReq) {
     return sskcookMapper.selectMonthlySskcook(getSearchSskcookReq);
   }
 
   @Override
+  @Transactional(readOnly = true)
   public List<GetFridgeRecipeRes> findMyFridgeRecipe(String username) {
 
     // Flask API의 URL 구성
@@ -125,4 +134,6 @@ public class SskcookServiceImpl implements SskcookService {
     return sskcookId;
 
   }
+
+
 }

@@ -104,6 +104,13 @@
     OFFSET (#{page} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
     ]]>
     </select>
+  <update id="updateSskcookDeletedate" parameterType="Integer">
+    <![CDATA[
+    UPDATE sskcook
+    SET deletedate = CURRENT_TIMESTAMP
+    WHERE sskcook_id = #{sskcookId}
+    ]]>
+  </update>
   <select id="selectMonthlySskcook" parameterType="GetSearchSskcookReq"
     resultType="GetSearchSskcookRes">
 <![CDATA[

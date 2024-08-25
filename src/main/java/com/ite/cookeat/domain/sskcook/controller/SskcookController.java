@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,7 +58,6 @@ public class SskcookController {
     }
 
     // 최신순 10개
-
     if (keyword == null) {
       return ResponseEntity.ok(sskcookService.findRecentSskcook(modifiedReq));
     }
@@ -67,5 +67,11 @@ public class SskcookController {
     }
 
     return ResponseEntity.ok(sskcookService.findSearchLikesSskcook(modifiedReq));
+  }
+
+  @DeleteMapping("/{sskcookId}")
+  public ResponseEntity<?> sskcookDelete(@PathVariable Integer sskcookId) {
+    sskcookService.modifySskcookDeletedate(sskcookId);
+    return ResponseEntity.noContent().build();
   }
 }
