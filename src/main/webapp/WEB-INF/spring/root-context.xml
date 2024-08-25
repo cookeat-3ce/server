@@ -30,6 +30,7 @@
                          com.ite.cookeat.domain.member,
                          com.ite.cookeat.domain.sskcook,
                          com.ite.cookeat.domain.notice,
+                         com.ite.cookeat.domain.member_sskcook",
                          com.ite.cookeat.domain.admin,
                          com.ite.cookeat.global.dto,
                          com.ite.cookeat.domain.fridge">
