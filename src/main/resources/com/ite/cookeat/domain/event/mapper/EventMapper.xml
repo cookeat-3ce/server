@@ -3,4 +3,41 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ite.cookeat.domain.event.mapper.EventMapper">
 
+  <select id="selectEventList" parameterType="Criteria" resultType="GetEventRes">
+<![CDATA[
+    SELECT event_id           AS eventId,
+           title,
+           startdate,
+           enddate,
+           TO_CHAR(thumbnail) AS thumbnail,
+           regdate
+    FROM event
+    WHERE deletedate IS NULL
+    ORDER BY regdate DESC
+    OFFSET (#{pageNum} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+    ]]>
+  </select>
+
+  <select id="selectEventDetail" parameterType="Integer" resultType="GetEventDetailRes">
+<![CDATA[
+    SELECT event_id           AS eventId,
+           title,
+           content,
+           startdate,
+           enddate,
+           TO_CHAR(thumbnail) AS thumbnail,
+           regdate
+    FROM event
+    WHERE deletedate IS NULL
+      AND event_id = #{eventId}
+    ]]>
+  </select>
+
+  <select id="selectEventCount">
+    <![CDATA[
+    SELECT COUNT(event_id)
+    FROM event
+    WHERE deletedate IS NULL
+    ]]>
+  </select>
 </mapper>
