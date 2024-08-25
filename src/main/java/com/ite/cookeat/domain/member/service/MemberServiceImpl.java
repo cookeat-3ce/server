@@ -1,12 +1,14 @@
 package com.ite.cookeat.domain.member.service;
 
 import static com.ite.cookeat.exception.ErrorCode.MEMBER_NOT_FOUND;
+import static com.ite.cookeat.exception.ErrorCode.VERIFYING_FAILED;
 
 import com.ite.cookeat.domain.member.dto.GetMemberNoticePageRes;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.Member;
 import com.ite.cookeat.domain.member.dto.PostLoginReq;
 import com.ite.cookeat.domain.member.dto.PostLoginRes;
+import com.ite.cookeat.domain.member.dto.PostMemberOneLinerReq;
 import com.ite.cookeat.domain.member.dto.PostSignUpReq;
 import com.ite.cookeat.domain.member.dto.TokenDTO;
 import com.ite.cookeat.domain.member.mapper.MemberMapper;
@@ -96,6 +98,16 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
+  @Transactional
+  public Integer modifyMemberOneLiner(PostMemberOneLinerReq req) {
+    Integer result = memberMapper.updateMemberOneLiner(req);
+    if (result <= 0) {
+      throw new CustomException(MEMBER_NOT_FOUND);
+    }
+    return result;
+  }
+
+  @Override
   @Transactional(readOnly = true)
   public List<GetUserDetailsRes> findSearchMember(GetSearchSskcookReq getSearchSskcookReq) {
     return memberMapper.selectSearchMember(getSearchSskcookReq);
@@ -108,6 +120,16 @@ public class MemberServiceImpl implements MemberService {
     if (result <= 0) {
       throw new CustomException(MEMBER_NOT_FOUND);
     }
+  }
+
+  @Override
+  @Transactional
+  public Integer modifyVerifyStatus(String username, String status) {
+    Integer result = memberMapper.updateVerifiedStatus(username, status);
+    if (result <= 0) {
+      throw new CustomException(VERIFYING_FAILED);
+    }
+    return result;
   }
 
   @Override

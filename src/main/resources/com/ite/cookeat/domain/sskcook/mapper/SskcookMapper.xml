@@ -2,6 +2,51 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ite.cookeat.domain.sskcook.mapper.SskcookMapper">
+  <delete id="deleteLikes" parameterType="PostLikesReq">
+    <![CDATA[
+    DELETE
+    FROM likes
+    WHERE #{memberId} = member_id
+      AND #{sskcookId} = sskcook_id
+    ]]>
+  </delete>
+  <insert id="insertSskcook" parameterType="PostSskcookReq">
+    <selectKey keyProperty="sskcookId" order="BEFORE" resultType="Integer">
+      <![CDATA[
+        SELECT sskcook_seq.nextval AS sskcookId FROM dual
+      ]]>
+    </selectKey>
+    <![CDATA[
+        INSERT INTO sskcook (sskcook_id, sskcook_url, member_id, title, recipe)
+        VALUES (#{sskcookId}, #{sskcookUrl}, #{memberId}, #{title}, #{recipe})
+    ]]>
+  </insert>
+  <insert id="insertIngredientSskcook" parameterType="PostIngredientReq">
+    <![CDATA[
+    INSERT INTO ingredient_sskcook (ingredient_id, sskcook_id, name, amount)
+    VALUES (ingredient_sskcook_seq.nextval, #{sskcookId}, #{name}, #{amount})
+    ]]>
+  </insert>
+  <insert id="insertHashtag" parameterType="PostHashtagReq">
+    <![CDATA[
+    INSERT INTO sskcook_hashtag (sskcook_hashtag_id, sskcook_id, hashtag_id)
+    VALUES (sskcook_hashtag_seq.nextval, #{sskcookId}, #{hashtagId})
+    ]]>
+  </insert>
+  <insert id="insertLikes" parameterType="PostLikesReq">
+  <![CDATA[
+    INSERT INTO likes(like_id, member_id, sskcook_id)
+    VALUES (like_seq.nextval, #{memberId}, #{sskcookId})
+    ]]>
+  </insert>
+  <select id="selectLikesCount" parameterType="PostLikesReq" resultType="Integer">
+    <![CDATA[
+    SELECT COUNT(member_id)
+    FROM likes
+    WHERE member_id = #{memberId}
+      AND sskcook_id = #{sskcookId}
+    ]]>
+  </select>
   <select id="selectSearchRecentSskcook" parameterType="GetSearchSskcookReq"
     resultType="GetSearchSskcookRes">
         <![CDATA[
@@ -100,4 +145,21 @@
     OFFSET (#{page} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
     ]]>
   </select>
+  <update id="updateSskcookCount" parameterType="Integer">
+    <![CDATA[
+    UPDATE member
+    SET sskcook_count = (SELECT COUNT(*)
+                         FROM sskcook
+                         WHERE member_id = #{memberId}
+                           AND STATUS = 'ACTIVE')
+    WHERE member_id = #{memberId}
+    ]]>
+  </update>
+  <update id="updateSskcookDeletedate" parameterType="Integer">
+    <![CDATA[
+    UPDATE sskcook
+    SET deletedate = CURRENT_TIMESTAMP
+    WHERE sskcook_id = #{sskcookId}
+    ]]>
+  </update>
 </mapper>
