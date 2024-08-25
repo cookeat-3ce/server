@@ -24,6 +24,7 @@ public enum ErrorCode {
 
   /* code: 404 */
   INGREDIENT_NOT_FOUND(NOT_FOUND, "식재료(회원)를 찾을 수 없습니다."),
+  VERIFY_REQUEST_NOT_FOUND(NOT_FOUND, "인증 요청 정보를 찾을 수 없습니다."),
   LIKES_DELETE_FAIL(NOT_FOUND, "좋아요 취소 실패했습니다."),
   LIKES_INSERT_FAIL(NOT_FOUND, "좋아요 실패했습니다."),
   SSKCOOK_NOT_FOUND(NOT_FOUND, "슥쿡 정보를 찾을 수 없습니다."),
