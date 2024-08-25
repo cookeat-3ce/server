@@ -33,7 +33,6 @@
                          com.ite.cookeat.domain.admin,
                          com.ite.cookeat.global.dto,
                          com.ite.cookeat.domain.fridge">
-
     </property>
   </bean>
 

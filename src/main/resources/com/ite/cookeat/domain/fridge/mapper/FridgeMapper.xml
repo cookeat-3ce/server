@@ -3,12 +3,32 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ite.cookeat.domain.fridge.mapper.FridgeMapper">
 
+  <insert id="insertIngredient" parameterType="PostIngredientReq">
+    <selectKey keyProperty="ingredientId" order="BEFORE" resultType="Integer">
+      <![CDATA[
+        SELECT ingredient_member_seq.nextval AS ingredientId FROM dual
+      ]]>
+    </selectKey>
+    <![CDATA[
+    INSERT INTO ingredient_member (ingredient_id, member_id, name, amount, icon, regdate)
+    VALUES (#{ingredientId}, #{memberId}, #{name}, #{amount}, #{icon}, CURRENT_TIMESTAMP)
+    ]]>
+  </insert>
+
   <select id="selectIngredients" parameterType="Integer" resultType="GetIngredientsRes">
     <![CDATA[
-    SELECT name, amount, icon
+    SELECT ingredient_id AS ingredientId, name, amount, icon
     FROM ingredient_member
     WHERE member_id = #{memberId}
       AND deletedate IS NULL
     ]]>
   </select>
+
+  <update id="updateIngredientDeletedate" parameterType="Integer">
+    <![CDATA[
+    UPDATE ingredient_member
+    SET deletedate = CURRENT_TIMESTAMP
+    WHERE ingredient_id = #{ingredientId}
+    ]]>
+  </update>
 </mapper>

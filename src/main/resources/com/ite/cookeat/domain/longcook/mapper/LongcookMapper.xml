@@ -20,13 +20,13 @@
 
   <select id="selectLongcookList" parameterType="GetLongcookReq" resultType="GetLongcookRes">
     <![CDATA[
-    SELECT a.longcook_id                               AS longcookId,
-           b.username                                  AS username,
-           b.nickname                                  AS nickname,
-           a.title                                     AS title,
-           a.longcook_url                              AS longcookUrl,
-           a.regdate                                   AS regdate,
-           TO_CHAR(b.profile_img)                      AS profileImage
+    SELECT a.longcook_id          AS longcookId,
+           b.username             AS username,
+           b.nickname             AS nickname,
+           a.title                AS title,
+           a.longcook_url         AS longcookUrl,
+           a.regdate              AS regdate,
+           TO_CHAR(b.profile_img) AS profileImage
     FROM longcook a
            INNER JOIN member b ON b.member_id = a.member_id
     WHERE b.username = #{username}
@@ -35,4 +35,11 @@
     OFFSET (#{page} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
     ]]>
   </select>
+  <update id="updateLongcookDeletedate" parameterType="Integer">
+    <![CDATA[
+    UPDATE longcook
+    SET deletedate = CURRENT_TIMESTAMP
+    WHERE longcook_id = #{longcookId}
+    ]]>
+  </update>
 </mapper>
