@@ -104,4 +104,12 @@
     OFFSET (#{page} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
     ]]>
   </select>
+
+  <update id="updateVerifiedStatus">
+    <![CDATA[
+    UPDATE member
+    SET verified_status = #{status}
+    WHERE username = #{username}
+    ]]>
+  </update>
 </mapper>

@@ -24,4 +24,6 @@ public interface MemberService {
   Integer modifyMemberOneLiner(PostMemberOneLinerReq req);
 
   List<GetUserDetailsRes> findSearchMember(GetSearchSskcookReq getSearchSskcookReq);
+
+  Integer modifyVerifyStatus(String username, String status);
 }
