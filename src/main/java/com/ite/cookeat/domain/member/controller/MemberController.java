@@ -4,6 +4,7 @@ import com.ite.cookeat.domain.member.dto.GetMemberNoticePageRes;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.PostLoginReq;
 import com.ite.cookeat.domain.member.dto.PostLoginRes;
+import com.ite.cookeat.domain.member.dto.PostMemberOneLinerReq;
 import com.ite.cookeat.domain.member.dto.PostSignUpReq;
 import com.ite.cookeat.domain.member.service.MemberService;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
@@ -34,6 +35,10 @@ public class MemberController {
   @PatchMapping(value = "/{username}/verify", produces = "application/json; charset=UTF-8")
   public ResponseEntity<Integer> verifyStatusModify(@PathVariable String username) {
     return ResponseEntity.ok(memberService.modifyVerifyStatus(username, "REQUEST_VERIFY"));
+
+  @PostMapping("/one-liner")
+  public ResponseEntity<Integer> memberOneLinerModify(@RequestBody PostMemberOneLinerReq req) {
+    return ResponseEntity.ok(memberService.modifyMemberOneLiner(req));
   }
 
   @PostMapping("/sign-up")
