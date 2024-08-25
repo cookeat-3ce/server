@@ -3,7 +3,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ite.cookeat.domain.fridge.mapper.FridgeMapper">
 
-  <insert id="insertIngredient" parameterType="PostIngredientReq">
+  <insert id="insertIngredient" parameterType="PostMemberIngredientReq">
     <selectKey keyProperty="ingredientId" order="BEFORE" resultType="Integer">
       <![CDATA[
         SELECT ingredient_member_seq.nextval AS ingredientId FROM dual
@@ -15,7 +15,7 @@
     ]]>
   </insert>
 
-  <select id="selectIngredients" parameterType="Integer" resultType="GetIngredientsRes">
+  <select id="selectIngredients" parameterType="Integer" resultType="GetMemberIngredientsRes">
     <![CDATA[
     SELECT ingredient_id AS ingredientId, name, amount, icon
     FROM ingredient_member

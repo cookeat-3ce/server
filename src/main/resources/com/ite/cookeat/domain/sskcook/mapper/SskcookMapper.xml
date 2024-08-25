@@ -21,7 +21,7 @@
         VALUES (#{sskcookId}, #{sskcookUrl}, #{memberId}, #{title}, #{recipe})
     ]]>
   </insert>
-  <insert id="insertIngredientSskcook" parameterType="PostIngredientReq">
+  <insert id="insertIngredientSskcook" parameterType="PostSskcookIngredientReq">
     <![CDATA[
     INSERT INTO ingredient_sskcook (ingredient_id, sskcook_id, name, amount)
     VALUES (ingredient_sskcook_seq.nextval, #{sskcookId}, #{name}, #{amount})

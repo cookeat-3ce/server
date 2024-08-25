@@ -8,7 +8,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class PostIngredientReq {
+public class PostMemberIngredientReq {
 
   @Setter
   private Integer ingredientId;

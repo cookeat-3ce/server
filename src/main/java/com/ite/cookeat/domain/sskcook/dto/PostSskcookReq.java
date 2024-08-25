@@ -15,7 +15,7 @@ public class PostSskcookReq {
   private String title;
   private String recipe;
   private List<PostHashtagReq> hashtag;
-  private List<PostIngredientReq> ingredient;
+  private List<PostSskcookIngredientReq> ingredient;
   private Integer sskcookId;
 
   @Setter

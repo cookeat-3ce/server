@@ -1,17 +1,16 @@
-package com.ite.cookeat.domain.sskcook.dto;
+package com.ite.cookeat.domain.fridge.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class PostIngredientReq {
+public class GetMemberIngredientsRes {
 
+  private Integer ingredientId;
   private String name;
   private String amount;
-  @Setter
-  private Integer sskcookId;
+  private String icon;
 }

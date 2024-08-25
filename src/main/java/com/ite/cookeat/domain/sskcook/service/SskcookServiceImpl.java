@@ -12,8 +12,8 @@ import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
 import com.ite.cookeat.domain.sskcook.dto.PostHashtagReq;
-import com.ite.cookeat.domain.sskcook.dto.PostIngredientReq;
 import com.ite.cookeat.domain.sskcook.dto.PostLikesReq;
+import com.ite.cookeat.domain.sskcook.dto.PostSskcookIngredientReq;
 import com.ite.cookeat.domain.sskcook.dto.PostSskcookReq;
 import com.ite.cookeat.domain.sskcook.mapper.SskcookMapper;
 import com.ite.cookeat.exception.CustomException;
@@ -158,9 +158,9 @@ public class SskcookServiceImpl implements SskcookService {
     }
     Integer sskcookId = postSskcookReq.getSskcookId();
 
-    List<PostIngredientReq> ingredients = postSskcookReq.getIngredient();
+    List<PostSskcookIngredientReq> ingredients = postSskcookReq.getIngredient();
     if (ingredients != null && !ingredients.isEmpty()) {
-      for (PostIngredientReq ingredient : ingredients) {
+      for (PostSskcookIngredientReq ingredient : ingredients) {
         ingredient.setSskcookId(sskcookId);
         sskcookMapper.insertIngredientSskcook(ingredient);
       }
@@ -176,6 +176,4 @@ public class SskcookServiceImpl implements SskcookService {
     return sskcookId;
 
   }
-
-
 }

@@ -1,7 +1,7 @@
 package com.ite.cookeat.domain.fridge.controller;
 
-import com.ite.cookeat.domain.fridge.dto.GetIngredientsRes;
-import com.ite.cookeat.domain.fridge.dto.PostIngredientReq;
+import com.ite.cookeat.domain.fridge.dto.GetMemberIngredientsRes;
+import com.ite.cookeat.domain.fridge.dto.PostMemberIngredientReq;
 import com.ite.cookeat.domain.fridge.service.FridgeService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +22,13 @@ public class FridgeController {
   private final FridgeService fridgeService;
 
   @GetMapping("/{username}")
-  public ResponseEntity<List<GetIngredientsRes>> ingredientsList(@PathVariable String username) {
+  public ResponseEntity<List<GetMemberIngredientsRes>> ingredientsList(
+      @PathVariable String username) {
     return ResponseEntity.ok(fridgeService.findIngredients(username));
   }
 
   @PostMapping
-  public ResponseEntity<Integer> ingredientAdd(@RequestBody PostIngredientReq req) {
+  public ResponseEntity<Integer> ingredientAdd(@RequestBody PostMemberIngredientReq req) {
     return ResponseEntity.ok(fridgeService.saveIngredient(req));
   }
 
