@@ -1,8 +1,8 @@
 package com.ite.cookeat.domain.sskcook.controller;
 
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
-import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
+import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
 import com.ite.cookeat.domain.sskcook.service.SskcookService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -30,20 +30,29 @@ public class SskcookController {
   public ResponseEntity<List<GetSearchSskcookRes>> findSearchSskcookList(
       @RequestParam(value = "keyword", required = false) String keyword,
       @RequestParam(defaultValue = "1") Integer page,
-      @RequestParam(defaultValue = "latest") String sort) {
+      @RequestParam(defaultValue = "latest") String sort,
+      @RequestParam(defaultValue = "", required = false) String date) {
 
     GetSearchSskcookReq modifiedReq = GetSearchSskcookReq.builder()
         .keyword(keyword)
         .page(page)
+        .date(date)
         .sort(sort)
         .build();
 
-    // 최신순 10개
-    if (keyword == null)
-      return ResponseEntity.ok(sskcookService.findRecentSskcook(modifiedReq));
+    if (!date.isEmpty()) {
+      return ResponseEntity.ok(sskcookService.findMonthlySskcook(modifiedReq));
+    }
 
-    if ("latest".equals(sort))
+    // 최신순 10개
+
+    if (keyword == null) {
+      return ResponseEntity.ok(sskcookService.findRecentSskcook(modifiedReq));
+    }
+
+    if ("latest".equals(sort)) {
       return ResponseEntity.ok(sskcookService.findSearchRecentSskcook(modifiedReq));
+    }
 
     return ResponseEntity.ok(sskcookService.findSearchLikesSskcook(modifiedReq));
   }

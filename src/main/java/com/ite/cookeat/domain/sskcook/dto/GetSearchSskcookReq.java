@@ -12,6 +12,7 @@ public class GetSearchSskcookReq {
   private String keyword;
   private Integer page;
   private String sort;
+  private String date;
 
   @Builder.Default
   private Integer pageSize = 10;
