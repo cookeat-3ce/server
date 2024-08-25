@@ -32,6 +32,7 @@ public class LongcookServiceImpl implements LongcookService {
   }
 
   @Override
+  @Transactional
   public Integer modifyLongcookDeletedate(Integer longcookId) {
     Integer result = longcookMapper.updateLongcookDeletedate(longcookId);
     if (result <= 0) {
