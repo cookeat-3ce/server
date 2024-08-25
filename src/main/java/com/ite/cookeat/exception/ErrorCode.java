@@ -1,6 +1,7 @@
 package com.ite.cookeat.exception;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
@@ -28,9 +29,10 @@ public enum ErrorCode {
   LIKES_INSERT_FAIL(NOT_FOUND, "좋아요 실패했습니다."),
   SSKCOOK_NOT_FOUND(NOT_FOUND, "슥쿡 정보를 찾을 수 없습니다."),
   LONGCOOK_NOT_FOUND(NOT_FOUND, "스윽쿡(롱쿡) 정보를 찾을 수 없습니다."),
-  NOTICE_NOT_FOUND(NOT_FOUND, "공지 정보를 찾을 수 없습니다.");
+  NOTICE_NOT_FOUND(NOT_FOUND, "공지 정보를 찾을 수 없습니다."),
 
   /* code: 409 */
+  EVENT_CONFLICT(CONFLICT, "이벤트 등록에 실패했습니다.");
   /* code: 500 */
 
   private final HttpStatus httpStatus;

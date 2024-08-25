@@ -3,6 +3,24 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ite.cookeat.domain.admin.mapper.AdminMapper">
 
+  <insert id="insertEvent" parameterType="PostEventReq">
+    <selectKey keyProperty="eventId" order="BEFORE" resultType="Integer">
+      SELECT event_seq.nextval AS eventId FROM dual
+    </selectKey>
+    INSERT INTO event (event_id, title, content, startdate, enddate, thumbnail, regdate)
+    VALUES (#{eventId}, #{title}, #{content}, #{startdate, jdbcType=TIMESTAMP},
+    #{enddate, jdbcType=TIMESTAMP},
+    UTL_RAW.CAST_TO_RAW(#{thumbnail}), CURRENT_TIMESTAMP)
+  </insert>
+
+  <select id="selectVerifyRequestCount" resultType="Integer">
+    SELECT COUNT(m.member_id)
+    FROM member m
+    WHERE m.status = 'ACTIVE'
+      AND m.deletedate IS NULL
+      AND m.verified_status = 'REQUEST_VERIFY'
+  </select>
+
   <select id="selectVerifyRequestList" parameterType="Criteria"
     resultType="GetVerifyRequestRes">
     SELECT m.member_id         AS memberId,
@@ -20,14 +38,6 @@
     GROUP BY m.member_id, m.username, m.sskcook_count
     ORDER BY followerCount DESC, sskcookCount DESC
     OFFSET (#{pageNum} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
-  </select>
-
-  <select id="selectVerifyRequestCount" resultType="Integer">
-    SELECT COUNT(m.member_id)
-    FROM member m
-    WHERE m.status = 'ACTIVE'
-      AND m.deletedate IS NULL
-      AND m.verified_status = 'REQUEST_VERIFY'
   </select>
 
   <update id="updateVerifyRequestMemberStatus" parameterType="String">

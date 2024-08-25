@@ -1,6 +1,7 @@
 package com.ite.cookeat.domain.admin.controller;
 
 import com.ite.cookeat.domain.admin.dto.GetVerifyRequestPageRes;
+import com.ite.cookeat.domain.admin.dto.PostEventReq;
 import com.ite.cookeat.domain.admin.dto.PostVerifyRequestReq;
 import com.ite.cookeat.domain.admin.service.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +28,10 @@ public class AdminController {
   @PostMapping("/member/verify")
   public ResponseEntity<Integer> verifyRequestAdd(@RequestBody PostVerifyRequestReq req) {
     return ResponseEntity.ok(adminService.modifyVerifyMemberStatus(req));
+  }
+
+  @PostMapping("/event")
+  public ResponseEntity<Integer> eventAdd(@RequestBody PostEventReq req) {
+    return ResponseEntity.ok(adminService.addEvent(req));
   }
 }

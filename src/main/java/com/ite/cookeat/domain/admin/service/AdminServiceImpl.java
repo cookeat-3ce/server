@@ -1,8 +1,10 @@
 package com.ite.cookeat.domain.admin.service;
 
+import static com.ite.cookeat.exception.ErrorCode.EVENT_CONFLICT;
 import static com.ite.cookeat.exception.ErrorCode.MEMBER_NOT_FOUND;
 
 import com.ite.cookeat.domain.admin.dto.GetVerifyRequestPageRes;
+import com.ite.cookeat.domain.admin.dto.PostEventReq;
 import com.ite.cookeat.domain.admin.dto.PostVerifyRequestReq;
 import com.ite.cookeat.domain.admin.mapper.AdminMapper;
 import com.ite.cookeat.exception.CustomException;
@@ -37,6 +39,15 @@ public class AdminServiceImpl implements AdminService {
     Integer result = adminMapper.updateVerifyRequestMemberStatus(req);
     if (result <= 0) {
       throw new CustomException(MEMBER_NOT_FOUND);
+    }
+    return result;
+  }
+
+  @Override
+  public Integer addEvent(PostEventReq req) {
+    Integer result = adminMapper.insertEvent(req);
+    if (result <= 0) {
+      throw new CustomException(EVENT_CONFLICT);
     }
     return result;
   }
