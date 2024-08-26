@@ -18,7 +18,7 @@ public class PaginatedRes<T> {
   private Integer total;
   // 페이지 정보
   private Criteria cri;
-  // 공지 리스트
+  // 리스트
   private List<T> data;
 
   @Builder
