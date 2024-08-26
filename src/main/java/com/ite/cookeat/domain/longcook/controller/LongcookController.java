@@ -7,6 +7,7 @@ import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,5 +40,11 @@ public class LongcookController {
       return ResponseEntity.ok(longcookService.findRecentLongcookList(page));
     }
     throw new CustomException(ErrorCode.LONGCOOK_NOT_FOUND);
+  }
+
+  @DeleteMapping("/{longcookId}")
+  public ResponseEntity<?> longcookDelete(@PathVariable Integer longcookId) {
+    longcookService.modifyLongcookDeletedate(longcookId);
+    return ResponseEntity.noContent().build();
   }
 }

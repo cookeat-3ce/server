@@ -68,4 +68,11 @@
       AND b.status = 'ACTIVE'
     ]]>
   </select>
+  <update id="updateLongcookDeletedate" parameterType="Integer">
+    <![CDATA[
+    UPDATE longcook
+    SET deletedate = CURRENT_TIMESTAMP
+    WHERE longcook_id = #{longcookId}
+    ]]>
+  </update>
 </mapper>

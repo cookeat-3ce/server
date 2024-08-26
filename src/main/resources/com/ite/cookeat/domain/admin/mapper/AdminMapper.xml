@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ite.cookeat.domain.admin.mapper.AdminMapper">
+
+  <select id="selectVerifyRequestList" parameterType="Criteria"
+    resultType="GetVerifyRequestRes">
+    SELECT m.member_id         AS memberId,
+           m.username          AS username,
+           m.sskcook_count     AS sskcookCount,
+           COUNT(m2.member_id) AS followerCount
+    FROM member m
+           LEFT OUTER JOIN subscription s ON m.member_id = s.following_id
+           LEFT OUTER JOIN member m2 ON s.follower_id = m2.member_id
+      AND m2.status = 'ACTIVE'
+      AND m2.deletedate IS NULL
+    WHERE m.status = 'ACTIVE'
+      AND m.deletedate IS NULL
+      AND m.verified_status = 'REQUEST_VERIFY'
+    GROUP BY m.member_id, m.username, m.sskcook_count
+    ORDER BY followerCount DESC, sskcookCount DESC
+    OFFSET (#{pageNum} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+  </select>
+
+  <select id="selectVerifyRequestCount" resultType="Integer">
+    SELECT COUNT(m.member_id)
+    FROM member m
+    WHERE m.status = 'ACTIVE'
+      AND m.deletedate IS NULL
+      AND m.verified_status = 'REQUEST_VERIFY'
+  </select>
+
+  <update id="updateVerifyRequestMemberStatus" parameterType="String">
+    UPDATE member
+    SET verified_status = 'VERIFIED'
+    WHERE username = #{username}
+  </update>
+</mapper>

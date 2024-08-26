@@ -5,8 +5,8 @@ import com.ite.cookeat.domain.sskcook.dto.GetSskcookDetailsReq;
 import com.ite.cookeat.domain.sskcook.dto.GetSskcookDetailsRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSskcookIngredientsRes;
 import com.ite.cookeat.domain.sskcook.dto.PostHashtagReq;
-import com.ite.cookeat.domain.sskcook.dto.PostIngredientReq;
 import com.ite.cookeat.domain.sskcook.dto.PostLikesReq;
+import com.ite.cookeat.domain.sskcook.dto.PostSskcookIngredientReq;
 import com.ite.cookeat.domain.sskcook.dto.PostSskcookReq;
 import com.ite.cookeat.global.dto.Criteria;
 import java.util.List;
@@ -20,7 +20,7 @@ public interface SskcookMapper {
 
   Integer insertSskcook(PostSskcookReq req);
 
-  void insertIngredientSskcook(PostIngredientReq req);
+  void insertIngredientSskcook(PostSskcookIngredientReq req);
 
   void insertHashtag(PostHashtagReq req);
 

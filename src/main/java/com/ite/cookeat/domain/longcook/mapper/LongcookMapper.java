@@ -20,4 +20,7 @@ public interface LongcookMapper {
   List<GetLongcookRes> selectRecentLongcookList(@Param("cri") Criteria cri);
 
   Integer selectRecentLongcookListCount();
+  List<GetLongcookRes> selectLongcookList(GetLongcookReq getLongcookReq);
+
+  Integer updateLongcookDeletedate(Integer longcookId);
 }

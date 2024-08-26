@@ -12,6 +12,20 @@
             'ROLE_USER', null)
     ]]>
     </insert>
+  <select id="selectUsername" parameterType="String"
+    resultType="Member">
+    <![CDATA[
+    SELECT member_id as         memberId,
+           username,
+           password,
+           roles,
+           TO_CHAR(profile_img) profileImage,
+           nickname
+    FROM member
+    WHERE username = #{username}
+      AND deletedate IS NULL
+    ]]>
+	</select>
 
   <select id="selectUserDetails" parameterType="String" resultType="GetUserDetailsRes">
         <![CDATA[
@@ -66,21 +80,6 @@
     ]]>
   </select>
 
-  <select id="selectUsername" parameterType="String"
-    resultType="Member">
-    <![CDATA[
-    SELECT member_id as         memberId,
-           username,
-           password,
-           roles,
-           TO_CHAR(profile_img) profileImage,
-           nickname
-    FROM member
-    WHERE username = #{username}
-      AND deletedate IS NULL
-    ]]>
-	</select>
-
   <select id="selectSearchMember" parameterType="GetSearchSskcookReq"
     resultType="GetUserDetailsRes">
     <![CDATA[
@@ -104,6 +103,33 @@
       AND status = 'ACTIVE'
   </select>
 
+  <select id="selectMemberSubscriptionList" parameterType="Map"
+    resultType="GetSubscriptionUserDetailsRes">
+    <![CDATA[
+    SELECT d.username, TO_CHAR(d.profile_img) as profileImage
+    FROM member b
+           INNER JOIN subscription c ON b.member_id = c.follower_id
+           INNER JOIN member d ON d.member_id = c.following_id
+    WHERE b.username = #{username}
+      AND b.status = 'ACTIVE'
+      AND d.status = 'ACTIVE'
+    OFFSET(#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
+    ]]>
+  </select>
+
+  <select id="selectMemberSubscriptionListCount" parameterType="String" resultType="Integer">
+    <![CDATA[
+    SELECT COUNT(d.username)
+    FROM member b
+           INNER JOIN subscription c ON b.member_id = c.follower_id
+           INNER JOIN member d ON d.member_id = c.following_id
+    WHERE b.username = #{username}
+      AND b.status = 'ACTIVE'
+      AND d.status = 'ACTIVE'
+    ]]>
+  </select>
+
+
   <update id="updateMemberOneLiner" parameterType="PostMemberOneLinerReq">
   <![CDATA[
     UPDATE member
@@ -111,6 +137,15 @@
     WHERE username = #{username}
     ]]>
   </update>
+
+  <update id="updateMemberDeletedate" parameterType="String">
+    <![CDATA[
+    UPDATE member
+    SET deletedate = CURRENT_TIMESTAMP,
+        status     = 'INACTIVE'
+    ]]>
+  </update>
+
   <update id="updateVerifiedStatus">
     <![CDATA[
     UPDATE member

@@ -5,6 +5,7 @@ import static com.ite.cookeat.exception.ErrorCode.VERIFYING_FAILED;
 
 import com.ite.cookeat.domain.member.dto.GetMemberNoticePageRes;
 import com.ite.cookeat.domain.member.dto.GetUserDetailPageRes;
+import com.ite.cookeat.domain.member.dto.GetSubscriptionUserDetailsPageRes;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.Member;
 import com.ite.cookeat.domain.member.dto.PostLoginReq;
@@ -119,6 +120,29 @@ public class MemberServiceImpl implements MemberService {
       throw new CustomException(MEMBER_NOT_FOUND);
     }
     return result;
+  }
+
+  @Override
+  @Transactional
+  public GetSubscriptionUserDetailsPageRes findMemberSubscriptionList(String username,
+      Integer page) {
+    Criteria cri = Criteria.builder()
+        .pageSize(10)
+        .pageNum(page)
+        .build();
+
+    return GetSubscriptionUserDetailsPageRes.builder()
+        .cri(cri)
+        .total(memberMapper.selectMemberSubscriptionListCount(username))
+        .users(memberMapper.selectMemberSubscriptionList(cri, username))
+        .build();
+  }
+
+  public void modifyMemberDeletedate(String username) {
+    Integer result = memberMapper.updateMemberDeletedate(username);
+    if (result <= 0) {
+      throw new CustomException(MEMBER_NOT_FOUND);
+    }
   }
 
   @Override

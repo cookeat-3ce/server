@@ -2,6 +2,7 @@ package com.ite.cookeat.domain.member.controller;
 
 import com.ite.cookeat.domain.member.dto.GetMemberNoticePageRes;
 import com.ite.cookeat.domain.member.dto.GetUserDetailPageRes;
+import com.ite.cookeat.domain.member.dto.GetSubscriptionUserDetailsPageRes;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.PostLoginReq;
 import com.ite.cookeat.domain.member.dto.PostLoginRes;
@@ -64,6 +65,12 @@ public class MemberController {
     }
   }
 
+  @PatchMapping("/{username}/withdraw")
+  public ResponseEntity<Boolean> memberDelete(@PathVariable String username) {
+    memberService.modifyMemberDeletedate(username);
+    return ResponseEntity.noContent().build();
+  }
+
   @GetMapping("/{username}")
   public ResponseEntity<GetUserDetailsRes> findUserDetails(@PathVariable String username) {
 
@@ -84,5 +91,12 @@ public class MemberController {
   public ResponseEntity<GetMemberNoticePageRes> memberNoticeList(@PathVariable String username,
       @RequestParam Integer page) {
     return ResponseEntity.ok(memberService.findMemberNotices(username, page));
+  }
+
+  @GetMapping("/{username}/subscription")
+  public ResponseEntity<GetSubscriptionUserDetailsPageRes> findMemberSubscriptionList(
+      @PathVariable String username,
+      @RequestParam Integer page) {
+    return ResponseEntity.ok(memberService.findMemberSubscriptionList(username, page));
   }
 }
