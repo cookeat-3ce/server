@@ -129,6 +129,13 @@
     ]]>
   </select>
 
+  <select id="selectMemberVerifiedStatus" parameterType="String">
+    SELECT verified_status
+    FROM member
+    WHERE username = #{username}
+      AND status = 'ACTIVE'
+      AND deletedate IS NULL
+  </select>
 
   <update id="updateMemberOneLiner" parameterType="PostMemberOneLinerReq">
   <![CDATA[

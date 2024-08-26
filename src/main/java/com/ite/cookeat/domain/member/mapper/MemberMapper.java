@@ -46,4 +46,5 @@ public interface MemberMapper {
 
   Integer updateVerifiedStatus(@Param("username") String username, @Param("status") String status);
 
+  String selectMemberVerifiedStatus(String username);
 }

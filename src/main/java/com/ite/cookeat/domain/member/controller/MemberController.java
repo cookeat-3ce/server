@@ -93,6 +93,11 @@ public class MemberController {
     return ResponseEntity.ok(memberService.findMemberNotices(username, page));
   }
 
+  @GetMapping("/verify/{username}")
+  public ResponseEntity<String> memberVerifyStatus(@PathVariable String username) {
+    return ResponseEntity.ok(memberService.findMemberVerifiedStatus(username));
+  }
+
   @GetMapping("/{username}/subscription")
   public ResponseEntity<GetSubscriptionUserDetailsPageRes> findMemberSubscriptionList(
       @PathVariable String username,

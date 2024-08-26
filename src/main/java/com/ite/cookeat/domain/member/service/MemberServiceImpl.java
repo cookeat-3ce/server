@@ -160,6 +160,16 @@ public class MemberServiceImpl implements MemberService {
 
   @Override
   @Transactional
+  public String findMemberVerifiedStatus(String username) {
+    String result = memberMapper.selectMemberVerifiedStatus(username);
+    if (result == null) {
+      throw new CustomException(MEMBER_NOT_FOUND);
+    }
+    return result;
+  }
+
+  @Override
+  @Transactional(readOnly = true)
   public GetMemberNoticePageRes findMemberNotices(String username, Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)
