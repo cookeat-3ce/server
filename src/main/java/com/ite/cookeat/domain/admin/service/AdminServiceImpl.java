@@ -1,6 +1,6 @@
 package com.ite.cookeat.domain.admin.service;
 
-import static com.ite.cookeat.exception.ErrorCode.MEMBER_NOT_FOUND;
+import static com.ite.cookeat.exception.ErrorCode.VERIFY_REQUEST_NOT_FOUND;
 
 import com.ite.cookeat.domain.admin.dto.GetReportSskcookPageRes;
 import com.ite.cookeat.domain.admin.dto.GetVerifyRequestPageRes;
@@ -37,10 +37,22 @@ public class AdminServiceImpl implements AdminService {
 
   @Override
   @Transactional
-  public Integer modifyVerifyMemberStatus(PostVerifyRequestReq req) {
-    Integer result = adminMapper.updateVerifyRequestMemberStatus(req);
+  public Integer modifyVerifyMemberStatusVerified(PostVerifyRequestReq req) {
+    Integer result = adminMapper.updateVerifyRequestMemberStatus(req.getUsername(),
+        "VERIFIED");
     if (result <= 0) {
-      throw new CustomException(MEMBER_NOT_FOUND);
+      throw new CustomException(VERIFY_REQUEST_NOT_FOUND);
+    }
+    return result;
+  }
+
+  @Override
+  @Transactional
+  public Integer modifyVerifyMemberStatusUnverified(String username) {
+    Integer result = adminMapper.updateVerifyRequestMemberStatus(username,
+        "UNVERIFIED");
+    if (result <= 0) {
+      throw new CustomException(VERIFY_REQUEST_NOT_FOUND);
     }
     return result;
   }

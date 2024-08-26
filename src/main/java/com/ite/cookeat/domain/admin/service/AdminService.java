@@ -8,7 +8,9 @@ public interface AdminService {
 
   GetVerifyRequestPageRes findVerifyRequestList(Integer page);
 
-  Integer modifyVerifyMemberStatus(PostVerifyRequestReq req);
+  Integer modifyVerifyMemberStatusVerified(PostVerifyRequestReq req);
 
+  Integer modifyVerifyMemberStatusUnverified(String username);
+  
   GetReportSskcookPageRes findReportSskcookList(Integer page);
 }
