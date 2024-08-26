@@ -1,4 +1,5 @@
-package com.ite.cookeat.domain.member.dto;
+package com.ite.cookeat.domain.admin.dto;
+
 
 import com.ite.cookeat.global.dto.Criteria;
 import java.util.List;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class GetUserDetailPageRes {
+public class GetReportSskcookPageRes {
 
   // 이전, 이후 값이 있는 지 없는 지
   private boolean prev, next;
@@ -19,14 +20,14 @@ public class GetUserDetailPageRes {
   private Integer total;
   // 페이지 정보
   private Criteria cri;
-  // 검색 멤버 리스트
-  private List<GetUserDetailsRes> users;
+  // 공지 리스트
+  private List<GetReportSskcookRes> reports;
 
   @Builder
-  GetUserDetailPageRes(Integer total, Criteria cri, List<GetUserDetailsRes> users) {
-    this.total = total;
+  public GetReportSskcookPageRes(Integer total, Criteria cri, List<GetReportSskcookRes> reports) {
     this.cri = cri;
-    this.users = users;
+    this.total = total;
+    this.reports = reports;
 
     int pageSize = cri.getPageSize();
     int pageNum = cri.getPageNum();
@@ -36,5 +37,4 @@ public class GetUserDetailPageRes {
     this.prev = pageNum > 1;
     this.next = pageNum < realEnd;
   }
-
 }

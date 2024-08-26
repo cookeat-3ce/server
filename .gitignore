@@ -4,6 +4,8 @@
 src/main/resources/application.properties
 Wallet_cookeat
 
+*.iml
+
 ### Eclipse ###
 .metadata
 bin/

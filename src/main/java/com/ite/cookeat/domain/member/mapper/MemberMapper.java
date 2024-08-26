@@ -5,7 +5,6 @@ import com.ite.cookeat.domain.member.dto.GetSubscriptionUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.Member;
 import com.ite.cookeat.domain.member.dto.PostMemberOneLinerReq;
-import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
 import com.ite.cookeat.global.dto.Criteria;
 import java.util.List;
 import java.util.Optional;
@@ -30,9 +29,13 @@ public interface MemberMapper {
 
   Optional<Integer> selectMemberId(String username);
 
+  List<GetUserDetailsRes> selectSearchMember(@Param("cri") Criteria cri,
+      @Param("keyword") String keyword);
+
+  Integer selectSearchMemberCount(String keyword);
+
   Integer updateMemberOneLiner(PostMemberOneLinerReq req);
 
-  List<GetUserDetailsRes> selectSearchMember(GetSearchSskcookReq getSearchSskcookReq);
 
   List<GetSubscriptionUserDetailsRes> selectMemberSubscriptionList(@Param("cri") Criteria cri,
       @Param("username") String username);
@@ -43,4 +46,5 @@ public interface MemberMapper {
 
   Integer updateVerifiedStatus(@Param("username") String username, @Param("status") String status);
 
+  String selectMemberVerifiedStatus(String username);
 }

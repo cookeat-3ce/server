@@ -13,6 +13,9 @@ import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.s3.service.S3UploadService;
 import java.io.IOException;
 import java.util.List;
+import com.ite.cookeat.domain.sskcook.dto.GetLongcookPageRes;
+import com.ite.cookeat.exception.CustomException;
+import com.ite.cookeat.global.dto.Criteria;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,16 +33,38 @@ public class LongcookServiceImpl implements LongcookService {
 
 
   @Override
-  @Transactional(readOnly = true)
-  public GetLongcookRes findLongcook(Integer longcookId) {
-    Optional<GetLongcookRes> result = longcookMapper.selectLongcook(longcookId);
-    return result.orElseThrow(() -> new CustomException(LONGCOOK_NOT_FOUND));
+  @Transactional
+  public GetLongcookPageRes findLongcookList(String username, Integer page) {
+    Criteria cri = Criteria.builder()
+        .pageSize(9)
+        .pageNum(page)
+        .build();
+    return GetLongcookPageRes.builder()
+        .cri(cri)
+        .total(longcookMapper.selectLongcookListCount(username))
+        .longcooks(longcookMapper.selectLongcookList(cri, username))
+        .build();
+  }
+
+  @Override
+  @Transactional
+  public GetLongcookPageRes findRecentLongcookList(Integer page) {
+    Criteria cri = Criteria.builder()
+        .pageSize(9)
+        .pageNum(page)
+        .build();
+    return GetLongcookPageRes.builder()
+        .cri(cri)
+        .total(longcookMapper.selectRecentLongcookListCount())
+        .longcooks(longcookMapper.selectRecentLongcookList(cri))
+        .build();
   }
 
   @Override
   @Transactional(readOnly = true)
-  public List<GetLongcookRes> findLongcookList(GetLongcookReq getLongcookReq) {
-    return longcookMapper.selectLongcookList(getLongcookReq);
+  public GetLongcookRes findLongcook(Integer longcookId) {
+    Optional<GetLongcookRes> result = longcookMapper.selectLongcook(longcookId);
+    return result.orElseThrow(() -> new CustomException(LONGCOOK_NOT_FOUND));
   }
 
   @Override
