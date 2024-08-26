@@ -10,35 +10,35 @@
       AND #{sskcookId} = sskcook_id
     ]]>
   </delete>
-  <insert id="insertSskcook" parameterType="PostSskcookReq">
-    <selectKey keyProperty="sskcookId" order="BEFORE" resultType="Integer">
-      <![CDATA[
-        SELECT sskcook_seq.nextval AS sskcookId FROM dual
-      ]]>
-    </selectKey>
-    <![CDATA[
-        INSERT INTO sskcook (sskcook_id, sskcook_url, member_id, title, recipe)
-        VALUES (#{sskcookId}, #{sskcookUrl}, #{memberId}, #{title}, #{recipe})
-    ]]>
-  </insert>
-  <insert id="insertIngredientSskcook" parameterType="PostSskcookIngredientReq">
-    <![CDATA[
-    INSERT INTO ingredient_sskcook (ingredient_id, sskcook_id, name, amount)
-    VALUES (ingredient_sskcook_seq.nextval, #{sskcookId}, #{name}, #{amount})
-    ]]>
-  </insert>
-  <insert id="insertHashtag" parameterType="PostHashtagReq">
-    <![CDATA[
-    INSERT INTO sskcook_hashtag (sskcook_hashtag_id, sskcook_id, hashtag_id)
-    VALUES (sskcook_hashtag_seq.nextval, #{sskcookId}, #{hashtagId})
-    ]]>
-  </insert>
+
   <insert id="insertLikes" parameterType="PostLikesReq">
   <![CDATA[
     INSERT INTO likes(like_id, member_id, sskcook_id)
     VALUES (like_seq.nextval, #{memberId}, #{sskcookId})
     ]]>
   </insert>
+
+  <!-- Ingredient와 Hashtag를 위한 ResultMap 정의 -->
+  <resultMap id="ingredientResultMap" type="PostSskcookIngredientReq">
+    <result column="name" property="name"/>
+    <result column="amount" property="amount"/>
+  </resultMap>
+
+  <resultMap id="hashtagResultMap" type="PostHashtagReq">
+    <result column="hashtagId" property="hashtagId"/>
+  </resultMap>
+
+  <select id="addSskcookWithDetails" statementType="CALLABLE">
+    { CALL add_sskcook_with_details(
+      #{memberId, mode=IN, jdbcType=INTEGER},
+      #{title, mode=IN, jdbcType=VARCHAR},
+      #{recipe, mode=IN, jdbcType=VARCHAR},
+      #{sskcookUrl, mode=IN, jdbcType=VARCHAR},
+      #{ingredientsJson, mode=IN, jdbcType=CLOB},
+      #{hashtagsJson, mode=IN, jdbcType=CLOB},
+      #{sskcookId, mode=OUT, jdbcType=INTEGER}
+           ) }
+  </select>
   <select id="selectLikesCount" parameterType="PostLikesReq" resultType="Integer">
     <![CDATA[
     SELECT COUNT(member_id)
