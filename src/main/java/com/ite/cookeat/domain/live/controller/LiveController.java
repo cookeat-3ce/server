@@ -1,8 +1,9 @@
 package com.ite.cookeat.domain.live.controller;
 
-import com.ite.cookeat.domain.live.dto.GetLivePageRes;
+import com.ite.cookeat.domain.live.dto.GetLiveRes;
 import com.ite.cookeat.domain.live.dto.PostLiveReq;
 import com.ite.cookeat.domain.live.service.LiveService;
+import com.ite.cookeat.global.dto.PaginatedRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +26,7 @@ public class LiveController {
   }
 
   @GetMapping
-  public ResponseEntity<GetLivePageRes> liveList(
+  public ResponseEntity<PaginatedRes<GetLiveRes>> liveList(
       @RequestParam(value = "keyword", required = false) String keyword,
       @RequestParam(defaultValue = "1") Integer page) {
     return ResponseEntity.ok(liveService.findLiveList(keyword, page));

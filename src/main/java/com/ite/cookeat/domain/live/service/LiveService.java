@@ -1,12 +1,12 @@
 package com.ite.cookeat.domain.live.service;
 
-import com.ite.cookeat.domain.live.dto.GetLivePageRes;
+import com.ite.cookeat.domain.live.dto.GetLiveRes;
 import com.ite.cookeat.domain.live.dto.PostLiveReq;
+import com.ite.cookeat.global.dto.PaginatedRes;
 
 public interface LiveService {
 
   Integer saveLive(PostLiveReq dto);
 
-  GetLivePageRes findLiveList(String keyword, Integer page);
+  PaginatedRes<GetLiveRes> findLiveList(String keyword, Integer page);
 }
-
