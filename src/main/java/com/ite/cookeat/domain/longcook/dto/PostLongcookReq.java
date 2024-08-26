@@ -16,6 +16,4 @@ public class PostLongcookReq {
 
   @Setter
   private String longcookUrl;
-  @Setter
-  private Integer memberId;
 }

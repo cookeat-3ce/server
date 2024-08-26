@@ -1,7 +1,6 @@
 package com.ite.cookeat.domain.longcook.service;
 
 import static com.ite.cookeat.exception.ErrorCode.FILE_UPLOAD_FAIL;
-import static com.ite.cookeat.exception.ErrorCode.INVALID_JSON;
 import static com.ite.cookeat.exception.ErrorCode.LONGCOOK_NOT_FOUND;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,17 +60,11 @@ public class LongcookServiceImpl implements LongcookService {
 
     try {
       postLongcookReq = objectMapper.readValue(request, PostLongcookReq.class);
-    } catch (IOException e) {
-      throw new CustomException(INVALID_JSON);
-    }
-
-    try {
       longcookUrl = s3UploadService.saveFile(file);
     } catch (IOException e) {
       throw new CustomException(FILE_UPLOAD_FAIL);
     }
     postLongcookReq.setLongcookUrl(longcookUrl);
-    postLongcookReq.setMemberId(memberService.findMemberId(postLongcookReq.getUsername()));
 
     longcookMapper.insertLongcook(postLongcookReq);
     return postLongcookReq.getLongcookId();

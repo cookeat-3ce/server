@@ -5,14 +5,13 @@
 
   <insert id="insertLongcook" parameterType="PostLongcookReq">
     <selectKey keyProperty="longcookId" order="BEFORE" resultType="Integer">
-      <![CDATA[
-        SELECT longcook_seq.nextval AS longcookId FROM dual
-      ]]>
+      SELECT longcook_seq.nextval AS longcookId FROM dual
     </selectKey>
-    <![CDATA[
-        INSERT INTO longcook (longcook_id, longcook_url, member_id, title)
-        VALUES (#{longcookId}, #{longcookUrl}, #{memberId}, #{title})
-    ]]>
+    INSERT INTO longcook (longcook_id, longcook_url, member_id, title)
+    SELECT #{longcookId}, #{longcookUrl}, m.member_id, #{title}
+    FROM member m
+    WHERE m.username = #{username}
+    AND m.status = 'ACTIVE'
   </insert>
 
   <select id="selectLongcookList" parameterType="GetLongcookReq" resultType="GetLongcookRes">
