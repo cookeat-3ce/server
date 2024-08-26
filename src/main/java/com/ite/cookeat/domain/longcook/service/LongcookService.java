@@ -11,7 +11,5 @@ public interface LongcookService {
 
   GetLongcookPageRes findRecentLongcookList(Integer page);
 
-  List<GetLongcookRes> findLongcookList(GetLongcookReq getLongcookReq);
-
   Integer modifyLongcookDeletedate(Integer longcookId);
 }

@@ -7,7 +7,6 @@ import com.ite.cookeat.domain.longcook.mapper.LongcookMapper;
 import com.ite.cookeat.domain.sskcook.dto.GetLongcookPageRes;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.global.dto.Criteria;
-import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -51,12 +50,6 @@ public class LongcookServiceImpl implements LongcookService {
   public GetLongcookRes findLongcook(Integer longcookId) {
     Optional<GetLongcookRes> result = longcookMapper.selectLongcook(longcookId);
     return result.orElseThrow(() -> new CustomException(LONGCOOK_NOT_FOUND));
-  }
-
-  @Override
-  @Transactional(readOnly = true)
-  public List<GetLongcookRes> findLongcookList(GetLongcookReq getLongcookReq) {
-    return longcookMapper.selectLongcookList(getLongcookReq);
   }
 
   @Override

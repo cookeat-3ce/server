@@ -80,7 +80,7 @@
     ]]>
   </select>
 
-  <select id="selectSearchMember" parameterType="GetSearchSskcookReq"
+  <select id="selectSearchMember" parameterType="Map"
     resultType="GetUserDetailsRes">
     <![CDATA[
     SELECT username,

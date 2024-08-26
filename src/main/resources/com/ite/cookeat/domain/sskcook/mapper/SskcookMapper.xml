@@ -47,7 +47,7 @@
       AND sskcook_id = #{sskcookId}
     ]]>
   </select>
-  <select id="selectSearchRecentSskcook" parameterType="GetSearchSskcookReq"
+  <select id="selectSearchRecentSskcook" parameterType="Map"
     resultType="GetSearchSskcookRes">
         <![CDATA[
     SELECT a.sskcook_url as sskcookUrl,
