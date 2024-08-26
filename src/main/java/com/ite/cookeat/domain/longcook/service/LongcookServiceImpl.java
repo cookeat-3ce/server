@@ -53,6 +53,7 @@ public class LongcookServiceImpl implements LongcookService {
   }
 
   @Override
+  @Transactional
   public Integer addLongcook(String request, MultipartFile file) {
 
     String longcookUrl = null;
