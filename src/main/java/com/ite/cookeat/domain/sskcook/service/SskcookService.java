@@ -19,8 +19,6 @@ public interface SskcookService {
 
   PaginatedRes<GetSearchSskcookRes> findSearchRecentSskcookList(String keyword, Integer page);
 
-  GetSearchSskcookPageRes findSearchRecentSskcookList(String keyword, Integer page);
-
   PaginatedRes<GetSearchSskcookRes> findSearchLikesSskcookList(String keyword, Integer page);
 
   PaginatedRes<GetSearchSskcookRes> findRecentSskcookList(Integer page);
