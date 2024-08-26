@@ -1,9 +1,10 @@
 package com.ite.cookeat.domain.sskcook.controller;
 
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
-import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookPageRes;
+import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
 import com.ite.cookeat.domain.sskcook.dto.GetTotalSskcookDetailsRes;
 import com.ite.cookeat.domain.sskcook.service.SskcookService;
+import com.ite.cookeat.global.dto.PaginatedRes;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +47,7 @@ public class SskcookController {
   }
 
   @GetMapping
-  public ResponseEntity<GetSearchSskcookPageRes> findSearchSskcookList(
+  public ResponseEntity<PaginatedRes<GetSearchSskcookRes>> findSearchSskcookList(
       @RequestParam(value = "keyword", required = false) String keyword,
       @RequestParam(defaultValue = "1") Integer page,
       @RequestParam(defaultValue = "latest") String sort,
@@ -74,7 +75,7 @@ public class SskcookController {
   }
 
   @GetMapping("/list/{username}")
-  public ResponseEntity<GetSearchSskcookPageRes> findUserSskcookList(
+  public ResponseEntity<PaginatedRes<GetSearchSskcookRes>> findUserSskcookList(
       @PathVariable String username, @RequestParam(defaultValue = "1") Integer page) {
     return ResponseEntity.ok(sskcookService.findUserSskcookList(username, page));
   }

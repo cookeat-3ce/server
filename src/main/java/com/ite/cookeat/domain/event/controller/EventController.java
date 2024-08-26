@@ -1,8 +1,9 @@
 package com.ite.cookeat.domain.event.controller;
 
 import com.ite.cookeat.domain.event.dto.GetEventDetailRes;
-import com.ite.cookeat.domain.event.dto.GetEventPageRes;
+import com.ite.cookeat.domain.event.dto.GetEventRes;
 import com.ite.cookeat.domain.event.service.EventService;
+import com.ite.cookeat.global.dto.PaginatedRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,9 +25,8 @@ public class EventController {
   }
 
   @GetMapping
-  public ResponseEntity<GetEventPageRes> eventDetail(
+  public ResponseEntity<PaginatedRes<GetEventRes>> eventDetail(
       @RequestParam(defaultValue = "1") Integer page) {
     return ResponseEntity.ok(eventService.findEventList(page));
   }
 }
-

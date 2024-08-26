@@ -2,9 +2,9 @@ package com.ite.cookeat.domain.longcook.controller;
 
 import com.ite.cookeat.domain.longcook.dto.GetLongcookRes;
 import com.ite.cookeat.domain.longcook.service.LongcookService;
-import com.ite.cookeat.domain.sskcook.dto.GetLongcookPageRes;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.exception.ErrorCode;
+import com.ite.cookeat.global.dto.PaginatedRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,7 +22,7 @@ public class LongcookController {
   private final LongcookService longcookService;
 
   @GetMapping("/list/{username}")
-  public ResponseEntity<GetLongcookPageRes> findLongcookList(
+  public ResponseEntity<PaginatedRes<GetLongcookRes>> findLongcookList(
       @PathVariable("username") String username, @RequestParam(defaultValue = "1") Integer page) {
     return ResponseEntity.ok(longcookService.findLongcookList(username, page));
   }
@@ -33,7 +33,7 @@ public class LongcookController {
   }
 
   @GetMapping
-  public ResponseEntity<GetLongcookPageRes> findLongcookRecentList(
+  public ResponseEntity<PaginatedRes<GetLongcookRes>> findLongcookRecentList(
       @RequestParam(defaultValue = "latest") String sort,
       @RequestParam(defaultValue = "1") Integer page) {
     if ("latest".equals(sort)) {

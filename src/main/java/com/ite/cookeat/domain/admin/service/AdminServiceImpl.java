@@ -3,11 +3,12 @@ package com.ite.cookeat.domain.admin.service;
 import static com.ite.cookeat.exception.ErrorCode.VERIFY_REQUEST_NOT_FOUND;
 
 import com.ite.cookeat.domain.admin.dto.GetReportSskcookPageRes;
-import com.ite.cookeat.domain.admin.dto.GetVerifyRequestPageRes;
+import com.ite.cookeat.domain.admin.dto.GetVerifyRequestRes;
 import com.ite.cookeat.domain.admin.dto.PostVerifyRequestReq;
 import com.ite.cookeat.domain.admin.mapper.AdminMapper;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.global.dto.Criteria;
+import com.ite.cookeat.global.dto.PaginatedRes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,16 +23,16 @@ public class AdminServiceImpl implements AdminService {
 
   @Override
   @Transactional(readOnly = true)
-  public GetVerifyRequestPageRes findVerifyRequestList(Integer page) {
+  public PaginatedRes<GetVerifyRequestRes> findVerifyRequestList(Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)
         .pageNum(page)
         .build();
 
-    return GetVerifyRequestPageRes.builder()
+    return PaginatedRes.<GetVerifyRequestRes>builder()
         .total(adminMapper.selectVerifyRequestCount())
         .cri(cri)
-        .requests(adminMapper.selectVerifyRequestList(cri))
+        .data(adminMapper.selectVerifyRequestList(cri))
         .build();
   }
 

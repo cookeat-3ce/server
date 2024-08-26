@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ite.cookeat.domain.member.service.MemberService;
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
-import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookPageRes;
+import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSskcookDetailsReq;
 import com.ite.cookeat.domain.sskcook.dto.GetSskcookDetailsRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSskcookIngredientsRes;
@@ -23,6 +23,7 @@ import com.ite.cookeat.domain.sskcook.mapper.SskcookMapper;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.exception.ErrorCode;
 import com.ite.cookeat.global.dto.Criteria;
+import com.ite.cookeat.global.dto.PaginatedRes;
 import com.ite.cookeat.s3.service.S3UploadService;
 import java.io.IOException;
 import java.util.List;
@@ -45,7 +46,7 @@ public class SskcookServiceImpl implements SskcookService {
 
   @Override
   @Transactional
-  public GetSearchSskcookPageRes findSearchRecentSskcookList(
+  public PaginatedRes<GetSearchSskcookRes> findSearchRecentSskcookList(
       String keyword, Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)
@@ -53,55 +54,55 @@ public class SskcookServiceImpl implements SskcookService {
         .keyword(keyword)
         .build();
 
-    return GetSearchSskcookPageRes.builder()
+    return PaginatedRes.<GetSearchSskcookRes>builder()
         .cri(cri)
         .total(sskcookMapper.selectSearchSskcookListCount(keyword))
-        .sskcooks(sskcookMapper.selectSearchRecentSskcookList(cri, keyword))
+        .data(sskcookMapper.selectSearchRecentSskcookList(cri, keyword))
         .build();
   }
 
   @Override
   @Transactional
-  public GetSearchSskcookPageRes findSearchLikesSskcookList(
+  public PaginatedRes<GetSearchSskcookRes> findSearchLikesSskcookList(
       String keyword, Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)
         .pageNum(page)
         .keyword(keyword)
         .build();
-    return GetSearchSskcookPageRes.builder()
+    return PaginatedRes.<GetSearchSskcookRes>builder()
         .cri(cri)
         .total(sskcookMapper.selectSearchSskcookListCount(keyword))
-        .sskcooks(sskcookMapper.selectSearchLikesSskcookList(cri, keyword))
+        .data(sskcookMapper.selectSearchLikesSskcookList(cri, keyword))
         .build();
   }
 
   @Override
   @Transactional
-  public GetSearchSskcookPageRes findRecentSskcookList(Integer page) {
+  public PaginatedRes<GetSearchSskcookRes> findRecentSskcookList(Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)
         .pageNum(page)
         .build();
-    return GetSearchSskcookPageRes.builder()
+    return PaginatedRes.<GetSearchSskcookRes>builder()
         .cri(cri)
         .total(sskcookMapper.selectRecentSskcookListCount())
-        .sskcooks(sskcookMapper.selectRecentSskcookList(cri))
+        .data(sskcookMapper.selectRecentSskcookList(cri))
         .build();
   }
 
   @Override
   @Transactional
-  public GetSearchSskcookPageRes findMonthlySskcookList(String date, Integer page) {
+  public PaginatedRes<GetSearchSskcookRes> findMonthlySskcookList(String date, Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)
         .pageNum(page)
         .date(date)
         .build();
-    return GetSearchSskcookPageRes.builder()
+    return PaginatedRes.<GetSearchSskcookRes>builder()
         .cri(cri)
         .total(sskcookMapper.selectMonthlySskcookListCount(date))
-        .sskcooks(sskcookMapper.selectMonthlySskcookList(cri, date))
+        .data(sskcookMapper.selectMonthlySskcookList(cri, date))
         .build();
   }
 
@@ -116,31 +117,31 @@ public class SskcookServiceImpl implements SskcookService {
 
   @Override
   @Transactional
-  public GetSearchSskcookPageRes findUserSskcookList(String username, Integer page) {
+  public PaginatedRes<GetSearchSskcookRes> findUserSskcookList(String username, Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)
         .pageNum(page)
         .build();
-    return GetSearchSskcookPageRes.builder()
+    return PaginatedRes.<GetSearchSskcookRes>builder()
         .cri(cri)
         .total(sskcookMapper.selectUserSskcookListCount(username))
-        .sskcooks(sskcookMapper.selectUserSskcookList(cri, username))
+        .data(sskcookMapper.selectUserSskcookList(cri, username))
         .build();
   }
 
   @Override
   @Transactional
-  public GetSearchSskcookPageRes findTagSskcookList(String tag, Integer page) {
+  public PaginatedRes<GetSearchSskcookRes> findTagSskcookList(String tag, Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)
         .pageNum(page)
         .tag(tag)
         .build();
 
-    return GetSearchSskcookPageRes.builder()
+    return PaginatedRes.<GetSearchSskcookRes>builder()
         .cri(cri)
         .total(sskcookMapper.selectTagSskcookListCount(tag))
-        .sskcooks(sskcookMapper.selectTagSskcookList(cri, tag))
+        .data(sskcookMapper.selectTagSskcookList(cri, tag))
         .build();
   }
 
