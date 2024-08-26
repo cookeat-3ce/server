@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ite.cookeat.domain.member_sskcook.mapper.MemberSskcookMapper">
+
+  <delete id="deleteMemberSskcook" parameterType="PostMemberSskcookReq">
+    <![CDATA[
+    DELETE
+    FROM member_sskcook
+    WHERE #{memberId} = member_id
+      AND #{sskcookId} = sskcook_id
+    ]]>
+  </delete>
+
+  <insert id="insertMemberSskcook" parameterType="PostMemberSskcookReq">
+    <![CDATA[
+    INSERT INTO member_sskcook(member_sskcook_id, member_id, sskcook_id, regdate)
+    VALUES (member_sskcook_seq.nextval, #{memberId}, #{sskcookId}, CURRENT_TIMESTAMP)
+    ]]>
+  </insert>
+
+  <select id="selectMemberSskcookCount" parameterType="PostMemberSskcookReq" resultType="Integer">
+    <![CDATA[
+    SELECT COUNT(member_id)
+    FROM member_sskcook
+    WHERE member_id = #{memberId}
+      AND sskcook_id = #{sskcookId}
+    ]]>
+  </select>
+
+  <select id="selectMemberSskcookList" parameterType="Map" resultType="GetMemberSskcookRes">
+    <![CDATA[
+    SELECT c.sskcook_url        AS sskcookUrl,
+           c.sskcook_id         AS sskcookId,
+           c.title,
+           b.nickname,
+           NVL(a.countLikes, 0) AS countLikes
+    FROM (SELECT sskcook_id,
+                 sskcook_url,
+                 title,
+                 regdate,
+                 member_id,
+                 status
+          FROM sskcook
+          WHERE sskcook_id IN (SELECT sskcook_id
+                               FROM member_sskcook
+                               WHERE member_id = (SELECT member_id
+                                                  FROM member
+                                                  WHERE username = #{username}
+                                                    AND status = 'ACTIVE'))
+            AND status = 'ACTIVE') c
+           LEFT JOIN (SELECT COUNT(sskcook_id) AS countLikes,
+                             sskcook_id
+                      FROM likes
+                      GROUP BY sskcook_id) a ON a.sskcook_id = c.sskcook_id
+           INNER JOIN member b ON b.member_id = c.member_id
+    ORDER BY countLikes DESC, c.regdate DESC
+    OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
+    ]]>
+  </select>
+
+  <select id="selectMemberSskcookListCount" parameterType="String" resultType="Integer">
+    <![CDATA[
+    SELECT COUNT(a.sskcook_id)
+    FROM member_sskcook a
+           INNER JOIN member b ON a.member_id = b.member_id
+    WHERE b.username = #{username}
+      AND b.status = 'ACTIVE'
+    ]]>
+  </select>
+</mapper>

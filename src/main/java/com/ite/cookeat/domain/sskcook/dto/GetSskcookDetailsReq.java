@@ -1,4 +1,4 @@
-package com.ite.cookeat.domain.longcook.dto;
+package com.ite.cookeat.domain.sskcook.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Getter
-public class GetLongcookReq {
+public class GetSskcookDetailsReq {
 
-  private Integer page;
   private String username;
-  @Builder.Default
-  private Integer pageSize = 9;
+  private Integer sskcookId;
 }

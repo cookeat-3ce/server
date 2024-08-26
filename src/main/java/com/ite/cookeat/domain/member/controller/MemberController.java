@@ -1,16 +1,16 @@
 package com.ite.cookeat.domain.member.controller;
 
 import com.ite.cookeat.domain.member.dto.GetMemberNoticePageRes;
+import com.ite.cookeat.domain.member.dto.GetUserDetailPageRes;
+import com.ite.cookeat.domain.member.dto.GetSubscriptionUserDetailsPageRes;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.PostLoginReq;
 import com.ite.cookeat.domain.member.dto.PostLoginRes;
 import com.ite.cookeat.domain.member.dto.PostMemberOneLinerReq;
 import com.ite.cookeat.domain.member.dto.PostSignUpReq;
 import com.ite.cookeat.domain.member.service.MemberService;
-import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.exception.ErrorCode;
-import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -80,16 +80,11 @@ public class MemberController {
   }
 
   @GetMapping
-  public ResponseEntity<List<GetUserDetailsRes>> findSearchMemberList(
+  public ResponseEntity<GetUserDetailPageRes> findSearchMemberList(
       @RequestParam(value = "keyword", required = false) String keyword,
       @RequestParam(defaultValue = "1") Integer page) {
 
-    GetSearchSskcookReq modifiedReq = GetSearchSskcookReq.builder()
-        .keyword(keyword)
-        .page(page)
-        .build();
-
-    return ResponseEntity.ok(memberService.findSearchMember(modifiedReq));
+    return ResponseEntity.ok(memberService.findSearchMember(keyword, page));
   }
 
   @GetMapping("/{username}/notice")
@@ -101,5 +96,12 @@ public class MemberController {
   @GetMapping("/verify/{username}")
   public ResponseEntity<String> memberVerifyStatus(@PathVariable String username) {
     return ResponseEntity.ok(memberService.findMemberVerifiedStatus(username));
+  }
+
+  @GetMapping("/{username}/subscription")
+  public ResponseEntity<GetSubscriptionUserDetailsPageRes> findMemberSubscriptionList(
+      @PathVariable String username,
+      @RequestParam Integer page) {
+    return ResponseEntity.ok(memberService.findMemberSubscriptionList(username, page));
   }
 }
