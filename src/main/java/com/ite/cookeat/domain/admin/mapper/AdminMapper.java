@@ -1,5 +1,6 @@
 package com.ite.cookeat.domain.admin.mapper;
 
+import com.ite.cookeat.domain.admin.dto.GetReportSskcookRes;
 import com.ite.cookeat.domain.admin.dto.GetVerifyRequestRes;
 import com.ite.cookeat.global.dto.Criteria;
 import java.util.List;
@@ -13,4 +14,8 @@ public interface AdminMapper {
 
   Integer updateVerifyRequestMemberStatus(@Param("username") String username,
       @Param("verifiedStatus") String verifiedStatus);
+
+  List<GetReportSskcookRes> selectReportSskcookList(Criteria cri);
+
+  Integer selectReportSskcookCount();
 }

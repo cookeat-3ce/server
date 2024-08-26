@@ -2,6 +2,7 @@ package com.ite.cookeat.domain.admin.service;
 
 import static com.ite.cookeat.exception.ErrorCode.VERIFY_REQUEST_NOT_FOUND;
 
+import com.ite.cookeat.domain.admin.dto.GetReportSskcookPageRes;
 import com.ite.cookeat.domain.admin.dto.GetVerifyRequestPageRes;
 import com.ite.cookeat.domain.admin.dto.PostVerifyRequestReq;
 import com.ite.cookeat.domain.admin.mapper.AdminMapper;
@@ -20,6 +21,7 @@ public class AdminServiceImpl implements AdminService {
   private final AdminMapper adminMapper;
 
   @Override
+  @Transactional(readOnly = true)
   public GetVerifyRequestPageRes findVerifyRequestList(Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)
@@ -34,6 +36,7 @@ public class AdminServiceImpl implements AdminService {
   }
 
   @Override
+  @Transactional
   public Integer modifyVerifyMemberStatusVerified(PostVerifyRequestReq req) {
     Integer result = adminMapper.updateVerifyRequestMemberStatus(req.getUsername(),
         "VERIFIED");
@@ -52,5 +55,20 @@ public class AdminServiceImpl implements AdminService {
       throw new CustomException(VERIFY_REQUEST_NOT_FOUND);
     }
     return result;
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public GetReportSskcookPageRes findReportSskcookList(Integer page) {
+    Criteria cri = Criteria.builder()
+        .pageSize(10)
+        .pageNum(page)
+        .build();
+
+    return GetReportSskcookPageRes.builder()
+        .cri(cri)
+        .reports(adminMapper.selectReportSskcookList(cri))
+        .total(adminMapper.selectReportSskcookCount())
+        .build();
   }
 }
