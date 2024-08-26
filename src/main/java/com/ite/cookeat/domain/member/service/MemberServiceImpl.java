@@ -4,6 +4,7 @@ import static com.ite.cookeat.exception.ErrorCode.MEMBER_NOT_FOUND;
 import static com.ite.cookeat.exception.ErrorCode.VERIFYING_FAILED;
 
 import com.ite.cookeat.domain.member.dto.GetMemberNoticePageRes;
+import com.ite.cookeat.domain.member.dto.GetUserDetailPageRes;
 import com.ite.cookeat.domain.member.dto.GetSubscriptionUserDetailsPageRes;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.Member;
@@ -13,12 +14,10 @@ import com.ite.cookeat.domain.member.dto.PostMemberOneLinerReq;
 import com.ite.cookeat.domain.member.dto.PostSignUpReq;
 import com.ite.cookeat.domain.member.dto.TokenDTO;
 import com.ite.cookeat.domain.member.mapper.MemberMapper;
-import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.exception.ErrorCode;
 import com.ite.cookeat.global.dto.Criteria;
 import com.ite.cookeat.security.jwt.JwtTokenProvider;
-import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -100,18 +99,27 @@ public class MemberServiceImpl implements MemberService {
 
   @Override
   @Transactional
+  public GetUserDetailPageRes findSearchMember(String keyword, Integer page) {
+    Criteria cri = Criteria.builder()
+        .pageSize(10)
+        .pageNum(page)
+        .keyword(keyword)
+        .build();
+    return GetUserDetailPageRes.builder()
+        .cri(cri)
+        .total(memberMapper.selectSearchMemberCount(keyword))
+        .users(memberMapper.selectSearchMember(cri, keyword))
+        .build();
+  }
+
+  @Override
+  @Transactional
   public Integer modifyMemberOneLiner(PostMemberOneLinerReq req) {
     Integer result = memberMapper.updateMemberOneLiner(req);
     if (result <= 0) {
       throw new CustomException(MEMBER_NOT_FOUND);
     }
     return result;
-  }
-
-  @Override
-  @Transactional(readOnly = true)
-  public List<GetUserDetailsRes> findSearchMember(GetSearchSskcookReq getSearchSskcookReq) {
-    return memberMapper.selectSearchMember(getSearchSskcookReq);
   }
 
   @Override
@@ -148,6 +156,7 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
+  @Transactional
   public GetMemberNoticePageRes findMemberNotices(String username, Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)
