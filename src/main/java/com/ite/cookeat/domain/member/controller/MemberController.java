@@ -1,8 +1,7 @@
 package com.ite.cookeat.domain.member.controller;
 
-import com.ite.cookeat.domain.member.dto.GetMemberNoticePageRes;
-import com.ite.cookeat.domain.member.dto.GetUserDetailPageRes;
-import com.ite.cookeat.domain.member.dto.GetSubscriptionUserDetailsPageRes;
+import com.ite.cookeat.domain.member.dto.GetMemberNoticeRes;
+import com.ite.cookeat.domain.member.dto.GetSubscriptionUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.PostLoginReq;
 import com.ite.cookeat.domain.member.dto.PostLoginRes;
@@ -11,6 +10,7 @@ import com.ite.cookeat.domain.member.dto.PostSignUpReq;
 import com.ite.cookeat.domain.member.service.MemberService;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.exception.ErrorCode;
+import com.ite.cookeat.global.dto.PaginatedRes;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -80,7 +80,7 @@ public class MemberController {
   }
 
   @GetMapping
-  public ResponseEntity<GetUserDetailPageRes> findSearchMemberList(
+  public ResponseEntity<PaginatedRes<GetUserDetailsRes>> findSearchMemberList(
       @RequestParam(value = "keyword", required = false) String keyword,
       @RequestParam(defaultValue = "1") Integer page) {
 
@@ -88,13 +88,14 @@ public class MemberController {
   }
 
   @GetMapping("/{username}/notice")
-  public ResponseEntity<GetMemberNoticePageRes> memberNoticeList(@PathVariable String username,
+  public ResponseEntity<PaginatedRes<GetMemberNoticeRes>> memberNoticeList(
+      @PathVariable String username,
       @RequestParam Integer page) {
     return ResponseEntity.ok(memberService.findMemberNotices(username, page));
   }
 
   @GetMapping("/{username}/subscription")
-  public ResponseEntity<GetSubscriptionUserDetailsPageRes> findMemberSubscriptionList(
+  public ResponseEntity<PaginatedRes<GetSubscriptionUserDetailsRes>> findMemberSubscriptionList(
       @PathVariable String username,
       @RequestParam Integer page) {
     return ResponseEntity.ok(memberService.findMemberSubscriptionList(username, page));
