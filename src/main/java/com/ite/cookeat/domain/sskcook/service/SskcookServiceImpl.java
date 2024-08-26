@@ -237,6 +237,7 @@ public class SskcookServiceImpl implements SskcookService {
       throw new CustomException(FILE_UPLOAD_FAIL);
     }
     postSskcookReq.setSskcookUrl(sskcookUrl);
+    postSskcookReq.setMemberId(memberService.findMemberId(postSskcookReq.getUsername()));
 
     // 프로시저 호출
     sskcookMapper.addSskcookWithDetails(postSskcookReq);
