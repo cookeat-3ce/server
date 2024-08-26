@@ -20,4 +20,8 @@ public class PostSskcookReq {
 
   @Setter
   private String sskcookUrl;
+  @Setter
+  private String ingredientsJson;
+  @Setter
+  private String hashtagsJson;
 }

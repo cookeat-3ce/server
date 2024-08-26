@@ -2,7 +2,6 @@ package com.ite.cookeat.domain.sskcook.service;
 
 import static com.ite.cookeat.exception.ErrorCode.FILE_UPLOAD_FAIL;
 import static com.ite.cookeat.exception.ErrorCode.FIND_FAIL_SSKCOOK;
-import static com.ite.cookeat.exception.ErrorCode.INVALID_JSON;
 import static com.ite.cookeat.exception.ErrorCode.SSKCOOK_NOT_FOUND;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -15,9 +14,7 @@ import com.ite.cookeat.domain.sskcook.dto.GetSskcookDetailsReq;
 import com.ite.cookeat.domain.sskcook.dto.GetSskcookDetailsRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSskcookIngredientsRes;
 import com.ite.cookeat.domain.sskcook.dto.GetTotalSskcookDetailsRes;
-import com.ite.cookeat.domain.sskcook.dto.PostHashtagReq;
 import com.ite.cookeat.domain.sskcook.dto.PostLikesReq;
-import com.ite.cookeat.domain.sskcook.dto.PostSskcookIngredientReq;
 import com.ite.cookeat.domain.sskcook.dto.PostSskcookReq;
 import com.ite.cookeat.domain.sskcook.mapper.SskcookMapper;
 import com.ite.cookeat.exception.CustomException;
@@ -227,43 +224,24 @@ public class SskcookServiceImpl implements SskcookService {
 
     String sskcookUrl = null;
     PostSskcookReq postSskcookReq = null;
-    try {
-      postSskcookReq = objectMapper.readValue(request, PostSskcookReq.class);
-    } catch (IOException e) {
-      throw new CustomException(INVALID_JSON);
-    }
 
     try {
+      postSskcookReq = objectMapper.readValue(request, PostSskcookReq.class);
       sskcookUrl = s3UploadService.saveFile(file);
+
+      String ingredientsJson = objectMapper.writeValueAsString(postSskcookReq.getIngredient());
+      String hashtagsJson = objectMapper.writeValueAsString(postSskcookReq.getHashtag());
+      postSskcookReq.setIngredientsJson(ingredientsJson);
+      postSskcookReq.setHashtagsJson(hashtagsJson);
     } catch (IOException e) {
       throw new CustomException(FILE_UPLOAD_FAIL);
     }
     postSskcookReq.setSskcookUrl(sskcookUrl);
 
-    // 정상적으로 슥쿡이 업로드 되었을 경우
-    if (sskcookMapper.insertSskcook(postSskcookReq) == 1) {
+    // 프로시저 호출
+    sskcookMapper.addSskcookWithDetails(postSskcookReq);
 
-      // 해당 회원의 슥쿡 카운트 증가
-      sskcookMapper.updateSskcookCount(postSskcookReq.getMemberId());
-    }
-    Integer sskcookId = postSskcookReq.getSskcookId();
-
-    List<PostSskcookIngredientReq> ingredients = postSskcookReq.getIngredient();
-    if (ingredients != null && !ingredients.isEmpty()) {
-      for (PostSskcookIngredientReq ingredient : ingredients) {
-        ingredient.setSskcookId(sskcookId);
-        sskcookMapper.insertIngredientSskcook(ingredient);
-      }
-    }
-
-    List<PostHashtagReq> hashtags = postSskcookReq.getHashtag();
-    if (hashtags != null && !hashtags.isEmpty()) {
-      for (PostHashtagReq hashtag : hashtags) {
-        hashtag.setSskcookId(sskcookId);
-        sskcookMapper.insertHashtag(hashtag);
-      }
-    }
-    return sskcookId;
+    return postSskcookReq.getSskcookId();
 
   }
 }
