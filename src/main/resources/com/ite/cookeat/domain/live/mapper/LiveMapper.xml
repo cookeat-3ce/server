@@ -14,4 +14,35 @@
         VALUES (#{liveId}, #{memberId}, #{title}, #{people}, UTL_RAW.CAST_TO_RAW(#{thumbnail}), CURRENT_TIMESTAMP, #{sessionId})
     ]]>
   </insert>
+  <select id="selectLiveListByKeyword" parameterType="Map" resultType="GetLiveRes">
+    SELECT l.live_id AS liveId, m.nickname, l.people, l.title
+    FROM live l
+    INNER JOIN member m ON m.member_id = l.member_id
+    WHERE
+    <if test="keyword != null and keyword != ''">
+      (
+      LOWER (m.nickname) LIKE '%' || LOWER (#{keyword}) || '%'
+      OR
+      LOWER (l.title) LIKE '%' || LOWER (#{keyword}) || '%'
+      ) AND
+    </if>
+    l.enddate IS NULL
+    ORDER BY l.regdate DESC
+    OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
+  </select>
+
+  <select id="selectLiveCount" parameterType="String" resultType="Integer">
+    SELECT COUNT(l.live_id)
+    FROM live l
+    INNER JOIN member m ON m.member_id = l.member_id
+    WHERE
+    <if test="keyword != null and keyword != ''">
+      (
+      LOWER (m.nickname) LIKE '%' || LOWER (#{keyword}) || '%'
+      OR
+      LOWER (l.title) LIKE '%' || LOWER (#{keyword}) || '%'
+      ) AND
+    </if>
+    l.enddate IS NULL
+  </select>
 </mapper>

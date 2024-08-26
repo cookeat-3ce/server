@@ -89,6 +89,7 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public Integer findMemberId(String username) {
     Optional<Integer> result = memberMapper.selectMemberId(username);
     if (result.isEmpty()) {
@@ -138,6 +139,8 @@ public class MemberServiceImpl implements MemberService {
         .build();
   }
 
+  @Override
+  @Transactional
   public void modifyMemberDeletedate(String username) {
     Integer result = memberMapper.updateMemberDeletedate(username);
     if (result <= 0) {
@@ -157,6 +160,16 @@ public class MemberServiceImpl implements MemberService {
 
   @Override
   @Transactional
+  public String findMemberVerifiedStatus(String username) {
+    String result = memberMapper.selectMemberVerifiedStatus(username);
+    if (result == null) {
+      throw new CustomException(MEMBER_NOT_FOUND);
+    }
+    return result;
+  }
+
+  @Override
+  @Transactional(readOnly = true)
   public PaginatedRes<GetMemberNoticeRes> findMemberNotices(String username, Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)

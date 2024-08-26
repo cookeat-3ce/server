@@ -30,9 +30,28 @@
       AND m.verified_status = 'REQUEST_VERIFY'
   </select>
 
-  <update id="updateVerifyRequestMemberStatus" parameterType="String">
+  <update id="updateVerifyRequestMemberStatus" parameterType="Map">
     UPDATE member
-    SET verified_status = 'VERIFIED'
+    SET verified_status = #{verifiedStatus}
     WHERE username = #{username}
   </update>
+
+  <select id="selectReportSskcookList" parameterType="Criteria" resultType="GetReportSskcookRes">
+    SELECT s.sskcook_id       AS sskcookId,
+           s.title            AS title,
+           COUNT(r.report_id) AS reportCount
+    FROM sskcook s
+           INNER JOIN report r ON s.sskcook_id = r.sskcook_id
+    WHERE s.deletedate IS NULL
+    GROUP BY s.sskcook_id, s.title
+    ORDER BY reportCount DESC, s.sskcook_id DESC
+    OFFSET (#{pageNum} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+  </select>
+
+  <select id="selectReportSskcookCount">
+    SELECT COUNT(DISTINCT s.sskcook_id) AS totalCount
+    FROM report r
+           INNER JOIN sskcook s ON r.sskcook_id = s.sskcook_id
+    WHERE s.deletedate IS NULL
+  </select>
 </mapper>
