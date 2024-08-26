@@ -2,10 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ite.cookeat.domain.member.mapper.MemberMapper">
+
   <insert id="insertMember" keyProperty="memberId" parameterType="Member">
     <![CDATA[
     INSERT INTO member(member_id, username, password, nickname, profile_img, regdate, status,
-                       subscription_count, ssgcook_count, verified_status, roles, one_liner)
+                       subscription_count, sskcook_count, verified_status, roles, one_liner)
     VALUES (member_seq.nextval, #{username}, #{password}, #{nickname},
             UTL_RAW.CAST_TO_RAW(#{profileImage}), CURRENT_TIMESTAMP, 'ACTIVE', 0, 0, 'UNVERIFIED',
             'ROLE_USER', null)
@@ -30,9 +31,9 @@
         <![CDATA[
     SELECT nickname,
            TO_CHAR(profile_img) as profileImage,
-           one_liner,
+           one_liner            AS oneLiner,
            subscription_count   as subscriptionCount,
-           ssgcook_count        as sskcookCount
+           sskcook_count        as sskcookCount
     FROM member
     WHERE username = #{username}
       AND status = 'ACTIVE'
@@ -79,19 +80,77 @@
     ]]>
   </select>
 
-  <select id="selectSearchMember" parameterType="GetSearchSskcookReq"
+  <select id="selectSearchMember" parameterType="Map"
     resultType="GetUserDetailsRes">
     <![CDATA[
     SELECT username,
            nickname,
            TO_CHAR(profile_img) as profileImage,
            subscription_count   as subscriptionCount,
-           ssgcook_count        as sskcookCount
+           sskcook_count        as sskcookCount
     FROM member
     WHERE LOWER(nickname) LIKE '%' || LOWER(#{keyword}) || '%'
       AND status = 'ACTIVE'
-    ORDER BY subscription_count DESC, ssgcook_count DESC, regdate DESC
-    OFFSET (#{page} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+    ORDER BY subscription_count DESC, sskcook_count DESC, regdate DESC
+    OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
     ]]>
   </select>
+
+  <select id="selectSearchMemberCount" parameterType="String" resultType="Integer">
+    SELECT COUNT(nickname)
+    FROM member
+    WHERE LOWER(nickname) LIKE '%' || LOWER(#{keyword}) || '%'
+      AND status = 'ACTIVE'
+  </select>
+
+  <select id="selectMemberSubscriptionList" parameterType="Map"
+    resultType="GetSubscriptionUserDetailsRes">
+    <![CDATA[
+    SELECT d.username, TO_CHAR(d.profile_img) as profileImage
+    FROM member b
+           INNER JOIN subscription c ON b.member_id = c.follower_id
+           INNER JOIN member d ON d.member_id = c.following_id
+    WHERE b.username = #{username}
+      AND b.status = 'ACTIVE'
+      AND d.status = 'ACTIVE'
+    OFFSET(#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
+    ]]>
+  </select>
+
+  <select id="selectMemberSubscriptionListCount" parameterType="String" resultType="Integer">
+    <![CDATA[
+    SELECT COUNT(d.username)
+    FROM member b
+           INNER JOIN subscription c ON b.member_id = c.follower_id
+           INNER JOIN member d ON d.member_id = c.following_id
+    WHERE b.username = #{username}
+      AND b.status = 'ACTIVE'
+      AND d.status = 'ACTIVE'
+    ]]>
+  </select>
+
+
+  <update id="updateMemberOneLiner" parameterType="PostMemberOneLinerReq">
+  <![CDATA[
+    UPDATE member
+    SET one_liner = #{oneLiner}
+    WHERE username = #{username}
+    ]]>
+  </update>
+
+  <update id="updateMemberDeletedate" parameterType="String">
+    <![CDATA[
+    UPDATE member
+    SET deletedate = CURRENT_TIMESTAMP,
+        status     = 'INACTIVE'
+    ]]>
+  </update>
+
+  <update id="updateVerifiedStatus">
+    <![CDATA[
+    UPDATE member
+    SET verified_status = #{status}
+    WHERE username = #{username}
+    ]]>
+  </update>
 </mapper>

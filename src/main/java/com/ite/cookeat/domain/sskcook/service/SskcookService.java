@@ -1,19 +1,38 @@
 package com.ite.cookeat.domain.sskcook.service;
 
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
-import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
-import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
+import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookPageRes;
+import com.ite.cookeat.domain.sskcook.dto.GetTotalSskcookDetailsRes;
+import java.io.IOException;
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface SskcookService {
 
+  GetTotalSskcookDetailsRes findSskcookTotalDetails(String username, Integer sskcookId)
+      throws IOException;
+
   List<GetFridgeRecipeRes> findMyFridgeRecipe(String username);
 
-  List<GetSearchSskcookRes> findSearchRecentSskcook(GetSearchSskcookReq getSearchSskcookReq);
+  GetSearchSskcookPageRes findSearchRecentSskcookList(String keyword, Integer page);
 
-  List<GetSearchSskcookRes> findSearchLikesSskcook(GetSearchSskcookReq getSearchSskcookReq);
+  Integer addSskcook(String postSskcookReq, MultipartFile file);
 
-  List<GetSearchSskcookRes> findRecentSskcook(GetSearchSskcookReq getSearchSskcookReq);
+  GetSearchSskcookPageRes findSearchLikesSskcookList(String keyword, Integer page);
 
-  List<GetSearchSskcookRes> findMonthlySskcook(GetSearchSskcookReq getSearchSskcookReq);
+  GetSearchSskcookPageRes findRecentSskcookList(Integer page);
+
+  GetSearchSskcookPageRes findMonthlySskcookList(String date, Integer page);
+
+  GetSearchSskcookPageRes findUserSskcookList(String username, Integer page);
+
+  GetSearchSskcookPageRes findTagSskcookList(String tag, Integer page);
+
+  Integer modifySskcookDeletedate(Integer sskcookId);
+
+  void addLikes(String username, Integer sskcookId);
+
+  void removeLikes(String username, Integer sskcookId);
+
+  Integer findLikes(String username, Integer sskcookId);
 }
