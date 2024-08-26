@@ -4,18 +4,14 @@ import static com.ite.cookeat.exception.ErrorCode.FILE_UPLOAD_FAIL;
 import static com.ite.cookeat.exception.ErrorCode.LONGCOOK_NOT_FOUND;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ite.cookeat.domain.longcook.dto.GetLongcookReq;
 import com.ite.cookeat.domain.longcook.dto.GetLongcookRes;
 import com.ite.cookeat.domain.longcook.dto.PostLongcookReq;
 import com.ite.cookeat.domain.longcook.mapper.LongcookMapper;
-import com.ite.cookeat.domain.member.service.MemberService;
-import com.ite.cookeat.exception.CustomException;
-import com.ite.cookeat.s3.service.S3UploadService;
-import java.io.IOException;
-import java.util.List;
 import com.ite.cookeat.domain.sskcook.dto.GetLongcookPageRes;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.global.dto.Criteria;
+import com.ite.cookeat.s3.service.S3UploadService;
+import java.io.IOException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,8 +25,6 @@ public class LongcookServiceImpl implements LongcookService {
   private final LongcookMapper longcookMapper;
   private final ObjectMapper objectMapper;
   private final S3UploadService s3UploadService;
-  private final MemberService memberService;
-
 
   @Override
   @Transactional
