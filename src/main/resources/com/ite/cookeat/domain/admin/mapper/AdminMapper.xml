@@ -55,12 +55,6 @@
     WHERE username = #{username}
   </update>
 
-  <update id="updateVerifyRequestMemberStatus" parameterType="String">
-    UPDATE member
-    SET verified_status = 'VERIFIED'
-    WHERE username = #{username}
-  </update>
-
   <update id="updateReportSskcookStatus" parameterType="DeleteReportSskcookReq"
     statementType="CALLABLE">
     CALL update_and_delete_report_sskcook(#{sskcookId, mode=IN, jdbcType=INTEGER},
