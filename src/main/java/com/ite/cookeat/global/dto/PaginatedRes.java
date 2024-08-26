@@ -1,6 +1,5 @@
-package com.ite.cookeat.domain.sskcook.dto;
+package com.ite.cookeat.global.dto;
 
-import com.ite.cookeat.global.dto.Criteria;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class GetSearchSskcookPageRes {
+public class PaginatedRes<T> {
 
   // 이전, 이후 값이 있는 지 없는 지
   private boolean prev, next;
@@ -19,14 +18,14 @@ public class GetSearchSskcookPageRes {
   private Integer total;
   // 페이지 정보
   private Criteria cri;
-  // 검색 멤버 리스트
-  private List<GetSearchSskcookRes> sskcooks;
+  // 리스트
+  private List<T> data;
 
   @Builder
-  GetSearchSskcookPageRes(Integer total, Criteria cri, List<GetSearchSskcookRes> sskcooks) {
-    this.total = total;
+  public PaginatedRes(Integer total, Criteria cri, List<T> data) {
     this.cri = cri;
-    this.sskcooks = sskcooks;
+    this.total = total;
+    this.data = data;
 
     int pageSize = cri.getPageSize();
     int pageNum = cri.getPageNum();

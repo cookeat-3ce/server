@@ -1,9 +1,10 @@
 package com.ite.cookeat.domain.admin.controller;
 
+import com.ite.cookeat.domain.admin.dto.GetVerifyRequestRes;
 import com.ite.cookeat.domain.admin.dto.GetReportSskcookPageRes;
-import com.ite.cookeat.domain.admin.dto.GetVerifyRequestPageRes;
 import com.ite.cookeat.domain.admin.dto.PostVerifyRequestReq;
 import com.ite.cookeat.domain.admin.service.AdminService;
+import com.ite.cookeat.global.dto.PaginatedRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,7 +24,8 @@ public class AdminController {
   private final AdminService adminService;
 
   @GetMapping("/member/verify")
-  public ResponseEntity<GetVerifyRequestPageRes> verifyRequestList(@RequestParam Integer page) {
+  public ResponseEntity<PaginatedRes<GetVerifyRequestRes>> verifyRequestList(
+      @RequestParam Integer page) {
     return ResponseEntity.ok(adminService.findVerifyRequestList(page));
   }
 

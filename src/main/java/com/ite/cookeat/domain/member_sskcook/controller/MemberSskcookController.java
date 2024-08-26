@@ -1,7 +1,8 @@
 package com.ite.cookeat.domain.member_sskcook.controller;
 
-import com.ite.cookeat.domain.member_sskcook.dto.GetMemberSskcookPageRes;
+import com.ite.cookeat.domain.member_sskcook.dto.GetMemberSskcookRes;
 import com.ite.cookeat.domain.member_sskcook.service.MemberSskcookService;
+import com.ite.cookeat.global.dto.PaginatedRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +32,7 @@ public class MemberSskcookController {
   }
 
   @GetMapping("/{username}")
-  public ResponseEntity<GetMemberSskcookPageRes> memberSskcookList(
+  public ResponseEntity<PaginatedRes<GetMemberSskcookRes>> memberSskcookList(
       @PathVariable String username, @RequestParam Integer page) {
     return ResponseEntity.ok(memberSskcookService.findMemberSskcookList(username, page));
   }
