@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 public class PutSskcookReq {
-  
+
   private String title;
   private String recipe;
   private List<PostHashtagReq> hashtag;
@@ -23,5 +23,6 @@ public class PutSskcookReq {
   private String ingredientsJson;
   @Setter
   private String hashtagsJson;
-
+  @Setter
+  private Integer updatedCount;
 }

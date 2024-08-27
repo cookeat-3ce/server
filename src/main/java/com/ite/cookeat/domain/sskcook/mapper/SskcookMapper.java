@@ -57,7 +57,7 @@ public interface SskcookMapper {
 
   GetSskcookDetailsRes selectSskcookDetails(GetSskcookDetailsReq getSskcookDetailsReq);
 
-  void updateSskcookWithDetails(PutSskcookReq putSskcookReq);
+  Integer updateSskcookWithDetails(PutSskcookReq putSskcookReq);
 
   String selectSskcookUrl(Integer sskcookId);
 }

@@ -205,7 +205,8 @@ public class SskcookServiceImpl implements SskcookService {
 
     // 프로시저 호출
     sskcookMapper.updateSskcookWithDetails(putSskcookReq);
-    return putSskcookReq.getSskcookId();
+    return putSskcookReq.getUpdatedCount();
+
   }
 
   @Override
