@@ -6,6 +6,7 @@ import com.ite.cookeat.domain.sskcook.dto.GetSskcookDetailsRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSskcookIngredientsRes;
 import com.ite.cookeat.domain.sskcook.dto.PostLikesReq;
 import com.ite.cookeat.domain.sskcook.dto.PostSskcookReq;
+import com.ite.cookeat.domain.sskcook.dto.PutSskcookReq;
 import com.ite.cookeat.global.dto.Criteria;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
@@ -44,7 +45,6 @@ public interface SskcookMapper {
 
   Integer updateSskcookDeletedate(Integer sskcookId);
 
-
   Integer deleteLikes(PostLikesReq postLikesReq);
 
   Integer insertLikes(PostLikesReq postLikesReq);
@@ -56,4 +56,8 @@ public interface SskcookMapper {
   List<String> selectSskcookTags(Integer sskcookId);
 
   GetSskcookDetailsRes selectSskcookDetails(GetSskcookDetailsReq getSskcookDetailsReq);
+
+  void updateSskcookWithDetails(PutSskcookReq putSskcookReq);
+
+  String selectSskcookUrl(Integer sskcookId);
 }
