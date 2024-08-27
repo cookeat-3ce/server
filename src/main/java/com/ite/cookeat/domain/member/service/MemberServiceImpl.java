@@ -3,8 +3,8 @@ package com.ite.cookeat.domain.member.service;
 import static com.ite.cookeat.exception.ErrorCode.MEMBER_NOT_FOUND;
 import static com.ite.cookeat.exception.ErrorCode.VERIFYING_FAILED;
 
-import com.ite.cookeat.domain.member.dto.GetMemberNoticePageRes;
-import com.ite.cookeat.domain.member.dto.GetSubscriptionUserDetailsPageRes;
+import com.ite.cookeat.domain.member.dto.GetMemberNoticeRes;
+import com.ite.cookeat.domain.member.dto.GetSubscriptionUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.Member;
 import com.ite.cookeat.domain.member.dto.PostLoginReq;
@@ -13,12 +13,11 @@ import com.ite.cookeat.domain.member.dto.PostMemberOneLinerReq;
 import com.ite.cookeat.domain.member.dto.PostSignUpReq;
 import com.ite.cookeat.domain.member.dto.TokenDTO;
 import com.ite.cookeat.domain.member.mapper.MemberMapper;
-import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.exception.ErrorCode;
 import com.ite.cookeat.global.dto.Criteria;
+import com.ite.cookeat.global.dto.PaginatedRes;
 import com.ite.cookeat.security.jwt.JwtTokenProvider;
-import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -90,12 +89,28 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public Integer findMemberId(String username) {
     Optional<Integer> result = memberMapper.selectMemberId(username);
     if (result.isEmpty()) {
       throw new CustomException(MEMBER_NOT_FOUND);
     }
     return result.get();
+  }
+
+  @Override
+  @Transactional
+  public PaginatedRes<GetUserDetailsRes> findSearchMember(String keyword, Integer page) {
+    Criteria cri = Criteria.builder()
+        .pageSize(10)
+        .pageNum(page)
+        .keyword(keyword)
+        .build();
+    return PaginatedRes.<GetUserDetailsRes>builder()
+        .cri(cri)
+        .total(memberMapper.selectSearchMemberCount(keyword))
+        .data(memberMapper.selectSearchMember(cri, keyword))
+        .build();
   }
 
   @Override
@@ -109,27 +124,23 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
-  @Transactional(readOnly = true)
-  public List<GetUserDetailsRes> findSearchMember(GetSearchSskcookReq getSearchSskcookReq) {
-    return memberMapper.selectSearchMember(getSearchSskcookReq);
-  }
-
-  @Override
   @Transactional
-  public GetSubscriptionUserDetailsPageRes findMemberSubscriptionList(String username,
+  public PaginatedRes<GetSubscriptionUserDetailsRes> findMemberSubscriptionList(String username,
       Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)
         .pageNum(page)
         .build();
 
-    return GetSubscriptionUserDetailsPageRes.builder()
+    return PaginatedRes.<GetSubscriptionUserDetailsRes>builder()
         .cri(cri)
         .total(memberMapper.selectMemberSubscriptionListCount(username))
-        .users(memberMapper.selectMemberSubscriptionList(cri, username))
+        .data(memberMapper.selectMemberSubscriptionList(cri, username))
         .build();
   }
 
+  @Override
+  @Transactional
   public void modifyMemberDeletedate(String username) {
     Integer result = memberMapper.updateMemberDeletedate(username);
     if (result <= 0) {
@@ -148,16 +159,27 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
-  public GetMemberNoticePageRes findMemberNotices(String username, Integer page) {
+  @Transactional
+  public String findMemberVerifiedStatus(String username) {
+    String result = memberMapper.selectMemberVerifiedStatus(username);
+    if (result == null) {
+      throw new CustomException(MEMBER_NOT_FOUND);
+    }
+    return result;
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public PaginatedRes<GetMemberNoticeRes> findMemberNotices(String username, Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)
         .pageNum(page)
         .build();
 
-    return GetMemberNoticePageRes.builder()
+    return PaginatedRes.<GetMemberNoticeRes>builder()
         .cri(cri)
         .total(memberMapper.selectMemberNoticeCount(username))
-        .notices(memberMapper.selectMemberNotices(cri, username))
+        .data(memberMapper.selectMemberNotices(cri, username))
         .build();
   }
 }

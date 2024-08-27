@@ -1,12 +1,13 @@
 package com.ite.cookeat.domain.member_sskcook.service;
 
 import com.ite.cookeat.domain.member.service.MemberService;
-import com.ite.cookeat.domain.member_sskcook.dto.GetMemberSskcookPageRes;
+import com.ite.cookeat.domain.member_sskcook.dto.GetMemberSskcookRes;
 import com.ite.cookeat.domain.member_sskcook.dto.PostMemberSskcookReq;
 import com.ite.cookeat.domain.member_sskcook.mapper.MemberSskcookMapper;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.exception.ErrorCode;
 import com.ite.cookeat.global.dto.Criteria;
+import com.ite.cookeat.global.dto.PaginatedRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -53,16 +54,16 @@ public class MemberSskcookServiceImpl implements MemberSskcookService {
   }
 
   @Override
-  public GetMemberSskcookPageRes findMemberSskcookList(String username, Integer page) {
+  public PaginatedRes<GetMemberSskcookRes> findMemberSskcookList(String username, Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)
         .pageNum(page)
         .build();
 
-    return GetMemberSskcookPageRes.builder()
+    return PaginatedRes.<GetMemberSskcookRes>builder()
         .cri(cri)
         .total(memberSskcookMapper.selectMemberSskcookListCount(username))
-        .memberSskcooks(memberSskcookMapper.selectMemberSskcookList(cri, username))
+        .data(memberSskcookMapper.selectMemberSskcookList(cri, username))
         .build();
   }
 }

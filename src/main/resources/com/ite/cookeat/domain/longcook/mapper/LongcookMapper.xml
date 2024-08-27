@@ -3,22 +3,18 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ite.cookeat.domain.longcook.mapper.LongcookMapper">
 
-  <select id="selectLongcook" parameterType="Integer" resultType="GetLongcookRes">
-    <![CDATA[
-    SELECT l.longcook_id          AS longcookId,
-           m.username             AS username,
-           m.nickname             AS nickname,
-           l.title                AS title,
-           l.longcook_url         AS longcookUrl,
-           l.regdate              AS regdate,
-           TO_CHAR(m.profile_img) AS profileImage
-    FROM longcook l
-           INNER JOIN member m on l.member_id = m.member_id
-    WHERE l.longcook_id = #{longcookId}
-    ]]>
-  </select>
+  <insert id="insertLongcook" parameterType="PostLongcookReq">
+    <selectKey keyProperty="longcookId" order="BEFORE" resultType="Integer">
+      SELECT longcook_seq.nextval AS longcookId FROM dual
+    </selectKey>
+    INSERT INTO longcook (longcook_id, longcook_url, member_id, title)
+    SELECT #{longcookId}, #{longcookUrl}, m.member_id, #{title}
+    FROM member m
+    WHERE m.username = #{username}
+    AND m.status = 'ACTIVE'
+  </insert>
 
-  <select id="selectLongcookList" parameterType="GetLongcookReq" resultType="GetLongcookRes">
+  <select id="selectLongcookList" parameterType="Map" resultType="GetLongcookRes">
     <![CDATA[
     SELECT a.longcook_id          AS longcookId,
            b.username             AS username,
@@ -32,7 +28,55 @@
     WHERE b.username = #{username}
       AND b.status = 'ACTIVE'
     ORDER BY a.regdate DESC
-    OFFSET (#{page} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+    OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
+    ]]>
+  </select>
+  <select id="selectLongcookListCount" parameterType="String" resultType="Integer">
+    <![CDATA[
+    SELECT COUNT(a.longcook_id)
+    FROM longcook a
+           INNER JOIN member b ON b.member_id = a.member_id
+    WHERE #{username} = b.username
+      AND b.status = 'ACTIVE'
+    ]]>
+  </select>
+  <select id="selectRecentLongcookList" parameterType="Map" resultType="GetLongcookRes">
+    <![CDATA[
+    SELECT a.longcook_id          AS longcookId,
+           b.username             AS username,
+           b.nickname             AS nickname,
+           a.title                AS title,
+           a.longcook_url         AS longcookUrl,
+           a.regdate              AS regdate,
+           TO_CHAR(b.profile_img) AS profileImage
+    FROM longcook a
+           INNER JOIN member b ON b.member_id = a.member_id
+    WHERE b.status = 'ACTIVE'
+    ORDER BY a.regdate DESC
+    OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
+    ]]>
+  </select>
+  <select id="selectRecentLongcookListCount" resultType="Integer">
+    <![CDATA[
+    SELECT COUNT(a.longcook_id)
+    FROM longcook a
+           INNER JOIN member b ON b.member_id = a.member_id
+    WHERE a.regdate IS NOT NULL
+      AND b.status = 'ACTIVE'
+    ]]>
+  </select>
+  <select id="selectLongcook" parameterType="Integer" resultType="GetLongcookRes">
+    <![CDATA[
+    SELECT l.longcook_id          AS longcookId,
+           m.username             AS username,
+           m.nickname             AS nickname,
+           l.title                AS title,
+           l.longcook_url         AS longcookUrl,
+           l.regdate              AS regdate,
+           TO_CHAR(m.profile_img) AS profileImage
+    FROM longcook l
+           INNER JOIN member m on l.member_id = m.member_id
+    WHERE l.longcook_id = #{longcookId}
     ]]>
   </select>
   <update id="updateLongcookDeletedate" parameterType="Integer">

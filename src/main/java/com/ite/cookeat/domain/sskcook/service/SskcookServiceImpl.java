@@ -2,22 +2,25 @@ package com.ite.cookeat.domain.sskcook.service;
 
 import static com.ite.cookeat.exception.ErrorCode.FILE_UPLOAD_FAIL;
 import static com.ite.cookeat.exception.ErrorCode.FIND_FAIL_SSKCOOK;
-import static com.ite.cookeat.exception.ErrorCode.INVALID_JSON;
 import static com.ite.cookeat.exception.ErrorCode.SSKCOOK_NOT_FOUND;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ite.cookeat.domain.member.service.MemberService;
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
-import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
-import com.ite.cookeat.domain.sskcook.dto.PostHashtagReq;
+import com.ite.cookeat.domain.sskcook.dto.GetSskcookDetailsReq;
+import com.ite.cookeat.domain.sskcook.dto.GetSskcookDetailsRes;
+import com.ite.cookeat.domain.sskcook.dto.GetSskcookIngredientsRes;
+import com.ite.cookeat.domain.sskcook.dto.GetTotalSskcookDetailsRes;
 import com.ite.cookeat.domain.sskcook.dto.PostLikesReq;
-import com.ite.cookeat.domain.sskcook.dto.PostSskcookIngredientReq;
 import com.ite.cookeat.domain.sskcook.dto.PostSskcookReq;
 import com.ite.cookeat.domain.sskcook.mapper.SskcookMapper;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.exception.ErrorCode;
+import com.ite.cookeat.global.dto.Criteria;
+import com.ite.cookeat.global.dto.PaginatedRes;
 import com.ite.cookeat.s3.service.S3UploadService;
 import java.io.IOException;
 import java.util.List;
@@ -39,27 +42,68 @@ public class SskcookServiceImpl implements SskcookService {
   private final MemberService memberService;
 
   @Override
-  @Transactional(readOnly = true)
-  public List<GetSearchSskcookRes> findSearchRecentSskcook(
-      GetSearchSskcookReq getSearchSskcookReq) {
-    return sskcookMapper.selectSearchRecentSskcook(getSearchSskcookReq);
-  }
+  @Transactional
+  public PaginatedRes<GetSearchSskcookRes> findSearchRecentSskcookList(
+      String keyword, Integer page) {
+    Criteria cri = Criteria.builder()
+        .pageSize(10)
+        .pageNum(page)
+        .keyword(keyword)
+        .build();
 
-  @Override
-  @Transactional(readOnly = true)
-  public List<GetSearchSskcookRes> findSearchLikesSskcook(
-      GetSearchSskcookReq getSearchSskcookReq) {
-    return sskcookMapper.selectSearchLikesSskcook(getSearchSskcookReq);
-  }
-
-  @Override
-  @Transactional(readOnly = true)
-  public List<GetSearchSskcookRes> findRecentSskcook(GetSearchSskcookReq getSearchSskcookReq) {
-    return sskcookMapper.selectRecentSskcook(getSearchSskcookReq);
+    return PaginatedRes.<GetSearchSskcookRes>builder()
+        .cri(cri)
+        .total(sskcookMapper.selectSearchSskcookListCount(keyword))
+        .data(sskcookMapper.selectSearchRecentSskcookList(cri, keyword))
+        .build();
   }
 
   @Override
   @Transactional
+  public PaginatedRes<GetSearchSskcookRes> findSearchLikesSskcookList(
+      String keyword, Integer page) {
+    Criteria cri = Criteria.builder()
+        .pageSize(10)
+        .pageNum(page)
+        .keyword(keyword)
+        .build();
+    return PaginatedRes.<GetSearchSskcookRes>builder()
+        .cri(cri)
+        .total(sskcookMapper.selectSearchSskcookListCount(keyword))
+        .data(sskcookMapper.selectSearchLikesSskcookList(cri, keyword))
+        .build();
+  }
+
+  @Override
+  @Transactional
+  public PaginatedRes<GetSearchSskcookRes> findRecentSskcookList(Integer page) {
+    Criteria cri = Criteria.builder()
+        .pageSize(10)
+        .pageNum(page)
+        .build();
+    return PaginatedRes.<GetSearchSskcookRes>builder()
+        .cri(cri)
+        .total(sskcookMapper.selectRecentSskcookListCount())
+        .data(sskcookMapper.selectRecentSskcookList(cri))
+        .build();
+  }
+
+  @Override
+  @Transactional
+  public PaginatedRes<GetSearchSskcookRes> findMonthlySskcookList(String date, Integer page) {
+    Criteria cri = Criteria.builder()
+        .pageSize(10)
+        .pageNum(page)
+        .date(date)
+        .build();
+    return PaginatedRes.<GetSearchSskcookRes>builder()
+        .cri(cri)
+        .total(sskcookMapper.selectMonthlySskcookListCount(date))
+        .data(sskcookMapper.selectMonthlySskcookList(cri, date))
+        .build();
+  }
+
+  @Override
   public Integer modifySskcookDeletedate(Integer sskcookId) {
     Integer result = sskcookMapper.updateSskcookDeletedate(sskcookId);
     if (result <= 0) {
@@ -70,8 +114,32 @@ public class SskcookServiceImpl implements SskcookService {
 
   @Override
   @Transactional
-  public List<GetSearchSskcookRes> findMonthlySskcook(GetSearchSskcookReq getSearchSskcookReq) {
-    return sskcookMapper.selectMonthlySskcook(getSearchSskcookReq);
+  public PaginatedRes<GetSearchSskcookRes> findUserSskcookList(String username, Integer page) {
+    Criteria cri = Criteria.builder()
+        .pageSize(10)
+        .pageNum(page)
+        .build();
+    return PaginatedRes.<GetSearchSskcookRes>builder()
+        .cri(cri)
+        .total(sskcookMapper.selectUserSskcookListCount(username))
+        .data(sskcookMapper.selectUserSskcookList(cri, username))
+        .build();
+  }
+
+  @Override
+  @Transactional
+  public PaginatedRes<GetSearchSskcookRes> findTagSskcookList(String tag, Integer page) {
+    Criteria cri = Criteria.builder()
+        .pageSize(10)
+        .pageNum(page)
+        .tag(tag)
+        .build();
+
+    return PaginatedRes.<GetSearchSskcookRes>builder()
+        .cri(cri)
+        .total(sskcookMapper.selectTagSskcookListCount(tag))
+        .data(sskcookMapper.selectTagSskcookList(cri, tag))
+        .build();
   }
 
   @Override
@@ -86,7 +154,6 @@ public class SskcookServiceImpl implements SskcookService {
       throw new CustomException(ErrorCode.LIKES_INSERT_FAIL);
     }
   }
-
 
   @Override
   public void removeLikes(String username, Integer sskcookId) {
@@ -108,6 +175,27 @@ public class SskcookServiceImpl implements SskcookService {
         .sskcookId(sskcookId)
         .build();
     return sskcookMapper.selectLikesCount(modifiedReq);
+  }
+
+  @Override
+  @Transactional
+  public GetTotalSskcookDetailsRes findSskcookTotalDetails(String username, Integer sskcookId)
+      throws IOException {
+    JsonNode jsonNode = objectMapper.readTree(username);
+    String name = jsonNode.get("username").asText();
+    GetSskcookDetailsReq getSskcookDetailsReq = GetSskcookDetailsReq.builder()
+        .username(name)
+        .sskcookId(sskcookId)
+        .build();
+    System.out.println(username + " " + sskcookId);
+    List<String> tags = sskcookMapper.selectSskcookTags(sskcookId);
+    GetSskcookDetailsRes details = sskcookMapper.selectSskcookDetails(getSskcookDetailsReq);
+    List<GetSskcookIngredientsRes> ingredients = sskcookMapper.selectSskcookIngredients(sskcookId);
+    return GetTotalSskcookDetailsRes.builder()
+        .details(details)
+        .tags(tags)
+        .ingredients(ingredients)
+        .build();
   }
 
   @Override
@@ -137,43 +225,25 @@ public class SskcookServiceImpl implements SskcookService {
 
     String sskcookUrl = null;
     PostSskcookReq postSskcookReq = null;
-    try {
-      postSskcookReq = objectMapper.readValue(request, PostSskcookReq.class);
-    } catch (IOException e) {
-      throw new CustomException(INVALID_JSON);
-    }
 
     try {
+      postSskcookReq = objectMapper.readValue(request, PostSskcookReq.class);
       sskcookUrl = s3UploadService.saveFile(file);
+
+      String ingredientsJson = objectMapper.writeValueAsString(postSskcookReq.getIngredient());
+      String hashtagsJson = objectMapper.writeValueAsString(postSskcookReq.getHashtag());
+      postSskcookReq.setIngredientsJson(ingredientsJson);
+      postSskcookReq.setHashtagsJson(hashtagsJson);
     } catch (IOException e) {
       throw new CustomException(FILE_UPLOAD_FAIL);
     }
     postSskcookReq.setSskcookUrl(sskcookUrl);
+    postSskcookReq.setMemberId(memberService.findMemberId(postSskcookReq.getUsername()));
 
-    // 정상적으로 슥쿡이 업로드 되었을 경우
-    if (sskcookMapper.insertSskcook(postSskcookReq) == 1) {
+    // 프로시저 호출
+    sskcookMapper.addSskcookWithDetails(postSskcookReq);
 
-      // 해당 회원의 슥쿡 카운트 증가
-      sskcookMapper.updateSskcookCount(postSskcookReq.getMemberId());
-    }
-    Integer sskcookId = postSskcookReq.getSskcookId();
-
-    List<PostSskcookIngredientReq> ingredients = postSskcookReq.getIngredient();
-    if (ingredients != null && !ingredients.isEmpty()) {
-      for (PostSskcookIngredientReq ingredient : ingredients) {
-        ingredient.setSskcookId(sskcookId);
-        sskcookMapper.insertIngredientSskcook(ingredient);
-      }
-    }
-
-    List<PostHashtagReq> hashtags = postSskcookReq.getHashtag();
-    if (hashtags != null && !hashtags.isEmpty()) {
-      for (PostHashtagReq hashtag : hashtags) {
-        hashtag.setSskcookId(sskcookId);
-        sskcookMapper.insertHashtag(hashtag);
-      }
-    }
-    return sskcookId;
+    return postSskcookReq.getSskcookId();
 
   }
 }

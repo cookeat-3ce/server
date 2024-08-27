@@ -1,9 +1,10 @@
 package com.ite.cookeat.domain.event.service;
 
 import com.ite.cookeat.domain.event.dto.GetEventDetailRes;
-import com.ite.cookeat.domain.event.dto.GetEventPageRes;
+import com.ite.cookeat.domain.event.dto.GetEventRes;
 import com.ite.cookeat.domain.event.mapper.EventMapper;
 import com.ite.cookeat.global.dto.Criteria;
+import com.ite.cookeat.global.dto.PaginatedRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +15,16 @@ public class EventServiceImpl implements EventService {
   private final EventMapper eventMapper;
 
   @Override
-  public GetEventPageRes findEventList(Integer page) {
+  public PaginatedRes<GetEventRes> findEventList(Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)
         .pageNum(page)
         .build();
-    return GetEventPageRes.builder()
-        .cri(cri)
+
+    return PaginatedRes.<GetEventRes>builder()
         .total(eventMapper.selectEventCount())
-        .events(eventMapper.selectEventList(cri))
+        .data(eventMapper.selectEventList(cri))
+        .cri(cri)
         .build();
   }
 

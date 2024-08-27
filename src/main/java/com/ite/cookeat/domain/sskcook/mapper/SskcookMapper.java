@@ -1,32 +1,49 @@
 package com.ite.cookeat.domain.sskcook.mapper;
 
-import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
-import com.ite.cookeat.domain.sskcook.dto.PostHashtagReq;
+import com.ite.cookeat.domain.sskcook.dto.GetSskcookDetailsReq;
+import com.ite.cookeat.domain.sskcook.dto.GetSskcookDetailsRes;
+import com.ite.cookeat.domain.sskcook.dto.GetSskcookIngredientsRes;
 import com.ite.cookeat.domain.sskcook.dto.PostLikesReq;
-import com.ite.cookeat.domain.sskcook.dto.PostSskcookIngredientReq;
 import com.ite.cookeat.domain.sskcook.dto.PostSskcookReq;
+import com.ite.cookeat.global.dto.Criteria;
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface SskcookMapper {
 
-  Integer insertSskcook(PostSskcookReq req);
 
-  void insertIngredientSskcook(PostSskcookIngredientReq req);
+  List<GetSearchSskcookRes> selectSearchRecentSskcookList(@Param("cri") Criteria cri,
+      @Param("keyword") String keyword);
 
-  void insertHashtag(PostHashtagReq req);
+  void addSskcookWithDetails(PostSskcookReq req);
 
-  void updateSskcookCount(Integer memberId);
+  List<GetSearchSskcookRes> selectSearchLikesSskcookList(@Param("cri") Criteria cri,
+      @Param("keyword") String keyword);
 
-  List<GetSearchSskcookRes> selectSearchRecentSskcook(GetSearchSskcookReq getSearchSskcookReq);
+  List<GetSearchSskcookRes> selectRecentSskcookList(@Param("cri") Criteria cri);
 
-  List<GetSearchSskcookRes> selectSearchLikesSskcook(GetSearchSskcookReq getSearchSskcookReq);
+  List<GetSearchSskcookRes> selectMonthlySskcookList(
+      @Param("cri") Criteria cri, @Param("date") String date);
 
-  List<GetSearchSskcookRes> selectRecentSskcook(GetSearchSskcookReq getSearchSskcookReq);
+  List<GetSearchSskcookRes> selectUserSskcookList(@Param("cri") Criteria cri,
+      @Param("username") String username);
+
+  List<GetSearchSskcookRes> selectTagSskcookList(@Param("cri") Criteria cri,
+      @Param("tag") String tag);
+
+  Integer selectSearchSskcookListCount(String keyword);
+
+  Integer selectRecentSskcookListCount();
+
+  Integer selectMonthlySskcookListCount(String date);
+
+  Integer selectUserSskcookListCount(String username);
+
+  Integer selectTagSskcookListCount(String tag);
 
   Integer updateSskcookDeletedate(Integer sskcookId);
 
-  List<GetSearchSskcookRes> selectMonthlySskcook(GetSearchSskcookReq getSearchSskcookReq);
 
   Integer deleteLikes(PostLikesReq postLikesReq);
 
@@ -34,4 +51,9 @@ public interface SskcookMapper {
 
   Integer selectLikesCount(PostLikesReq postLikesReq);
 
+  List<GetSskcookIngredientsRes> selectSskcookIngredients(Integer sskcookId);
+
+  List<String> selectSskcookTags(Integer sskcookId);
+
+  GetSskcookDetailsRes selectSskcookDetails(GetSskcookDetailsReq getSskcookDetailsReq);
 }

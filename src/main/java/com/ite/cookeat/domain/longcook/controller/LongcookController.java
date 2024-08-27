@@ -1,15 +1,17 @@
 package com.ite.cookeat.domain.longcook.controller;
 
-import com.ite.cookeat.domain.longcook.dto.GetLongcookReq;
 import com.ite.cookeat.domain.longcook.dto.GetLongcookRes;
 import com.ite.cookeat.domain.longcook.service.LongcookService;
-import java.util.List;
+import com.ite.cookeat.exception.CustomException;
+import com.ite.cookeat.exception.ErrorCode;
+import com.ite.cookeat.global.dto.PaginatedRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -23,16 +25,25 @@ public class LongcookController {
 
   private final LongcookService longcookService;
 
+  @GetMapping("/list/{username}")
+  public ResponseEntity<PaginatedRes<GetLongcookRes>> findLongcookList(
+      @PathVariable("username") String username, @RequestParam(defaultValue = "1") Integer page) {
+    return ResponseEntity.ok(longcookService.findLongcookList(username, page));
+  }
+
   @GetMapping("/{longcookId}")
   public ResponseEntity<GetLongcookRes> longcookDetail(@PathVariable Integer longcookId) {
     return ResponseEntity.ok(longcookService.findLongcook(longcookId));
   }
 
-  @GetMapping("/list/{username}")
-  public ResponseEntity<List<GetLongcookRes>> longcookList(
-      @PathVariable("username") String username, @RequestParam(defaultValue = "1") Integer page) {
-    GetLongcookReq modifiedReq = GetLongcookReq.builder().username(username).page(page).build();
-    return ResponseEntity.ok(longcookService.findLongcookList(modifiedReq));
+  @GetMapping
+  public ResponseEntity<PaginatedRes<GetLongcookRes>> findLongcookRecentList(
+      @RequestParam(defaultValue = "latest") String sort,
+      @RequestParam(defaultValue = "1") Integer page) {
+    if ("latest".equals(sort)) {
+      return ResponseEntity.ok(longcookService.findRecentLongcookList(page));
+    }
+    throw new CustomException(ErrorCode.LONGCOOK_NOT_FOUND);
   }
 
   @DeleteMapping("/{longcookId}")
@@ -46,5 +57,11 @@ public class LongcookController {
       @RequestPart("file") MultipartFile file,
       @RequestPart("longcook") String request) {
     return ResponseEntity.ok(longcookService.modifyLongcook(request, file));
+
+  @PostMapping(consumes = {"multipart/form-data"})
+  public ResponseEntity<Integer> longcookAdd(
+      @RequestPart("file") MultipartFile file,
+      @RequestPart("longcook") String request) {
+    return ResponseEntity.ok(longcookService.addLongcook(request, file));
   }
 }
