@@ -2,6 +2,7 @@ package com.ite.cookeat.domain.longcook.mapper;
 
 import com.ite.cookeat.domain.longcook.dto.GetLongcookRes;
 import com.ite.cookeat.domain.longcook.dto.PostLongcookReq;
+import com.ite.cookeat.domain.longcook.dto.PutLongcookReq;
 import com.ite.cookeat.global.dto.Criteria;
 import java.util.List;
 import java.util.Optional;
@@ -24,5 +25,9 @@ public interface LongcookMapper {
 
   Integer updateLongcookDeletedate(Integer longcookId);
 
+  Integer updateLongcook(PutLongcookReq putLongcookReq);
+
   void insertLongcook(PostLongcookReq postLongcookReq);
+
+  String selectLongcookUrl(Integer longcookId);
 }

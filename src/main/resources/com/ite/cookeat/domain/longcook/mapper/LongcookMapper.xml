@@ -79,6 +79,24 @@
     WHERE l.longcook_id = #{longcookId}
     ]]>
   </select>
+  <select id="selectLongcookUrl" parameterType="Integer" resultType="String">
+    SELECT longcook_url
+    FROM longcook
+    WHERE longcook_id = #{longcookId}
+  </select>
+
+  <update id="updateLongcook" parameterType="PutLongcookReq">
+    <![CDATA[
+    UPDATE longcook l
+    SET title        = #{title},
+        longcook_url = #{longcookUrl}
+    WHERE longcook_id = #{longcookId}
+      AND EXISTS (SELECT 1
+                  FROM member m
+                  WHERE m.member_id = l.member_id
+                    AND m.status = 'ACTIVE')
+    ]]>
+</update>
   <update id="updateLongcookDeletedate" parameterType="Integer">
     <![CDATA[
     UPDATE longcook
