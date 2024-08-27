@@ -4,22 +4,15 @@ import static com.ite.cookeat.exception.ErrorCode.FILE_UPLOAD_FAIL;
 import static com.ite.cookeat.exception.ErrorCode.LONGCOOK_NOT_FOUND;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ite.cookeat.domain.longcook.dto.GetLongcookReq;
 import com.ite.cookeat.domain.longcook.dto.GetLongcookRes;
+import com.ite.cookeat.domain.longcook.dto.PostLongcookReq;
 import com.ite.cookeat.domain.longcook.dto.PutLongcookReq;
 import com.ite.cookeat.domain.longcook.mapper.LongcookMapper;
 import com.ite.cookeat.exception.CustomException;
-import com.ite.cookeat.s3.service.S3UploadService;
-import java.io.IOException;
-import java.util.List;
-import com.ite.cookeat.domain.longcook.dto.GetLongcookRes;
-import com.ite.cookeat.domain.longcook.dto.PostLongcookReq;
-import com.ite.cookeat.domain.longcook.mapper.LongcookMapper;
-import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.global.dto.Criteria;
+import com.ite.cookeat.global.dto.PaginatedRes;
 import com.ite.cookeat.s3.service.S3UploadService;
 import java.io.IOException;
-import com.ite.cookeat.global.dto.PaginatedRes;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -83,10 +76,24 @@ public class LongcookServiceImpl implements LongcookService {
   @Transactional
   public Integer modifyLongcook(String request, MultipartFile file) {
 
-    String longcookUrl = null;
     PutLongcookReq putLongcookReq = null;
     try {
       putLongcookReq = objectMapper.readValue(request, PutLongcookReq.class);
+      if (!longcookMapper.selectLongcookUrl(putLongcookReq.getLongcookId())
+          .equals(putLongcookReq.getLongcookUrl())) {
+        putLongcookReq.setLongcookUrl(s3UploadService.saveFile(file));
+      }
+    } catch (IOException e) {
+      throw new CustomException(FILE_UPLOAD_FAIL);
+    }
+    Integer result = longcookMapper.updateLongcook(putLongcookReq);
+    if (result <= 0) {
+      throw new CustomException(LONGCOOK_NOT_FOUND);
+    }
+    return result;
+  }
+
+
   public Integer addLongcook(String request, MultipartFile file) {
 
     String longcookUrl = null;
@@ -98,14 +105,6 @@ public class LongcookServiceImpl implements LongcookService {
     } catch (IOException e) {
       throw new CustomException(FILE_UPLOAD_FAIL);
     }
-
-    putLongcookReq.setLongcookUrl(longcookUrl);
-    Integer result = longcookMapper.updateLongcook(putLongcookReq);
-    if (result <= 0) {
-      throw new CustomException(LONGCOOK_NOT_FOUND);
-    }
-    return result;
-
     postLongcookReq.setLongcookUrl(longcookUrl);
 
     longcookMapper.insertLongcook(postLongcookReq);

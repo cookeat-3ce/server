@@ -79,13 +79,11 @@
     WHERE l.longcook_id = #{longcookId}
     ]]>
   </select>
-  <update id="updateLongcookDeletedate" parameterType="Integer">
-    <![CDATA[
-    UPDATE longcook
-    SET deletedate = CURRENT_TIMESTAMP
+  <select id="selectLongcookUrl" parameterType="Integer" resultType="String">
+    SELECT longcook_url
+    FROM longcook
     WHERE longcook_id = #{longcookId}
-    ]]>
-  </update>
+  </select>
 
   <update id="updateLongcook" parameterType="PutLongcookReq">
     <![CDATA[
@@ -99,4 +97,11 @@
                     AND m.status = 'ACTIVE')
     ]]>
 </update>
+  <update id="updateLongcookDeletedate" parameterType="Integer">
+    <![CDATA[
+    UPDATE longcook
+    SET deletedate = CURRENT_TIMESTAMP
+    WHERE longcook_id = #{longcookId}
+    ]]>
+  </update>
 </mapper>
