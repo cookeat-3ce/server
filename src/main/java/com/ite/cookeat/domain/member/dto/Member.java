@@ -7,13 +7,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
 @Getter
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Builder
-@ToString
 public class Member {
 
   // 고유번호
@@ -33,10 +31,9 @@ public class Member {
 
   // 유저의 역할(권한) 문자열에서 리스트 변환
   public List<String> getRoleList() {
-    if (this.roles != null && this.roles.length() > 0) {
+    if (this.roles != null && !this.roles.isEmpty()) {
       return Arrays.asList(this.roles.split(","));
     }
-    return new ArrayList();
+    return new ArrayList<>();
   }
-
 }

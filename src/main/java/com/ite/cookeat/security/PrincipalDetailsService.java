@@ -34,5 +34,4 @@ public class PrincipalDetailsService implements UserDetailsService {
 
     return new PrincipalDetails(optional_member.get());
   }
-
 }
