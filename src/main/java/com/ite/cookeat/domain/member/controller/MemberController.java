@@ -11,9 +11,15 @@ import com.ite.cookeat.domain.member.service.MemberService;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.exception.ErrorCode;
 import com.ite.cookeat.global.dto.PaginatedRes;
+import com.ite.cookeat.security.PrincipalDetails;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +36,7 @@ public class MemberController {
 
   private final static String AUTHORIZATION_HEADER = "auth";
   private static final String PREFIX = "Bearer ";
+  private static final Logger log = LoggerFactory.getLogger(MemberController.class);
   private final MemberService memberService;
 
   @PatchMapping(value = "/{username}/verify", produces = "application/json; charset=UTF-8")
@@ -99,10 +106,18 @@ public class MemberController {
     return ResponseEntity.ok(memberService.findMemberVerifiedStatus(username));
   }
 
-  @GetMapping("/{username}/subscription")
+  @GetMapping("/subscription")
   public ResponseEntity<PaginatedRes<GetSubscriptionUserDetailsRes>> findMemberSubscriptionList(
-      @PathVariable String username,
+      @AuthenticationPrincipal PrincipalDetails user,
       @RequestParam Integer page) {
-    return ResponseEntity.ok(memberService.findMemberSubscriptionList(username, page));
+
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+
+    log.info("username at member controller from SecurityContext: {}",
+        principalDetails.getUsername());
+    log.info("username at member controller from Annotation: {}",
+        user.getMember());
+    return ResponseEntity.ok(memberService.findMemberSubscriptionList(principalDetails, page));
   }
 }

@@ -8,6 +8,7 @@ import com.ite.cookeat.domain.member.dto.PostLoginRes;
 import com.ite.cookeat.domain.member.dto.PostMemberOneLinerReq;
 import com.ite.cookeat.domain.member.dto.PostSignUpReq;
 import com.ite.cookeat.global.dto.PaginatedRes;
+import com.ite.cookeat.security.PrincipalDetails;
 
 public interface MemberService {
 
@@ -26,7 +27,7 @@ public interface MemberService {
   Integer modifyMemberOneLiner(PostMemberOneLinerReq req);
 
 
-  PaginatedRes<GetSubscriptionUserDetailsRes> findMemberSubscriptionList(String username,
+  PaginatedRes<GetSubscriptionUserDetailsRes> findMemberSubscriptionList(PrincipalDetails user,
       Integer page);
 
   void modifyMemberDeletedate(String username);

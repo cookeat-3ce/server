@@ -1,64 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
+<beans xmlns:security="http://www.springframework.org/schema/security"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:security="http://www.springframework.org/schema/security"
+  xmlns="http://www.springframework.org/schema/beans"
   xsi:schemaLocation="http://www.springframework.org/schema/security
            http://www.springframework.org/schema/security/spring-security.xsd
            http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
   <!-- JWT Token Provider -->
-  <bean id="jwtTokenProvider"
-    class="com.ite.cookeat.security.jwt.JwtTokenProvider"/>
+  <bean class="com.ite.cookeat.security.jwt.JwtTokenProvider"
+    id="jwtTokenProvider"/>
 
   <!-- JWT Authentication Entry Point -->
-  <bean id="jwtAuthenticationEntryPoint"
-    class="com.ite.cookeat.security.jwt.JwtAuthenticationEntryPoint"/>
+  <bean class="com.ite.cookeat.security.jwt.JwtAuthenticationEntryPoint"
+    id="jwtAuthenticationEntryPoint"/>
 
   <!-- JWT Access Denied Handler -->
-  <bean id="jwtAccessDeniedHandler"
-    class="com.ite.cookeat.security.jwt.JwtAccessDeniedHandler"/>
+  <bean class="com.ite.cookeat.security.jwt.JwtAccessDeniedHandler"
+    id="jwtAccessDeniedHandler"/>
 
   <!-- BCrypt Password Encoder -->
-  <bean id="passwordEncoder"
-    class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+  <bean class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"
+    id="passwordEncoder"/>
 
   <!-- JWT Authentication Filter -->
-  <bean id="jwtAuthenticationFilter"
-    class="com.ite.cookeat.security.jwt.JwtAuthenticationFilter">
+  <bean class="com.ite.cookeat.security.jwt.JwtAuthenticationFilter"
+    id="jwtAuthenticationFilter">
     <constructor-arg ref="jwtTokenProvider"/>
   </bean>
 
-  <bean id="corsFilter" class="com.ite.cookeat.filter.CorsFilter"/>
+  <bean class="com.ite.cookeat.filter.CorsFilter" id="corsFilter"/>
 
-  <bean id="principalDetailsService"
-    class="com.ite.cookeat.security.PrincipalDetailsService"/>
+  <bean class="com.ite.cookeat.security.PrincipalDetailsService"
+    id="principalDetailsService"/>
 
-  <bean id="CustomLogoutHandler" class="com.ite.cookeat.security.CustomLogoutHandler"/>
+  <bean class="com.ite.cookeat.security.CustomLogoutHandler" id="CustomLogoutHandler"/>
 
-  <security:http auto-config="true" use-expressions="true">
-    <security:csrf disabled="true"/>
-
-    <security:custom-filter ref="corsFilter" before="CHANNEL_FILTER"/>
-    <security:custom-filter
-      ref="jwtAuthenticationFilter" position="PRE_AUTH_FILTER"/>
-
-    <security:intercept-url pattern="/member/sign-up"
-      access="permitAll"/>
-
-    <security:intercept-url pattern="/member/login"
-      access="permitAll"/>
-
-    <!-- 로그아웃 -->
-    <security:logout logout-url="/api/member/logout" invalidate-session="true"
-      delete-cookies="JSESSIONID" success-handler-ref="CustomLogoutHandler"/>
-
-    <!-- Access denied handler 설정 -->
-    <security:access-denied-handler
-      ref="jwtAccessDeniedHandler"/>
-  </security:http>
-
-  <!-- AuthenticationManager 설정 -->
   <security:authentication-manager
     id="authenticationManager">
     <!-- 사용자 정보를 제공하는 서비스 등록 -->
@@ -69,5 +46,28 @@
 
     </security:authentication-provider>
   </security:authentication-manager>
+
+  <!-- AuthenticationManager 설정 -->
+  <security:http auto-config="true" use-expressions="true">
+    <security:access-denied-handler
+      ref="jwtAccessDeniedHandler"/>
+
+    <security:csrf disabled="true"/>
+    <security:custom-filter
+      position="PRE_AUTH_FILTER" ref="jwtAuthenticationFilter"/>
+
+    <security:custom-filter before="CHANNEL_FILTER" ref="corsFilter"/>
+
+    <security:intercept-url access="permitAll"
+      pattern="/api/member/login"/>
+
+    <!-- 로그아웃 -->
+    <security:intercept-url access="permitAll"
+      pattern="/api/member/sign-up"/>
+
+    <!-- Access denied handler 설정 -->
+    <security:logout delete-cookies="JSESSIONID" invalidate-session="true"
+      logout-url="/api/member/logout" success-handler-ref="CustomLogoutHandler"/>
+  </security:http>
 
 </beans>

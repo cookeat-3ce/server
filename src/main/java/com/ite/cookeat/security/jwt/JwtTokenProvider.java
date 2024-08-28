@@ -3,6 +3,7 @@ package com.ite.cookeat.security.jwt;
 import com.ite.cookeat.domain.member.dto.Member;
 import com.ite.cookeat.domain.member.dto.TokenDTO;
 import com.ite.cookeat.security.PrincipalDetails;
+import com.ite.cookeat.security.PrincipalDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -15,7 +16,6 @@ import io.jsonwebtoken.security.SecurityException;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -23,7 +23,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 @PropertySource("classpath:application.properties")
@@ -35,6 +35,7 @@ public class JwtTokenProvider implements InitializingBean {
   private static final String AUTHORITIES_KEY = "auth";
   private static final String PREFIX = "Bearer";
   private static long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30; // 30분
+  private final PrincipalDetailsService principalDetailsService;
   @Value("${jwt.secret}")
   private String secret;
   private Key key;
@@ -57,9 +58,6 @@ public class JwtTokenProvider implements InitializingBean {
 
   public TokenDTO generateToken(Authentication authentication) {
     log.info("[jwt token provider] generate token: " + authentication.getPrincipal());
-    String authorities = authentication.getAuthorities().stream()
-        .map(GrantedAuthority::getAuthority)
-        .collect(Collectors.joining(","));
 
     log.info("authentication: " + authentication.getName());
 
@@ -78,14 +76,12 @@ public class JwtTokenProvider implements InitializingBean {
 
 //    if (claims.get(AUTHORITIES_KEY) == null) throw new CustomException(ErrorCode.INVALID_AUTH_TOKEN);
 
-    PrincipalDetails principal = new PrincipalDetails(
-        Member.builder()
-            .username(claims.getSubject())
-            .roles(claims.get(AUTHORITIES_KEY).toString())
-            .build()
-    );
+    UserDetails userDetails = principalDetailsService.loadUserByUsername(claims.getSubject());
 
-    return new UsernamePasswordAuthenticationToken(principal, "", principal.getAuthorities());
+    log.info("authentication at jwt token provider userdetails: {}", userDetails.toString());
+
+    return new UsernamePasswordAuthenticationToken(userDetails, accessToken,
+        userDetails.getAuthorities());
   }
 
   public boolean validateToken(String token) {

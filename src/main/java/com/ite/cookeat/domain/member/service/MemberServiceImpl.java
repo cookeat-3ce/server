@@ -17,6 +17,7 @@ import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.exception.ErrorCode;
 import com.ite.cookeat.global.dto.Criteria;
 import com.ite.cookeat.global.dto.PaginatedRes;
+import com.ite.cookeat.security.PrincipalDetails;
 import com.ite.cookeat.security.jwt.JwtTokenProvider;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -125,13 +126,20 @@ public class MemberServiceImpl implements MemberService {
 
   @Override
   @Transactional
-  public PaginatedRes<GetSubscriptionUserDetailsRes> findMemberSubscriptionList(String username,
+  public PaginatedRes<GetSubscriptionUserDetailsRes> findMemberSubscriptionList(
+      PrincipalDetails user,
       Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)
         .pageNum(page)
         .build();
 
+    String username = null;
+    if (user != null) {
+      username = user.getUsername();
+    }
+
+    log.info("username at memberservice impl: " + username);
     return PaginatedRes.<GetSubscriptionUserDetailsRes>builder()
         .cri(cri)
         .total(memberMapper.selectMemberSubscriptionListCount(username))
