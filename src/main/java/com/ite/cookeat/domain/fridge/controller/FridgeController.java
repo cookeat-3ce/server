@@ -21,10 +21,9 @@ public class FridgeController {
 
   private final FridgeService fridgeService;
 
-  @GetMapping("/{username}")
-  public ResponseEntity<List<GetMemberIngredientsRes>> ingredientsList(
-      @PathVariable String username) {
-    return ResponseEntity.ok(fridgeService.findIngredients(username));
+  @GetMapping
+  public ResponseEntity<List<GetMemberIngredientsRes>> ingredientsList() {
+    return ResponseEntity.ok(fridgeService.findIngredients());
   }
 
   @PostMapping
