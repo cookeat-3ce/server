@@ -5,14 +5,11 @@ import static com.ite.cookeat.exception.ErrorCode.FIND_FAIL_SSKCOOK;
 import static com.ite.cookeat.exception.ErrorCode.SSKCOOK_NOT_FOUND;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ite.cookeat.domain.member.service.MemberService;
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSskcookDetailsReq;
-import com.ite.cookeat.domain.sskcook.dto.GetSskcookDetailsRes;
-import com.ite.cookeat.domain.sskcook.dto.GetSskcookIngredientsRes;
 import com.ite.cookeat.domain.sskcook.dto.GetTotalSskcookDetailsRes;
 import com.ite.cookeat.domain.sskcook.dto.PostLikesReq;
 import com.ite.cookeat.domain.sskcook.dto.PostSskcookReq;
@@ -22,6 +19,7 @@ import com.ite.cookeat.exception.ErrorCode;
 import com.ite.cookeat.global.dto.Criteria;
 import com.ite.cookeat.global.dto.PaginatedRes;
 import com.ite.cookeat.s3.service.S3UploadService;
+import com.ite.cookeat.util.SecurityUtils;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -178,23 +176,22 @@ public class SskcookServiceImpl implements SskcookService {
   }
 
   @Override
-  @Transactional
-  public GetTotalSskcookDetailsRes findSskcookTotalDetails(String username, Integer sskcookId)
-      throws IOException {
-    JsonNode jsonNode = objectMapper.readTree(username);
-    String name = jsonNode.get("username").asText();
-    GetSskcookDetailsReq getSskcookDetailsReq = GetSskcookDetailsReq.builder()
-        .username(name)
+  @Transactional(readOnly = true)
+  public GetTotalSskcookDetailsRes findSskcookTotalDetails(Integer sskcookId) {
+
+    String username = SecurityUtils.getCurrentUsername();
+
+    GetSskcookDetailsReq req = GetSskcookDetailsReq.builder()
+        .username(username)
         .sskcookId(sskcookId)
         .build();
-    System.out.println(username + " " + sskcookId);
-    List<String> tags = sskcookMapper.selectSskcookTags(sskcookId);
-    GetSskcookDetailsRes details = sskcookMapper.selectSskcookDetails(getSskcookDetailsReq);
-    List<GetSskcookIngredientsRes> ingredients = sskcookMapper.selectSskcookIngredients(sskcookId);
+
+    sskcookMapper.selectSskcookDetails(req);
+
     return GetTotalSskcookDetailsRes.builder()
-        .details(details)
-        .tags(tags)
-        .ingredients(ingredients)
+        .tags(req.getTags())
+        .details(req.getDetails())
+        .ingredients(req.getIngredients())
         .build();
   }
 

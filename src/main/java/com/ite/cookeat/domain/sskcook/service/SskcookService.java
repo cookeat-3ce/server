@@ -4,14 +4,12 @@ import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
 import com.ite.cookeat.domain.sskcook.dto.GetTotalSskcookDetailsRes;
 import com.ite.cookeat.global.dto.PaginatedRes;
-import java.io.IOException;
 import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface SskcookService {
 
-  GetTotalSskcookDetailsRes findSskcookTotalDetails(String username, Integer sskcookId)
-      throws IOException;
+  GetTotalSskcookDetailsRes findSskcookTotalDetails(Integer sskcookId);
 
   List<GetFridgeRecipeRes> findMyFridgeRecipe(String username);
 
