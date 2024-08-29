@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,5 +13,7 @@ import lombok.NoArgsConstructor;
 public class PostLikesReq {
 
   private Integer sskcookId;
+
+  @Setter
   private Integer memberId;
 }

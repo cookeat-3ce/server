@@ -3,6 +3,7 @@ package com.ite.cookeat.domain.sskcook.controller;
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
 import com.ite.cookeat.domain.sskcook.dto.GetTotalSskcookDetailsRes;
+import com.ite.cookeat.domain.sskcook.dto.PostLikesReq;
 import com.ite.cookeat.domain.sskcook.service.SskcookService;
 import com.ite.cookeat.global.dto.PaginatedRes;
 import java.io.IOException;
@@ -87,15 +88,13 @@ public class SskcookController {
   }
 
   @PostMapping("/likes")
-  public ResponseEntity<String> sskcookLikesSave(@RequestParam("username") String username,
-      @RequestParam("sskcookId") Integer sskcookId) {
-
-    int cnt = sskcookService.findLikes(username, sskcookId);
+  public ResponseEntity<String> sskcookLikesSave(@RequestBody PostLikesReq req) {
+    int cnt = sskcookService.findLikes(req);
     if (cnt > 0) {
-      sskcookService.removeLikes(username, sskcookId);
+      sskcookService.removeLikes(req);
       return ResponseEntity.ok("likes deleted");
     }
-    sskcookService.addLikes(username, sskcookId);
+    sskcookService.addLikes(req);
     return ResponseEntity.ok("likes added");
   }
 }

@@ -22,6 +22,7 @@ import com.ite.cookeat.exception.ErrorCode;
 import com.ite.cookeat.global.dto.Criteria;
 import com.ite.cookeat.global.dto.PaginatedRes;
 import com.ite.cookeat.s3.service.S3UploadService;
+import com.ite.cookeat.util.SecurityUtils;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -143,12 +144,10 @@ public class SskcookServiceImpl implements SskcookService {
   }
 
   @Override
-  public void addLikes(String username, Integer sskcookId) {
-    PostLikesReq modifiedReq = PostLikesReq.builder()
-        .memberId(memberService.findMemberId(username))
-        .sskcookId(sskcookId)
-        .build();
-    int cnt = sskcookMapper.insertLikes(modifiedReq);
+  @Transactional
+  public void addLikes(PostLikesReq req) {
+    req.setMemberId(memberService.findMemberId(SecurityUtils.getCurrentUsername()));
+    int cnt = sskcookMapper.insertLikes(req);
 
     if (cnt == 0) {
       throw new CustomException(ErrorCode.LIKES_INSERT_FAIL);
@@ -156,12 +155,10 @@ public class SskcookServiceImpl implements SskcookService {
   }
 
   @Override
-  public void removeLikes(String username, Integer sskcookId) {
-    PostLikesReq modifiedReq = PostLikesReq.builder()
-        .memberId(memberService.findMemberId(username))
-        .sskcookId(sskcookId)
-        .build();
-    int cnt = sskcookMapper.deleteLikes(modifiedReq);
+  @Transactional
+  public void removeLikes(PostLikesReq req) {
+    req.setMemberId(memberService.findMemberId(SecurityUtils.getCurrentUsername()));
+    int cnt = sskcookMapper.deleteLikes(req);
 
     if (cnt == 0) {
       throw new CustomException(ErrorCode.LIKES_DELETE_FAIL);
@@ -169,12 +166,10 @@ public class SskcookServiceImpl implements SskcookService {
   }
 
   @Override
-  public Integer findLikes(String username, Integer sskcookId) {
-    PostLikesReq modifiedReq = PostLikesReq.builder()
-        .memberId(memberService.findMemberId(username))
-        .sskcookId(sskcookId)
-        .build();
-    return sskcookMapper.selectLikesCount(modifiedReq);
+  @Transactional(readOnly = true)
+  public Integer findLikes(PostLikesReq req) {
+    req.setMemberId(memberService.findMemberId(SecurityUtils.getCurrentUsername()));
+    return sskcookMapper.selectLikesCount(req);
   }
 
   @Override
