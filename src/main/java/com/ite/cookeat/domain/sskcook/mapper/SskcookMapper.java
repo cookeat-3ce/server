@@ -13,7 +13,7 @@ import org.apache.ibatis.annotations.Param;
 public interface SskcookMapper {
 
 
-  List<GetSearchSskcookRes> selectSearchRecentSskcookList(@Param("cri") Criteria cri,
+  List<GetSearchSskcookRes> selectSearchRecentSskcook(@Param("cri") Criteria cri,
       @Param("keyword") String keyword);
 
   void addSskcookWithDetails(PostSskcookReq req);

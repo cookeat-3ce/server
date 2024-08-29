@@ -54,7 +54,7 @@ public class SskcookServiceImpl implements SskcookService {
     return PaginatedRes.<GetSearchSskcookRes>builder()
         .cri(cri)
         .total(sskcookMapper.selectSearchSskcookListCount(keyword))
-        .data(sskcookMapper.selectSearchRecentSskcookList(cri, keyword))
+        .data(sskcookMapper.selectSearchRecentSskcook(cri, keyword))
         .build();
   }
 
