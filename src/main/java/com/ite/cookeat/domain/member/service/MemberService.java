@@ -25,8 +25,7 @@ public interface MemberService {
 
   Integer modifyMemberOneLiner(PostMemberOneLinerReq req);
 
-
-  PaginatedRes<GetSubscriptionUserDetailsRes> findMemberSubscriptionList(String username,
+  PaginatedRes<GetSubscriptionUserDetailsRes> findMemberSubscriptionList(
       Integer page);
 
   void modifyMemberDeletedate(String username);

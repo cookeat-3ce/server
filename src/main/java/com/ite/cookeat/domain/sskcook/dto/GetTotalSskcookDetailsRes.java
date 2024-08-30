@@ -14,5 +14,5 @@ public class GetTotalSskcookDetailsRes {
 
   private List<String> tags;
   private List<GetSskcookIngredientsRes> ingredients;
-  private GetSskcookDetailsRes details;
+  private List<GetSskcookDetailsRes> details;
 }

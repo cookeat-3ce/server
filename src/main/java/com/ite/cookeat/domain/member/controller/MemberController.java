@@ -99,10 +99,9 @@ public class MemberController {
     return ResponseEntity.ok(memberService.findMemberVerifiedStatus(username));
   }
 
-  @GetMapping("/{username}/subscription")
+  @GetMapping("/subscription")
   public ResponseEntity<PaginatedRes<GetSubscriptionUserDetailsRes>> findMemberSubscriptionList(
-      @PathVariable String username,
       @RequestParam Integer page) {
-    return ResponseEntity.ok(memberService.findMemberSubscriptionList(username, page));
+    return ResponseEntity.ok(memberService.findMemberSubscriptionList(page));
   }
 }
