@@ -44,7 +44,7 @@ public class SskcookController {
   }
 
   @GetMapping
-  public ResponseEntity<PaginatedRes<GetSearchSskcookRes>> findSearchSskcookList(
+  public ResponseEntity<PaginatedRes<GetSearchSskcookRes>> sskcookSearchList(
       @RequestParam(value = "keyword", required = false) String keyword,
       @RequestParam(defaultValue = "1") Integer page,
       @RequestParam(defaultValue = "latest") String sort,
@@ -72,7 +72,7 @@ public class SskcookController {
   }
 
   @GetMapping("/list/{username}")
-  public ResponseEntity<PaginatedRes<GetSearchSskcookRes>> findUserSskcookList(
+  public ResponseEntity<PaginatedRes<GetSearchSskcookRes>> sskcookMemberList(
       @PathVariable String username, @RequestParam(defaultValue = "1") Integer page) {
     return ResponseEntity.ok(sskcookService.findUserSskcookList(username, page));
   }
