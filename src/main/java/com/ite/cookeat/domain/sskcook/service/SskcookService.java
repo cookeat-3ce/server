@@ -34,4 +34,6 @@ public interface SskcookService {
   void removeLikes(String username, Integer sskcookId);
 
   Integer findLikes(String username, Integer sskcookId);
+
+  Integer modifySskcook(String request, MultipartFile file);
 }

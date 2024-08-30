@@ -14,7 +14,7 @@
     AND m.status = 'ACTIVE'
   </insert>
 
-  <select id="selectLongcookList" parameterType="Map" resultType="GetLongcookRes">
+  <select id="selectLongcookList" parameterType="Map" resultType="GetLongcookDetailRes">
     <![CDATA[
     SELECT a.longcook_id          AS longcookId,
            b.username             AS username,
@@ -37,35 +37,44 @@
     FROM longcook a
            INNER JOIN member b ON b.member_id = a.member_id
     WHERE #{username} = b.username
-      AND b.status = 'ACTIVE'
+      AND b.status != 'BLOCKED'
     ]]>
   </select>
-  <select id="selectRecentLongcookList" parameterType="Map" resultType="GetLongcookRes">
-    <![CDATA[
-    SELECT a.longcook_id          AS longcookId,
-           b.username             AS username,
-           b.nickname             AS nickname,
-           a.title                AS title,
-           a.longcook_url         AS longcookUrl,
-           a.regdate              AS regdate,
-           TO_CHAR(b.profile_img) AS profileImage
+  <select id="selectRecentLongcookList" parameterType="Map" resultType="GetLongcookDetailRes">
+    SELECT a.longcook_id AS longcookId,
+    b.username AS username,
+    b.nickname AS nickname,
+    a.title AS title,
+    a.longcook_url AS longcookUrl,
+    a.regdate AS regdate,
+    TO_CHAR(b.profile_img) AS profileImage
     FROM longcook a
-           INNER JOIN member b ON b.member_id = a.member_id
-    WHERE b.status = 'ACTIVE'
+    INNER JOIN member b ON b.member_id = a.member_id
+    WHERE b.status != 'BLOCKED'
+    <if test="keyword != null and keyword != ''">
+      AND (
+      LOWER (b.nickname) LIKE '%' || LOWER (#{keyword}) || '%'
+      OR
+      LOWER (a.title) LIKE '%' || LOWER (#{keyword}) || '%'
+      )
+    </if>
     ORDER BY a.regdate DESC
     OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
-    ]]>
   </select>
   <select id="selectRecentLongcookListCount" resultType="Integer">
-    <![CDATA[
-    SELECT COUNT(a.longcook_id)
-    FROM longcook a
-           INNER JOIN member b ON b.member_id = a.member_id
-    WHERE a.regdate IS NOT NULL
-      AND b.status = 'ACTIVE'
-    ]]>
+    SELECT COUNT(l.longcook_id)
+    FROM longcook l
+    INNER JOIN member m ON m.member_id = l.member_id
+    WHERE l.deletedate IS NULL
+    <if test="keyword != null and keyword != ''">
+      AND (
+      LOWER (m.nickname) LIKE '%' || LOWER (#{keyword}) || '%'
+      OR
+      LOWER (l.title) LIKE '%' || LOWER (#{keyword}) || '%'
+      )
+    </if>
   </select>
-  <select id="selectLongcook" parameterType="Integer" resultType="GetLongcookRes">
+  <select id="selectLongcook" parameterType="Integer" resultType="GetLongcookDetailRes">
     <![CDATA[
     SELECT l.longcook_id          AS longcookId,
            m.username             AS username,

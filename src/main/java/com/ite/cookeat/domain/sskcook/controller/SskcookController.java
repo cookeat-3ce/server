@@ -95,4 +95,12 @@ public class SskcookController {
     sskcookService.addLikes(username, sskcookId);
     return ResponseEntity.ok("likes added");
   }
+
+  @PutMapping(consumes = {"multipart/form-data"})
+  public ResponseEntity<?> sskcookModify(
+      @RequestPart("file") MultipartFile file,
+      @RequestPart("sskcook") String request) {
+    return ResponseEntity.ok(sskcookService.modifySskcook(request, file));
+  }
+
 }

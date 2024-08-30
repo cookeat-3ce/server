@@ -36,6 +36,7 @@ public enum ErrorCode {
   MEMBER_SSKCOOK_INSERT_FAIL(NOT_FOUND, "보관 실패했습니다."),
 
   /* code: 409 */
+  REPORTED_SSKCOOK_CONFLICT(CONFLICT, "신고된 슥쿡에 대한 삭제처리가 실패했습니다."),
   ADD_MEMBER_TO_ALERT_CONFLICT(CONFLICT, "알림받기 등록에 실패했습니다.");
   /* code: 500 */
 
