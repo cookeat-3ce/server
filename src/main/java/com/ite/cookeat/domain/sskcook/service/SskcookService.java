@@ -3,6 +3,7 @@ package com.ite.cookeat.domain.sskcook.service;
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
 import com.ite.cookeat.domain.sskcook.dto.GetTotalSskcookDetailsRes;
+import com.ite.cookeat.domain.sskcook.dto.PostLikesReq;
 import com.ite.cookeat.global.dto.PaginatedRes;
 import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,11 +30,11 @@ public interface SskcookService {
 
   Integer modifySskcookDeletedate(Integer sskcookId);
 
-  void addLikes(String username, Integer sskcookId);
+  void addLikes(PostLikesReq req);
 
-  void removeLikes(String username, Integer sskcookId);
+  void removeLikes(PostLikesReq req);
 
-  Integer findLikes(String username, Integer sskcookId);
+  Integer findLikes(PostLikesReq req);
 
-  Integer modifySskcook(String request, MultipartFile file);
+  Integer modifySskcook(String request, MultipartFile file);  
 }
