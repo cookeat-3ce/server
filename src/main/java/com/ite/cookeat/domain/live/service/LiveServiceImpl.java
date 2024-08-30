@@ -1,10 +1,11 @@
 package com.ite.cookeat.domain.live.service;
 
-import com.ite.cookeat.domain.live.dto.GetLivePageRes;
+import com.ite.cookeat.domain.live.dto.GetLiveRes;
 import com.ite.cookeat.domain.live.dto.PostLiveReq;
 import com.ite.cookeat.domain.live.mapper.LiveMapper;
 import com.ite.cookeat.domain.member.service.MemberService;
 import com.ite.cookeat.global.dto.Criteria;
+import com.ite.cookeat.global.dto.PaginatedRes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,16 +32,16 @@ public class LiveServiceImpl implements LiveService {
 
   @Override
   @Transactional(readOnly = true)
-  public GetLivePageRes findLiveList(String keyword, Integer page) {
+  public PaginatedRes<GetLiveRes> findLiveList(String keyword, Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(PAGE_SIZE)
         .pageNum(page)
         .build();
 
-    return GetLivePageRes.builder()
+    return PaginatedRes.<GetLiveRes>builder()
         .cri(cri)
         .total(liveMapper.selectLiveCount(keyword))
-        .lives(liveMapper.selectLiveListByKeyword(cri, keyword))
+        .data(liveMapper.selectLiveListByKeyword(cri, keyword))
         .build();
   }
 

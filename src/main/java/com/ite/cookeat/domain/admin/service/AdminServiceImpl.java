@@ -4,7 +4,7 @@ import static com.ite.cookeat.exception.ErrorCode.REPORTED_SSKCOOK_CONFLICT;
 import static com.ite.cookeat.exception.ErrorCode.VERIFY_REQUEST_NOT_FOUND;
 
 import com.ite.cookeat.domain.admin.dto.DeleteReportSskcookReq;
-import com.ite.cookeat.domain.admin.dto.GetReportSskcookPageRes;
+import com.ite.cookeat.domain.admin.dto.GetReportSskcookRes;
 import com.ite.cookeat.domain.admin.dto.GetVerifyRequestRes;
 import com.ite.cookeat.domain.admin.dto.PostVerifyRequestReq;
 import com.ite.cookeat.domain.admin.mapper.AdminMapper;
@@ -62,16 +62,16 @@ public class AdminServiceImpl implements AdminService {
 
   @Override
   @Transactional(readOnly = true)
-  public GetReportSskcookPageRes findReportSskcookList(Integer page) {
+  public PaginatedRes<GetReportSskcookRes> findReportSskcookList(Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)
         .pageNum(page)
         .build();
 
-    return GetReportSskcookPageRes.builder()
+    return PaginatedRes.<GetReportSskcookRes>builder()
         .cri(cri)
-        .reports(adminMapper.selectReportSskcookList(cri))
         .total(adminMapper.selectReportSskcookCount())
+        .data(adminMapper.selectReportSskcookList(cri))
         .build();
   }
 
