@@ -5,17 +5,15 @@ import static com.ite.cookeat.exception.ErrorCode.FIND_FAIL_SSKCOOK;
 import static com.ite.cookeat.exception.ErrorCode.SSKCOOK_NOT_FOUND;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ite.cookeat.domain.member.service.MemberService;
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSskcookDetailsReq;
-import com.ite.cookeat.domain.sskcook.dto.GetSskcookDetailsRes;
-import com.ite.cookeat.domain.sskcook.dto.GetSskcookIngredientsRes;
 import com.ite.cookeat.domain.sskcook.dto.GetTotalSskcookDetailsRes;
 import com.ite.cookeat.domain.sskcook.dto.PostLikesReq;
 import com.ite.cookeat.domain.sskcook.dto.PostSskcookReq;
+import com.ite.cookeat.domain.sskcook.dto.PutSskcookReq;
 import com.ite.cookeat.domain.sskcook.mapper.SskcookMapper;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.exception.ErrorCode;
@@ -55,7 +53,7 @@ public class SskcookServiceImpl implements SskcookService {
     return PaginatedRes.<GetSearchSskcookRes>builder()
         .cri(cri)
         .total(sskcookMapper.selectSearchSskcookListCount(keyword))
-        .data(sskcookMapper.selectSearchRecentSskcookList(cri, keyword))
+        .data(sskcookMapper.selectSearchRecentSskcook(cri, keyword))
         .build();
   }
 
@@ -105,6 +103,7 @@ public class SskcookServiceImpl implements SskcookService {
   }
 
   @Override
+  @Transactional
   public Integer modifySskcookDeletedate(Integer sskcookId) {
     Integer result = sskcookMapper.updateSskcookDeletedate(sskcookId);
     if (result <= 0) {
@@ -174,22 +173,51 @@ public class SskcookServiceImpl implements SskcookService {
 
   @Override
   @Transactional
-  public GetTotalSskcookDetailsRes findSskcookTotalDetails(String username, Integer sskcookId)
-      throws IOException {
-    JsonNode jsonNode = objectMapper.readTree(username);
-    String name = jsonNode.get("username").asText();
-    GetSskcookDetailsReq getSskcookDetailsReq = GetSskcookDetailsReq.builder()
-        .username(name)
+  public Integer modifySskcook(String request, MultipartFile file) {
+    String sskcookUrl = null;
+    PutSskcookReq putSskcookReq = null;
+
+    try {
+      putSskcookReq = objectMapper.readValue(request, PutSskcookReq.class);
+
+      // 스-윽쿡 영상이 수정되었을 경우에만 S3에 업로드
+      if (file != null && !sskcookMapper.selectSskcookUrl(putSskcookReq.getSskcookId())
+          .equals(putSskcookReq.getSskcookUrl())) {
+        sskcookUrl = s3UploadService.saveFile(file);
+        putSskcookReq.setSskcookUrl(sskcookUrl);
+      }
+
+      String ingredientsJson = objectMapper.writeValueAsString(putSskcookReq.getIngredient());
+      String hashtagsJson = objectMapper.writeValueAsString(putSskcookReq.getHashtag());
+      putSskcookReq.setIngredientsJson(ingredientsJson);
+      putSskcookReq.setHashtagsJson(hashtagsJson);
+    } catch (IOException e) {
+      throw new CustomException(FILE_UPLOAD_FAIL);
+    }
+
+    // 프로시저 호출
+    sskcookMapper.updateSskcookWithDetails(putSskcookReq);
+    return putSskcookReq.getUpdatedCount();
+
+  }
+  
+  @Override
+  @Transactional(readOnly = true)
+  public GetTotalSskcookDetailsRes findSskcookTotalDetails(Integer sskcookId) {
+
+    String username = SecurityUtils.getCurrentUsername();
+
+    GetSskcookDetailsReq req = GetSskcookDetailsReq.builder()
+        .username(username)
         .sskcookId(sskcookId)
         .build();
-    System.out.println(username + " " + sskcookId);
-    List<String> tags = sskcookMapper.selectSskcookTags(sskcookId);
-    GetSskcookDetailsRes details = sskcookMapper.selectSskcookDetails(getSskcookDetailsReq);
-    List<GetSskcookIngredientsRes> ingredients = sskcookMapper.selectSskcookIngredients(sskcookId);
+
+    sskcookMapper.selectSskcookDetails(req);
+
     return GetTotalSskcookDetailsRes.builder()
-        .details(details)
-        .tags(tags)
-        .ingredients(ingredients)
+        .tags(req.getTags())
+        .details(req.getDetails())
+        .ingredients(req.getIngredients())
         .build();
   }
 
