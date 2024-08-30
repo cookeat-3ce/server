@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class PostMemberSskcookReq {
 
+  @Setter
   private Integer memberId;
   private Integer sskcookId;
 }

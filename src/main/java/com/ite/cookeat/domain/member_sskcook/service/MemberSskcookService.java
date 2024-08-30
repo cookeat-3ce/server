@@ -1,15 +1,16 @@
 package com.ite.cookeat.domain.member_sskcook.service;
 
 import com.ite.cookeat.domain.member_sskcook.dto.GetMemberSskcookRes;
+import com.ite.cookeat.domain.member_sskcook.dto.PostMemberSskcookReq;
 import com.ite.cookeat.global.dto.PaginatedRes;
 
 public interface MemberSskcookService {
 
-  void addMemberSskcook(String username, Integer sskcookId);
+  void addMemberSskcook(PostMemberSskcookReq req);
 
-  void removeMemberSskcook(String username, Integer sskcookId);
+  void removeMemberSskcook(PostMemberSskcookReq req);
 
-  Integer findMemberSskcook(String username, Integer sskcookId);
+  Integer findMemberSskcook(PostMemberSskcookReq req);
 
-  PaginatedRes<GetMemberSskcookRes> findMemberSskcookList(String username, Integer page);
+  PaginatedRes<GetMemberSskcookRes> findMemberSskcookList(Integer page);
 }
