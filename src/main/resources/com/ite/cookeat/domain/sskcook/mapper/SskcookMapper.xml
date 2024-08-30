@@ -74,6 +74,15 @@
       #{ingredients, mode=OUT, jdbcType=CURSOR, resultMap=ingredientsResultMapAtSelectSskcook})}
   </select>
 
+  <select id="selectNullSskcookDetails" parameterType="GetNullSskcookDetailsReq"
+    statementType="CALLABLE">
+    {CALL PROC_GET_NULL_SSKCOOK_DETAILS(
+      #{sskcookId, mode = IN, jdbcType=INTEGER},
+      #{tags, mode=OUT, jdbcType=CURSOR, resultMap=tagsResultMapAtSelectSskcook},
+      #{details, mode=OUT, jdbcType=CURSOR, resultMap=detailsResultMapAtSelectSskcook},
+      #{ingredients, mode=OUT, jdbcType=CURSOR, resultMap=ingredientsResultMapAtSelectSskcook})}
+  </select>
+
   <select id="updateSskcookWithDetails" resultType="Integer" statementType="CALLABLE">
     { CALL update_sskcook_with_details(
       #{sskcookId, mode=IN, jdbcType=INTEGER},

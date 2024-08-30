@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ite.cookeat.domain.member.service.MemberService;
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
+import com.ite.cookeat.domain.sskcook.dto.GetNullSskcookDetailsReq;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSskcookDetailsReq;
 import com.ite.cookeat.domain.sskcook.dto.GetTotalSskcookDetailsRes;
@@ -200,12 +201,24 @@ public class SskcookServiceImpl implements SskcookService {
     return putSskcookReq.getUpdatedCount();
 
   }
-  
+
   @Override
   @Transactional(readOnly = true)
   public GetTotalSskcookDetailsRes findSskcookTotalDetails(Integer sskcookId) {
 
     String username = SecurityUtils.getCurrentUsername();
+
+    if (username == null) {
+      GetNullSskcookDetailsReq req = GetNullSskcookDetailsReq.builder()
+          .sskcookId(sskcookId)
+          .build();
+      sskcookMapper.selectNullSskcookDetails(req);
+      return GetTotalSskcookDetailsRes.builder()
+          .tags(req.getTags())
+          .details(req.getDetails())
+          .ingredients(req.getIngredients())
+          .build();
+    }
 
     GetSskcookDetailsReq req = GetSskcookDetailsReq.builder()
         .username(username)
