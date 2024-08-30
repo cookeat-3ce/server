@@ -1,7 +1,7 @@
 package com.ite.cookeat.domain.admin.controller;
 
+import com.ite.cookeat.domain.admin.dto.GetReportSskcookRes;
 import com.ite.cookeat.domain.admin.dto.GetVerifyRequestRes;
-import com.ite.cookeat.domain.admin.dto.GetReportSskcookPageRes;
 import com.ite.cookeat.domain.admin.dto.PostVerifyRequestReq;
 import com.ite.cookeat.domain.admin.service.AdminService;
 import com.ite.cookeat.global.dto.PaginatedRes;
@@ -40,7 +40,12 @@ public class AdminController {
   }
 
   @GetMapping("/report")
-  public ResponseEntity<GetReportSskcookPageRes> reportList(@RequestParam Integer page) {
+  public ResponseEntity<PaginatedRes<GetReportSskcookRes>> reportList(@RequestParam Integer page) {
     return ResponseEntity.ok(adminService.findReportSskcookList(page));
+  }
+
+  @DeleteMapping("/sskcook/{sskcookId}")
+  public ResponseEntity<Integer> reportSskcookStatusModify(@PathVariable Integer sskcookId) {
+    return ResponseEntity.ok(adminService.modifyReportSskcookStatus(sskcookId));
   }
 }

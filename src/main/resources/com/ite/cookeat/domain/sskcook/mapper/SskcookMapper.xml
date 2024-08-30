@@ -18,8 +18,33 @@
     ]]>
   </insert>
 
+  <!-- selectSskcookDetails - tags 매핑 -->
+  <resultMap id="tagsResultMapAtSelectSskcook" type="String">
+    <result column="hashtagName" property="hashtagName"/>
+  </resultMap>
+
+  <!-- selectSskcookDetails - details 매핑 -->
+  <resultMap id="detailsResultMapAtSelectSskcook" type="GetSskcookDetailsRes">
+    <result column="sskcookId" property="sskcookId"/>
+    <result column="sskcookUrl" property="sskcookUrl"/>
+    <result column="recipe" property="recipe"/>
+    <result column="title" property="title"/>
+    <result column="likeStatus" property="likeStatus"/>
+    <result column="storeStatus" property="storeStatus"/>
+    <result column="followStatus" property="followStatus"/>
+    <result column="nickname" property="nickname"/>
+    <result column="profileImage" property="profileImage"/>
+    <result column="likeCount" property="likeCount"/>
+  </resultMap>
+
+  <!-- selectSskcookDetails - ingredients 매핑 -->
+  <resultMap id="ingredientsResultMapAtSelectSskcook" type="GetSskcookIngredientsRes">
+    <result column="name" property="name"/>
+    <result column="amount" property="amount"/>
+  </resultMap>
+
   <!-- Ingredient와 Hashtag를 위한 ResultMap 정의 -->
-  <resultMap id="ingredientResultMap" type="PostSskcookIngredientReq">
+  <resultMap id="ingredientResultMapAtAddSskcook" type="PostSskcookIngredientReq">
     <result column="name" property="name"/>
     <result column="amount" property="amount"/>
   </resultMap>
@@ -39,6 +64,34 @@
       #{sskcookId, mode=OUT, jdbcType=INTEGER}
            ) }
   </select>
+
+  <select id="selectSskcookDetails" parameterType="GetSskcookDetailsReq" statementType="CALLABLE">
+    { CALL PROC_GET_SSKCOOK_DETAILS(
+      #{username, mode=IN, jdbcType=VARCHAR},
+      #{sskcookId, mode=IN, jdbcType=INTEGER},
+      #{tags, mode=OUT, jdbcType=CURSOR, resultMap=tagsResultMapAtSelectSskcook},
+      #{details, mode=OUT, jdbcType=CURSOR, resultMap=detailsResultMapAtSelectSskcook},
+      #{ingredients, mode=OUT, jdbcType=CURSOR, resultMap=ingredientsResultMapAtSelectSskcook})}
+  </select>
+
+  <select id="updateSskcookWithDetails" resultType="Integer" statementType="CALLABLE">
+    { CALL update_sskcook_with_details(
+      #{sskcookId, mode=IN, jdbcType=INTEGER},
+      #{title, mode=IN, jdbcType=VARCHAR},
+      #{recipe, mode=IN, jdbcType=VARCHAR},
+      #{sskcookUrl, mode=IN, jdbcType=VARCHAR},
+      #{ingredientsJson, mode=IN, jdbcType=CLOB},
+      #{hashtagsJson, mode=IN, jdbcType=CLOB},
+      #{updatedCount, mode=OUT, jdbcType=INTEGER}
+           ) }
+  </select>
+
+  <select id="selectSskcookUrl" parameterType="Integer" resultType="String">
+    SELECT sskcook_url
+    FROM sskcook
+    WHERE sskcook_id = #{sskcookId}
+  </select>
+
   <select id="selectLikesCount" parameterType="PostLikesReq" resultType="Integer">
     <![CDATA[
     SELECT COUNT(member_id)
@@ -162,6 +215,7 @@
     OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
     ]]>
   </select>
+
   <select id="selectMonthlySskcookListCount" parameterType="String" resultType="Integer">
     <![CDATA[
     SELECT COUNT(a.sskcook_id)
@@ -171,6 +225,7 @@
       AND a.status = 'ACTIVE'
     ]]>
   </select>
+
   <select id="selectUserSskcookList" parameterType="Map" resultType="GetSearchSskcookRes">
     <![CDATA[
     SELECT c.sskcook_url        AS sskcookUrl,
@@ -199,6 +254,7 @@
     OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
     ]]>
   </select>
+
   <select id="selectUserSskcookListCount" parameterType="String" resultType="Integer">
     <![CDATA[
     SELECT COUNT(a.sskcook_id)
@@ -245,52 +301,6 @@
                     AND h.hashtag_name = #{tag})
     ]]>
   </select>
-
-  <select id="selectSskcookDetails" parameterType="GetSskcookDetailsReq"
-    resultType="GetSskcookDetailsRes">
-    <![CDATA[
-    SELECT a.sskcook_id                   AS sskcookId,
-           a.sskcook_url                  AS sskcookUrl,
-           a.title,
-           a.recipe,
-           b.nickname,
-           TO_CHAR(b.profile_img)         AS profileImage,
-           CASE
-             WHEN c.member_id IS NOT NULL THEN 'Liked'
-             ELSE 'Not Liked'
-             END                          AS likeStatus,
-           CASE
-             WHEN d.member_id IS NOT NULL THEN 'Saved'
-             ELSE 'Not Saved'
-             END                          AS saveStatus,
-           CASE
-             WHEN e.follower_id IS NOT NULL THEN 'Following'
-             ELSE 'Not Following'
-             END                          AS followStatus,
-           NVL(like_counts.like_count, 0) AS likeCount
-    FROM sskcook a
-           INNER JOIN member b ON b.member_id = a.member_id
-           LEFT JOIN likes c
-                     ON c.sskcook_id = a.sskcook_id
-                       AND
-                        c.member_id = (SELECT member_id FROM member WHERE username = #{username})
-           LEFT JOIN member_sskcook d
-                     ON d.sskcook_id = a.sskcook_id
-                       AND
-                        d.member_id = (SELECT member_id FROM member WHERE username = #{username})
-           LEFT JOIN subscription e
-                     ON e.following_id = a.member_id
-                       AND
-                        e.follower_id = (SELECT member_id FROM member WHERE username = #{username})
-           LEFT JOIN (SELECT sskcook_id, COUNT(*) AS like_count
-                      FROM likes
-                      GROUP BY sskcook_id) like_counts
-                     ON like_counts.sskcook_id = a.sskcook_id
-    WHERE b.status = 'ACTIVE'
-      AND a.sskcook_id = #{sskcookId}
-    ]]>
-
-</select>
 
   <select id="selectSskcookTags" parameterType="Integer" resultType="String">
 <![CDATA[

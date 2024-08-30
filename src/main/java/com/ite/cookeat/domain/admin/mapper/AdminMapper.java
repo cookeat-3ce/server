@@ -1,5 +1,6 @@
 package com.ite.cookeat.domain.admin.mapper;
 
+import com.ite.cookeat.domain.admin.dto.DeleteReportSskcookReq;
 import com.ite.cookeat.domain.admin.dto.GetReportSskcookRes;
 import com.ite.cookeat.domain.admin.dto.GetVerifyRequestRes;
 import com.ite.cookeat.global.dto.Criteria;
@@ -18,4 +19,6 @@ public interface AdminMapper {
   List<GetReportSskcookRes> selectReportSskcookList(Criteria cri);
 
   Integer selectReportSskcookCount();
+
+  Integer updateReportSskcookStatus(DeleteReportSskcookReq req);
 }
