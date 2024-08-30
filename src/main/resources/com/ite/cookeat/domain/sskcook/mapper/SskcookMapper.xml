@@ -39,6 +39,25 @@
       #{sskcookId, mode=OUT, jdbcType=INTEGER}
            ) }
   </select>
+
+  <select id="updateSskcookWithDetails" resultType="Integer" statementType="CALLABLE">
+    { CALL update_sskcook_with_details(
+      #{sskcookId, mode=IN, jdbcType=INTEGER},
+      #{title, mode=IN, jdbcType=VARCHAR},
+      #{recipe, mode=IN, jdbcType=VARCHAR},
+      #{sskcookUrl, mode=IN, jdbcType=VARCHAR},
+      #{ingredientsJson, mode=IN, jdbcType=CLOB},
+      #{hashtagsJson, mode=IN, jdbcType=CLOB},
+      #{updatedCount, mode=OUT, jdbcType=INTEGER}
+           ) }
+  </select>
+
+  <select id="selectSskcookUrl" parameterType="Integer" resultType="String">
+    SELECT sskcook_url
+    FROM sskcook
+    WHERE sskcook_id = #{sskcookId}
+  </select>
+
   <select id="selectLikesCount" parameterType="PostLikesReq" resultType="Integer">
     <![CDATA[
     SELECT COUNT(member_id)

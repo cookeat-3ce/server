@@ -16,6 +16,7 @@ import com.ite.cookeat.domain.sskcook.dto.GetSskcookIngredientsRes;
 import com.ite.cookeat.domain.sskcook.dto.GetTotalSskcookDetailsRes;
 import com.ite.cookeat.domain.sskcook.dto.PostLikesReq;
 import com.ite.cookeat.domain.sskcook.dto.PostSskcookReq;
+import com.ite.cookeat.domain.sskcook.dto.PutSskcookReq;
 import com.ite.cookeat.domain.sskcook.mapper.SskcookMapper;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.exception.ErrorCode;
@@ -104,6 +105,7 @@ public class SskcookServiceImpl implements SskcookService {
   }
 
   @Override
+  @Transactional
   public Integer modifySskcookDeletedate(Integer sskcookId) {
     Integer result = sskcookMapper.updateSskcookDeletedate(sskcookId);
     if (result <= 0) {
@@ -175,6 +177,36 @@ public class SskcookServiceImpl implements SskcookService {
         .sskcookId(sskcookId)
         .build();
     return sskcookMapper.selectLikesCount(modifiedReq);
+  }
+
+  @Override
+  @Transactional
+  public Integer modifySskcook(String request, MultipartFile file) {
+    String sskcookUrl = null;
+    PutSskcookReq putSskcookReq = null;
+
+    try {
+      putSskcookReq = objectMapper.readValue(request, PutSskcookReq.class);
+
+      // 스-윽쿡 영상이 수정되었을 경우에만 S3에 업로드
+      if (file != null && !sskcookMapper.selectSskcookUrl(putSskcookReq.getSskcookId())
+          .equals(putSskcookReq.getSskcookUrl())) {
+        sskcookUrl = s3UploadService.saveFile(file);
+        putSskcookReq.setSskcookUrl(sskcookUrl);
+      }
+
+      String ingredientsJson = objectMapper.writeValueAsString(putSskcookReq.getIngredient());
+      String hashtagsJson = objectMapper.writeValueAsString(putSskcookReq.getHashtag());
+      putSskcookReq.setIngredientsJson(ingredientsJson);
+      putSskcookReq.setHashtagsJson(hashtagsJson);
+    } catch (IOException e) {
+      throw new CustomException(FILE_UPLOAD_FAIL);
+    }
+
+    // 프로시저 호출
+    sskcookMapper.updateSskcookWithDetails(putSskcookReq);
+    return putSskcookReq.getUpdatedCount();
+
   }
 
   @Override
