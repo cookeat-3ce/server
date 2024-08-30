@@ -4,7 +4,8 @@ import static com.ite.cookeat.exception.ErrorCode.MEMBER_NOT_FOUND;
 import static com.ite.cookeat.exception.ErrorCode.VERIFYING_FAILED;
 
 import com.ite.cookeat.domain.member.dto.GetMemberNoticeRes;
-import com.ite.cookeat.domain.member.dto.GetSubscriptionUserDetailsRes;
+import com.ite.cookeat.domain.member.dto.GetSubscriptionMemberDetailsRes;
+import com.ite.cookeat.domain.member.dto.GetSubscriptionMemberReq;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.Member;
 import com.ite.cookeat.domain.member.dto.PostLoginReq;
@@ -125,9 +126,8 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
-  @Transactional
-  public PaginatedRes<GetSubscriptionUserDetailsRes> findMemberSubscriptionList(
-      Integer page) {
+  @Transactional(readOnly = true)
+  public PaginatedRes<GetSubscriptionMemberDetailsRes> findMemberSubscriptionList(Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)
         .pageNum(page)
@@ -135,10 +135,17 @@ public class MemberServiceImpl implements MemberService {
 
     String username = SecurityUtils.getCurrentUsername();
 
-    return PaginatedRes.<GetSubscriptionUserDetailsRes>builder()
+    GetSubscriptionMemberReq req = GetSubscriptionMemberReq.builder()
         .cri(cri)
-        .total(memberMapper.selectMemberSubscriptionListCount(username))
-        .data(memberMapper.selectMemberSubscriptionList(cri, username))
+        .username(username)
+        .build();
+
+    memberMapper.selectMemberSubscriptionList(req);
+
+    return PaginatedRes.<GetSubscriptionMemberDetailsRes>builder()
+        .cri(cri)
+        .total(req.getTotal())
+        .data(req.getSubscriptionList())
         .build();
   }
 

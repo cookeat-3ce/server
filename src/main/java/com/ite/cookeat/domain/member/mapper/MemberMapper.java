@@ -1,7 +1,7 @@
 package com.ite.cookeat.domain.member.mapper;
 
 import com.ite.cookeat.domain.member.dto.GetMemberNoticeRes;
-import com.ite.cookeat.domain.member.dto.GetSubscriptionUserDetailsRes;
+import com.ite.cookeat.domain.member.dto.GetSubscriptionMemberReq;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.Member;
 import com.ite.cookeat.domain.member.dto.PostMemberOneLinerReq;
@@ -36,9 +36,7 @@ public interface MemberMapper {
 
   Integer updateMemberOneLiner(PostMemberOneLinerReq req);
 
-
-  List<GetSubscriptionUserDetailsRes> selectMemberSubscriptionList(@Param("cri") Criteria cri,
-      @Param("username") String username);
+  void selectMemberSubscriptionList(GetSubscriptionMemberReq req);
 
   Integer selectMemberSubscriptionListCount(String username);
 
