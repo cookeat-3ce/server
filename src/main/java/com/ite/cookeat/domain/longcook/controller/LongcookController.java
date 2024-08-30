@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -50,6 +51,13 @@ public class LongcookController {
   public ResponseEntity<?> longcookDelete(@PathVariable Integer longcookId) {
     longcookService.modifyLongcookDeletedate(longcookId);
     return ResponseEntity.noContent().build();
+  }
+
+  @PutMapping(consumes = {"multipart/form-data"})
+  public ResponseEntity<?> longcookModify(
+      @RequestPart("file") MultipartFile file,
+      @RequestPart("longcook") String request) {
+    return ResponseEntity.ok(longcookService.modifyLongcook(request, file));
   }
 
   @PostMapping(consumes = {"multipart/form-data"})

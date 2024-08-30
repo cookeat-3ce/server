@@ -6,6 +6,7 @@ import static com.ite.cookeat.exception.ErrorCode.LONGCOOK_NOT_FOUND;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ite.cookeat.domain.longcook.dto.GetLongcookDetailRes;
 import com.ite.cookeat.domain.longcook.dto.PostLongcookReq;
+import com.ite.cookeat.domain.longcook.dto.PutLongcookReq;
 import com.ite.cookeat.domain.longcook.mapper.LongcookMapper;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.global.dto.Criteria;
@@ -25,8 +26,8 @@ public class LongcookServiceImpl implements LongcookService {
   private static final int PAGE_SIZE = 9;
 
   private final LongcookMapper longcookMapper;
-  private final ObjectMapper objectMapper;
   private final S3UploadService s3UploadService;
+  private final ObjectMapper objectMapper;
 
   @Override
   @Transactional
@@ -75,6 +76,26 @@ public class LongcookServiceImpl implements LongcookService {
 
   @Override
   @Transactional
+  public Integer modifyLongcook(String request, MultipartFile file) {
+
+    PutLongcookReq putLongcookReq = null;
+    try {
+      putLongcookReq = objectMapper.readValue(request, PutLongcookReq.class);
+      if (!longcookMapper.selectLongcookUrl(putLongcookReq.getLongcookId())
+          .equals(putLongcookReq.getLongcookUrl())) {
+        putLongcookReq.setLongcookUrl(s3UploadService.saveFile(file));
+      }
+    } catch (IOException e) {
+      throw new CustomException(FILE_UPLOAD_FAIL);
+    }
+    Integer result = longcookMapper.updateLongcook(putLongcookReq);
+    if (result <= 0) {
+      throw new CustomException(LONGCOOK_NOT_FOUND);
+    }
+    return result;
+  }
+
+
   public Integer addLongcook(String request, MultipartFile file) {
 
     String longcookUrl = null;

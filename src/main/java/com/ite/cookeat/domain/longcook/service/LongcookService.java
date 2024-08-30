@@ -14,6 +14,8 @@ public interface LongcookService {
 
   Integer modifyLongcookDeletedate(Integer longcookId);
 
+  Integer modifyLongcook(String request, MultipartFile file);
+
   Integer addLongcook(String request, MultipartFile file);
 
 }
