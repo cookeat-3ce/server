@@ -42,7 +42,7 @@ public class SskcookController {
   @PostMapping(consumes = {"multipart/form-data"})
   public ResponseEntity<Integer> sskcookAdd(
       @RequestPart("file") MultipartFile file,
-      @RequestPart("sskcook") String request) throws IOException {
+      @RequestPart("sskcook") String request) {
     return ResponseEntity.ok(sskcookService.addSskcook(request, file));
   }
 

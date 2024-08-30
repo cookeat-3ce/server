@@ -1,7 +1,9 @@
 package com.ite.cookeat.domain.admin.service;
 
+import static com.ite.cookeat.exception.ErrorCode.REPORTED_SSKCOOK_CONFLICT;
 import static com.ite.cookeat.exception.ErrorCode.VERIFY_REQUEST_NOT_FOUND;
 
+import com.ite.cookeat.domain.admin.dto.DeleteReportSskcookReq;
 import com.ite.cookeat.domain.admin.dto.GetReportSskcookRes;
 import com.ite.cookeat.domain.admin.dto.GetVerifyRequestRes;
 import com.ite.cookeat.domain.admin.dto.PostVerifyRequestReq;
@@ -71,5 +73,25 @@ public class AdminServiceImpl implements AdminService {
         .total(adminMapper.selectReportSskcookCount())
         .data(adminMapper.selectReportSskcookList(cri))
         .build();
+  }
+
+  @Override
+  @Transactional
+  public Integer modifyReportSskcookStatus(Integer sskcookId) {
+    // DTO 객체 생성
+    DeleteReportSskcookReq req = DeleteReportSskcookReq.builder()
+        .sskcookId(sskcookId)  // IN 파라미터 설정
+        .result(null)          // OUT 파라미터 초기화
+        .build();
+
+    // 매퍼 메서드 호출
+    adminMapper.updateReportSskcookStatus(req);
+
+    // OUT 파라미터 값 확인
+    Integer result = req.getResult();
+    if (result == null || result <= 0) {
+      throw new CustomException(REPORTED_SSKCOOK_CONFLICT);
+    }
+    return result;
   }
 }

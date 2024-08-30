@@ -13,5 +13,7 @@ public interface AdminService {
 
   Integer modifyVerifyMemberStatusUnverified(String username);
 
+  Integer modifyReportSskcookStatus(Integer sskcookId);
+
   PaginatedRes<GetReportSskcookRes> findReportSskcookList(Integer page);
 }

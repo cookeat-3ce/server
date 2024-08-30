@@ -15,9 +15,9 @@ public interface SskcookService {
 
   List<GetFridgeRecipeRes> findMyFridgeRecipe(String username);
 
-  PaginatedRes<GetSearchSskcookRes> findSearchRecentSskcookList(String keyword, Integer page);
+  Integer addSskcook(String request, MultipartFile file);
 
-  Integer addSskcook(String postSskcookReq, MultipartFile file);
+  PaginatedRes<GetSearchSskcookRes> findSearchRecentSskcookList(String keyword, Integer page);
 
   PaginatedRes<GetSearchSskcookRes> findSearchLikesSskcookList(String keyword, Integer page);
 
