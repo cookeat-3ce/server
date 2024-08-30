@@ -30,12 +30,6 @@
       AND m.verified_status = 'REQUEST_VERIFY'
   </select>
 
-  <update id="updateVerifyRequestMemberStatus" parameterType="Map">
-    UPDATE member
-    SET verified_status = #{verifiedStatus}
-    WHERE username = #{username}
-  </update>
-
   <select id="selectReportSskcookList" parameterType="Criteria" resultType="GetReportSskcookRes">
     SELECT s.sskcook_id       AS sskcookId,
            s.title            AS title,
@@ -54,4 +48,16 @@
            INNER JOIN sskcook s ON r.sskcook_id = s.sskcook_id
     WHERE s.deletedate IS NULL
   </select>
+
+  <update id="updateVerifyRequestMemberStatus" parameterType="Map">
+    UPDATE member
+    SET verified_status = #{verifiedStatus}
+    WHERE username = #{username}
+  </update>
+
+  <update id="updateReportSskcookStatus" parameterType="DeleteReportSskcookReq"
+    statementType="CALLABLE">
+    CALL update_and_delete_report_sskcook(#{sskcookId, mode=IN, jdbcType=INTEGER},
+      #{result, mode=OUT, jdbcType=INTEGER})
+  </update>
 </mapper>

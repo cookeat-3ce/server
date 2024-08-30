@@ -43,4 +43,9 @@ public class AdminController {
   public ResponseEntity<GetReportSskcookPageRes> reportList(@RequestParam Integer page) {
     return ResponseEntity.ok(adminService.findReportSskcookList(page));
   }
+
+  @DeleteMapping("/sskcook/{sskcookId}")
+  public ResponseEntity<Integer> reportSskcookStatusModify(@PathVariable Integer sskcookId) {
+    return ResponseEntity.ok(adminService.modifyReportSskcookStatus(sskcookId));
+  }
 }
