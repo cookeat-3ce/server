@@ -174,6 +174,35 @@ public class SskcookServiceImpl implements SskcookService {
 
   @Override
   @Transactional
+  public void addReport(PostLikesReq postLikesReq) {
+    postLikesReq.setMemberId(memberService.findMemberId(SecurityUtils.getCurrentUsername()));
+    int cnt = sskcookMapper.insertReport(postLikesReq);
+
+    if (cnt == 0) {
+      throw new CustomException(ErrorCode.REPORT_INSERT_FAIL);
+    }
+  }
+
+  @Override
+  @Transactional
+  public void removeReport(PostLikesReq postLikesReq) {
+    postLikesReq.setMemberId(memberService.findMemberId(SecurityUtils.getCurrentUsername()));
+    int cnt = sskcookMapper.deleteReport(postLikesReq);
+
+    if (cnt == 0) {
+      throw new CustomException(ErrorCode.REPORT_DELETE_FAIL);
+    }
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public Integer findReport(PostLikesReq postLikesReq) {
+    postLikesReq.setMemberId(memberService.findMemberId(SecurityUtils.getCurrentUsername()));
+    return sskcookMapper.selectReportCount(postLikesReq);
+  }
+
+  @Override
+  @Transactional
   public Integer modifySskcook(String request, MultipartFile file) {
     String sskcookUrl = null;
     PutSskcookReq putSskcookReq = null;

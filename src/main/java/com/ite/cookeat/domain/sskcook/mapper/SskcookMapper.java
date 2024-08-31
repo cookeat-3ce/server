@@ -51,6 +51,12 @@ public interface SskcookMapper {
 
   Integer selectLikesCount(PostLikesReq postLikesReq);
 
+  Integer deleteReport(PostLikesReq postLikesReq);
+
+  Integer insertReport(PostLikesReq postLikesReq);
+
+  Integer selectReportCount(PostLikesReq postLikesReq);
+
   List<GetSskcookIngredientsRes> selectSskcookIngredients(Integer sskcookId);
 
   List<String> selectSskcookTags(Integer sskcookId);
