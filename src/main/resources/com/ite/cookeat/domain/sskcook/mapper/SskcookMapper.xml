@@ -257,11 +257,11 @@
 
   <select id="selectUserSskcookListCount" parameterType="String" resultType="Integer">
     <![CDATA[
-    SELECT COUNT(a.sskcook_id)
-    FROM sskcook a
-           INNER JOIN member b ON a.member_id = b.member_id
-    WHERE deletedate IS NULL
-      AND #{username} = b.username
+    SELECT COUNT(s.sskcook_id)
+    FROM sskcook s
+           INNER JOIN member m ON s.member_id = m.member_id
+    WHERE s.status = 'ACTIVE'
+      AND #{username} = m.username
     ]]>
   </select>
 
