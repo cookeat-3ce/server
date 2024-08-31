@@ -1,6 +1,7 @@
 package com.ite.cookeat.domain.member.service;
 
 import static com.ite.cookeat.exception.ErrorCode.MEMBER_NOT_FOUND;
+import static com.ite.cookeat.exception.ErrorCode.SUBSCRIPTION_CONFLICT;
 import static com.ite.cookeat.exception.ErrorCode.VERIFYING_FAILED;
 
 import com.ite.cookeat.domain.member.dto.GetMemberNoticeRes;
@@ -12,6 +13,7 @@ import com.ite.cookeat.domain.member.dto.PostLoginReq;
 import com.ite.cookeat.domain.member.dto.PostLoginRes;
 import com.ite.cookeat.domain.member.dto.PostMemberOneLinerReq;
 import com.ite.cookeat.domain.member.dto.PostSignUpReq;
+import com.ite.cookeat.domain.member.dto.PostSubscriptionReq;
 import com.ite.cookeat.domain.member.dto.TokenDTO;
 import com.ite.cookeat.domain.member.mapper.MemberMapper;
 import com.ite.cookeat.exception.CustomException;
@@ -126,6 +128,15 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
+  @Transactional
+  public Integer addSubscription(PostSubscriptionReq req) {
+    Integer result = memberMapper.insertSubscription(req);
+    if (result <= 0) {
+      throw new CustomException(SUBSCRIPTION_CONFLICT);
+    }
+    return result;
+  }
+
   @Transactional(readOnly = true)
   public PaginatedRes<GetSubscriptionMemberDetailsRes> findMemberSubscriptionList(Integer page) {
     Criteria cri = Criteria.builder()

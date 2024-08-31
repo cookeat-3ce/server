@@ -5,6 +5,7 @@ import com.ite.cookeat.domain.member.dto.GetSubscriptionMemberReq;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.Member;
 import com.ite.cookeat.domain.member.dto.PostMemberOneLinerReq;
+import com.ite.cookeat.domain.member.dto.PostSubscriptionReq;
 import com.ite.cookeat.global.dto.Criteria;
 import java.util.List;
 import java.util.Optional;
@@ -45,4 +46,6 @@ public interface MemberMapper {
   Integer updateVerifiedStatus(@Param("username") String username, @Param("status") String status);
 
   String selectMemberVerifiedStatus(String username);
+
+  Integer insertSubscription(PostSubscriptionReq req);
 }
