@@ -1,4 +1,4 @@
-package com.ite.cookeat.domain.member_sskcook.dto;
+package com.ite.cookeat.domain.longcook.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,13 +6,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Getter
-public class PostMemberSskcookReq {
+public class PutLongcookReq {
 
+  private Integer longcookId;
+  private String title;
   @Setter
-  private Integer memberId;
-  private Integer sskcookId;
+  private String longcookUrl;
+
 }

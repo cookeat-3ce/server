@@ -2,29 +2,25 @@ package com.ite.cookeat.domain.sskcook.service;
 
 import static com.ite.cookeat.exception.ErrorCode.FILE_UPLOAD_FAIL;
 import static com.ite.cookeat.exception.ErrorCode.FIND_FAIL_SSKCOOK;
-import static com.ite.cookeat.exception.ErrorCode.INVALID_JSON;
 import static com.ite.cookeat.exception.ErrorCode.SSKCOOK_NOT_FOUND;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ite.cookeat.domain.member.service.MemberService;
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSskcookDetailsReq;
-import com.ite.cookeat.domain.sskcook.dto.GetSskcookDetailsRes;
-import com.ite.cookeat.domain.sskcook.dto.GetSskcookIngredientsRes;
 import com.ite.cookeat.domain.sskcook.dto.GetTotalSskcookDetailsRes;
-import com.ite.cookeat.domain.sskcook.dto.PostHashtagReq;
 import com.ite.cookeat.domain.sskcook.dto.PostLikesReq;
-import com.ite.cookeat.domain.sskcook.dto.PostSskcookIngredientReq;
 import com.ite.cookeat.domain.sskcook.dto.PostSskcookReq;
+import com.ite.cookeat.domain.sskcook.dto.PutSskcookReq;
 import com.ite.cookeat.domain.sskcook.mapper.SskcookMapper;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.exception.ErrorCode;
 import com.ite.cookeat.global.dto.Criteria;
 import com.ite.cookeat.global.dto.PaginatedRes;
 import com.ite.cookeat.s3.service.S3UploadService;
+import com.ite.cookeat.util.SecurityUtils;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -57,7 +53,7 @@ public class SskcookServiceImpl implements SskcookService {
     return PaginatedRes.<GetSearchSskcookRes>builder()
         .cri(cri)
         .total(sskcookMapper.selectSearchSskcookListCount(keyword))
-        .data(sskcookMapper.selectSearchRecentSskcookList(cri, keyword))
+        .data(sskcookMapper.selectSearchRecentSskcook(cri, keyword))
         .build();
   }
 
@@ -107,6 +103,7 @@ public class SskcookServiceImpl implements SskcookService {
   }
 
   @Override
+  @Transactional
   public Integer modifySskcookDeletedate(Integer sskcookId) {
     Integer result = sskcookMapper.updateSskcookDeletedate(sskcookId);
     if (result <= 0) {
@@ -146,12 +143,10 @@ public class SskcookServiceImpl implements SskcookService {
   }
 
   @Override
-  public void addLikes(String username, Integer sskcookId) {
-    PostLikesReq modifiedReq = PostLikesReq.builder()
-        .memberId(memberService.findMemberId(username))
-        .sskcookId(sskcookId)
-        .build();
-    int cnt = sskcookMapper.insertLikes(modifiedReq);
+  @Transactional
+  public void addLikes(PostLikesReq req) {
+    req.setMemberId(memberService.findMemberId(SecurityUtils.getCurrentUsername()));
+    int cnt = sskcookMapper.insertLikes(req);
 
     if (cnt == 0) {
       throw new CustomException(ErrorCode.LIKES_INSERT_FAIL);
@@ -159,12 +154,10 @@ public class SskcookServiceImpl implements SskcookService {
   }
 
   @Override
-  public void removeLikes(String username, Integer sskcookId) {
-    PostLikesReq modifiedReq = PostLikesReq.builder()
-        .memberId(memberService.findMemberId(username))
-        .sskcookId(sskcookId)
-        .build();
-    int cnt = sskcookMapper.deleteLikes(modifiedReq);
+  @Transactional
+  public void removeLikes(PostLikesReq req) {
+    req.setMemberId(memberService.findMemberId(SecurityUtils.getCurrentUsername()));
+    int cnt = sskcookMapper.deleteLikes(req);
 
     if (cnt == 0) {
       throw new CustomException(ErrorCode.LIKES_DELETE_FAIL);
@@ -172,32 +165,59 @@ public class SskcookServiceImpl implements SskcookService {
   }
 
   @Override
-  public Integer findLikes(String username, Integer sskcookId) {
-    PostLikesReq modifiedReq = PostLikesReq.builder()
-        .memberId(memberService.findMemberId(username))
-        .sskcookId(sskcookId)
-        .build();
-    return sskcookMapper.selectLikesCount(modifiedReq);
+  @Transactional(readOnly = true)
+  public Integer findLikes(PostLikesReq req) {
+    req.setMemberId(memberService.findMemberId(SecurityUtils.getCurrentUsername()));
+    return sskcookMapper.selectLikesCount(req);
   }
 
   @Override
   @Transactional
-  public GetTotalSskcookDetailsRes findSskcookTotalDetails(String username, Integer sskcookId)
-      throws IOException {
-    JsonNode jsonNode = objectMapper.readTree(username);
-    String name = jsonNode.get("username").asText();
-    GetSskcookDetailsReq getSskcookDetailsReq = GetSskcookDetailsReq.builder()
-        .username(name)
+  public Integer modifySskcook(String request, MultipartFile file) {
+    String sskcookUrl = null;
+    PutSskcookReq putSskcookReq = null;
+
+    try {
+      putSskcookReq = objectMapper.readValue(request, PutSskcookReq.class);
+
+      // 스-윽쿡 영상이 수정되었을 경우에만 S3에 업로드
+      if (file != null && !sskcookMapper.selectSskcookUrl(putSskcookReq.getSskcookId())
+          .equals(putSskcookReq.getSskcookUrl())) {
+        sskcookUrl = s3UploadService.saveFile(file);
+        putSskcookReq.setSskcookUrl(sskcookUrl);
+      }
+
+      String ingredientsJson = objectMapper.writeValueAsString(putSskcookReq.getIngredient());
+      String hashtagsJson = objectMapper.writeValueAsString(putSskcookReq.getHashtag());
+      putSskcookReq.setIngredientsJson(ingredientsJson);
+      putSskcookReq.setHashtagsJson(hashtagsJson);
+    } catch (IOException e) {
+      throw new CustomException(FILE_UPLOAD_FAIL);
+    }
+
+    // 프로시저 호출
+    sskcookMapper.updateSskcookWithDetails(putSskcookReq);
+    return putSskcookReq.getUpdatedCount();
+
+  }
+  
+  @Override
+  @Transactional(readOnly = true)
+  public GetTotalSskcookDetailsRes findSskcookTotalDetails(Integer sskcookId) {
+
+    String username = SecurityUtils.getCurrentUsername();
+
+    GetSskcookDetailsReq req = GetSskcookDetailsReq.builder()
+        .username(username)
         .sskcookId(sskcookId)
         .build();
-    System.out.println(username + " " + sskcookId);
-    List<String> tags = sskcookMapper.selectSskcookTags(sskcookId);
-    GetSskcookDetailsRes details = sskcookMapper.selectSskcookDetails(getSskcookDetailsReq);
-    List<GetSskcookIngredientsRes> ingredients = sskcookMapper.selectSskcookIngredients(sskcookId);
+
+    sskcookMapper.selectSskcookDetails(req);
+
     return GetTotalSskcookDetailsRes.builder()
-        .details(details)
-        .tags(tags)
-        .ingredients(ingredients)
+        .tags(req.getTags())
+        .details(req.getDetails())
+        .ingredients(req.getIngredients())
         .build();
   }
 
@@ -228,43 +248,25 @@ public class SskcookServiceImpl implements SskcookService {
 
     String sskcookUrl = null;
     PostSskcookReq postSskcookReq = null;
-    try {
-      postSskcookReq = objectMapper.readValue(request, PostSskcookReq.class);
-    } catch (IOException e) {
-      throw new CustomException(INVALID_JSON);
-    }
 
     try {
+      postSskcookReq = objectMapper.readValue(request, PostSskcookReq.class);
       sskcookUrl = s3UploadService.saveFile(file);
+
+      String ingredientsJson = objectMapper.writeValueAsString(postSskcookReq.getIngredient());
+      String hashtagsJson = objectMapper.writeValueAsString(postSskcookReq.getHashtag());
+      postSskcookReq.setIngredientsJson(ingredientsJson);
+      postSskcookReq.setHashtagsJson(hashtagsJson);
     } catch (IOException e) {
       throw new CustomException(FILE_UPLOAD_FAIL);
     }
     postSskcookReq.setSskcookUrl(sskcookUrl);
+    postSskcookReq.setMemberId(memberService.findMemberId(postSskcookReq.getUsername()));
 
-    // 정상적으로 슥쿡이 업로드 되었을 경우
-    if (sskcookMapper.insertSskcook(postSskcookReq) == 1) {
+    // 프로시저 호출
+    sskcookMapper.addSskcookWithDetails(postSskcookReq);
 
-      // 해당 회원의 슥쿡 카운트 증가
-      sskcookMapper.updateSskcookCount(postSskcookReq.getMemberId());
-    }
-    Integer sskcookId = postSskcookReq.getSskcookId();
-
-    List<PostSskcookIngredientReq> ingredients = postSskcookReq.getIngredient();
-    if (ingredients != null && !ingredients.isEmpty()) {
-      for (PostSskcookIngredientReq ingredient : ingredients) {
-        ingredient.setSskcookId(sskcookId);
-        sskcookMapper.insertIngredientSskcook(ingredient);
-      }
-    }
-
-    List<PostHashtagReq> hashtags = postSskcookReq.getHashtag();
-    if (hashtags != null && !hashtags.isEmpty()) {
-      for (PostHashtagReq hashtag : hashtags) {
-        hashtag.setSskcookId(sskcookId);
-        sskcookMapper.insertHashtag(hashtag);
-      }
-    }
-    return sskcookId;
+    return postSskcookReq.getSskcookId();
 
   }
 }

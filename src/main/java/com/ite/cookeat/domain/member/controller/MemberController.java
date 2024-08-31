@@ -1,7 +1,7 @@
 package com.ite.cookeat.domain.member.controller;
 
 import com.ite.cookeat.domain.member.dto.GetMemberNoticeRes;
-import com.ite.cookeat.domain.member.dto.GetSubscriptionUserDetailsRes;
+import com.ite.cookeat.domain.member.dto.GetSubscriptionMemberDetailsRes;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.PostLoginReq;
 import com.ite.cookeat.domain.member.dto.PostLoginRes;
@@ -74,10 +74,7 @@ public class MemberController {
 
   @GetMapping("/{username}")
   public ResponseEntity<GetUserDetailsRes> findUserDetails(@PathVariable String username) {
-
-    GetUserDetailsRes getUserDetailsRes = memberService.findUserDetailsByUsername(username);
-
-    return ResponseEntity.ok(getUserDetailsRes);
+    return ResponseEntity.ok(memberService.findUserDetailsByUsername(username));
   }
 
   @GetMapping
@@ -100,11 +97,10 @@ public class MemberController {
     return ResponseEntity.ok(memberService.findMemberVerifiedStatus(username));
   }
 
-  @GetMapping("/{username}/subscription")
-  public ResponseEntity<PaginatedRes<GetSubscriptionUserDetailsRes>> findMemberSubscriptionList(
-      @PathVariable String username,
+  @GetMapping("/subscription")
+  public ResponseEntity<PaginatedRes<GetSubscriptionMemberDetailsRes>> findMemberSubscriptionList(
       @RequestParam Integer page) {
-    return ResponseEntity.ok(memberService.findMemberSubscriptionList(username, page));
+    return ResponseEntity.ok(memberService.findMemberSubscriptionList(page));
   }
 
   @PostMapping("/subscription")

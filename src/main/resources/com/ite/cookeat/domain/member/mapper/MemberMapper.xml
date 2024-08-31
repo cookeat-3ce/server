@@ -12,7 +12,12 @@
             'ROLE_USER', null)
     ]]>
     </insert>
-
+  
+  <resultMap id="subscriptionsResultMap" type="GetSubscriptionMemberDetailsRes">
+    <result column="username" property="username"/>
+    <result column="profileImage" property="profileImage"/>
+  </resultMap>
+  
   <insert id="insertSubscription" parameterType="PostSubscriptionReq">
     <selectKey keyProperty="subscriptionId" order="BEFORE" resultType="Integer">
       <![CDATA[
@@ -112,30 +117,14 @@
       AND status = 'ACTIVE'
   </select>
 
-  <select id="selectMemberSubscriptionList" parameterType="Map"
-    resultType="GetSubscriptionUserDetailsRes">
-    <![CDATA[
-    SELECT d.username, TO_CHAR(d.profile_img) as profileImage
-    FROM member b
-           INNER JOIN subscription c ON b.member_id = c.follower_id
-           INNER JOIN member d ON d.member_id = c.following_id
-    WHERE b.username = #{username}
-      AND b.status = 'ACTIVE'
-      AND d.status = 'ACTIVE'
-    OFFSET(#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
-    ]]>
-  </select>
-
-  <select id="selectMemberSubscriptionListCount" parameterType="String" resultType="Integer">
-    <![CDATA[
-    SELECT COUNT(d.username)
-    FROM member b
-           INNER JOIN subscription c ON b.member_id = c.follower_id
-           INNER JOIN member d ON d.member_id = c.following_id
-    WHERE b.username = #{username}
-      AND b.status = 'ACTIVE'
-      AND d.status = 'ACTIVE'
-    ]]>
+  <select id="selectMemberSubscriptionList" parameterType="GetSubscriptionMemberReq"
+    statementType="CALLABLE">
+    CALL PROC_GET_MEMBER_SUBSCRIPTION_LIST( #{username, mode=IN, jdbcType=VARCHAR},
+      #{cri.pageNum, mode=IN, jdbcType=INTEGER},
+      #{cri.pageSize, mode=IN, jdbcType=INTEGER},
+      #{total, mode=OUT, jdbcType=INTEGER},
+      #{subscriptionList, mode=OUT, jdbcType=CURSOR, resultMap=subscriptionsResultMap}
+      )
   </select>
 
   <select id="selectMemberVerifiedStatus" parameterType="String">

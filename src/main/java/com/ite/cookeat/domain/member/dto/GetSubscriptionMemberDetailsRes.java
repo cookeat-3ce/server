@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Getter
-public class GetSubscriptionUserDetailsRes {
+public class GetSubscriptionMemberDetailsRes {
 
   private String username;
   private String profileImage;

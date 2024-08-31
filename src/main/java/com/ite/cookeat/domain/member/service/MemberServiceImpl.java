@@ -5,7 +5,8 @@ import static com.ite.cookeat.exception.ErrorCode.SUBSCRIPTION_CONFLICT;
 import static com.ite.cookeat.exception.ErrorCode.VERIFYING_FAILED;
 
 import com.ite.cookeat.domain.member.dto.GetMemberNoticeRes;
-import com.ite.cookeat.domain.member.dto.GetSubscriptionUserDetailsRes;
+import com.ite.cookeat.domain.member.dto.GetSubscriptionMemberDetailsRes;
+import com.ite.cookeat.domain.member.dto.GetSubscriptionMemberReq;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.Member;
 import com.ite.cookeat.domain.member.dto.PostLoginReq;
@@ -20,6 +21,7 @@ import com.ite.cookeat.exception.ErrorCode;
 import com.ite.cookeat.global.dto.Criteria;
 import com.ite.cookeat.global.dto.PaginatedRes;
 import com.ite.cookeat.security.jwt.JwtTokenProvider;
+import com.ite.cookeat.util.SecurityUtils;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -135,19 +137,26 @@ public class MemberServiceImpl implements MemberService {
     return result;
   }
 
-  @Override
-  @Transactional
-  public PaginatedRes<GetSubscriptionUserDetailsRes> findMemberSubscriptionList(String username,
-      Integer page) {
+  @Transactional(readOnly = true)
+  public PaginatedRes<GetSubscriptionMemberDetailsRes> findMemberSubscriptionList(Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(10)
         .pageNum(page)
         .build();
 
-    return PaginatedRes.<GetSubscriptionUserDetailsRes>builder()
+    String username = SecurityUtils.getCurrentUsername();
+
+    GetSubscriptionMemberReq req = GetSubscriptionMemberReq.builder()
         .cri(cri)
-        .total(memberMapper.selectMemberSubscriptionListCount(username))
-        .data(memberMapper.selectMemberSubscriptionList(cri, username))
+        .username(username)
+        .build();
+
+    memberMapper.selectMemberSubscriptionList(req);
+
+    return PaginatedRes.<GetSubscriptionMemberDetailsRes>builder()
+        .cri(cri)
+        .total(req.getTotal())
+        .data(req.getSubscriptionList())
         .build();
   }
 

@@ -9,9 +9,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class PostSskcookReq {
+public class PutSskcookReq {
 
-  private String username;
   private String title;
   private String recipe;
   private List<PostHashtagReq> hashtag;
@@ -25,5 +24,5 @@ public class PostSskcookReq {
   @Setter
   private String hashtagsJson;
   @Setter
-  private Integer memberId;
+  private Integer updatedCount;
 }

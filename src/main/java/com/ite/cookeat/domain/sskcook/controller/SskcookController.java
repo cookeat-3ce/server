@@ -3,9 +3,9 @@ package com.ite.cookeat.domain.sskcook.controller;
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
 import com.ite.cookeat.domain.sskcook.dto.GetTotalSskcookDetailsRes;
+import com.ite.cookeat.domain.sskcook.dto.PostLikesReq;
 import com.ite.cookeat.domain.sskcook.service.SskcookService;
 import com.ite.cookeat.global.dto.PaginatedRes;
-import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,9 +29,8 @@ public class SskcookController {
   private final SskcookService sskcookService;
 
   @GetMapping("/{sskcookId}")
-  public ResponseEntity<GetTotalSskcookDetailsRes> sskcookDetails(@PathVariable Integer sskcookId,
-      @RequestBody String username) throws IOException {
-    return ResponseEntity.ok(sskcookService.findSskcookTotalDetails(username, sskcookId));
+  public ResponseEntity<GetTotalSskcookDetailsRes> sskcookDetails(@PathVariable Integer sskcookId) {
+    return ResponseEntity.ok(sskcookService.findSskcookTotalDetails(sskcookId));
   }
 
   @GetMapping("/fridge/{username}")
@@ -47,7 +47,7 @@ public class SskcookController {
   }
 
   @GetMapping
-  public ResponseEntity<PaginatedRes<GetSearchSskcookRes>> findSearchSskcookList(
+  public ResponseEntity<PaginatedRes<GetSearchSskcookRes>> sskcookSearchList(
       @RequestParam(value = "keyword", required = false) String keyword,
       @RequestParam(defaultValue = "1") Integer page,
       @RequestParam(defaultValue = "latest") String sort,
@@ -75,7 +75,7 @@ public class SskcookController {
   }
 
   @GetMapping("/list/{username}")
-  public ResponseEntity<PaginatedRes<GetSearchSskcookRes>> findUserSskcookList(
+  public ResponseEntity<PaginatedRes<GetSearchSskcookRes>> sskcookMemberList(
       @PathVariable String username, @RequestParam(defaultValue = "1") Integer page) {
     return ResponseEntity.ok(sskcookService.findUserSskcookList(username, page));
   }
@@ -87,15 +87,21 @@ public class SskcookController {
   }
 
   @PostMapping("/likes")
-  public ResponseEntity<String> sskcookLikesSave(@RequestParam("username") String username,
-      @RequestParam("sskcookId") Integer sskcookId) {
-
-    int cnt = sskcookService.findLikes(username, sskcookId);
+  public ResponseEntity<String> sskcookLikesSave(@RequestBody PostLikesReq req) {
+    int cnt = sskcookService.findLikes(req);
     if (cnt > 0) {
-      sskcookService.removeLikes(username, sskcookId);
+      sskcookService.removeLikes(req);
       return ResponseEntity.ok("likes deleted");
     }
-    sskcookService.addLikes(username, sskcookId);
+    sskcookService.addLikes(req);
     return ResponseEntity.ok("likes added");
   }
+
+  @PutMapping(consumes = {"multipart/form-data"})
+  public ResponseEntity<?> sskcookModify(
+      @RequestPart("file") MultipartFile file,
+      @RequestPart("sskcook") String request) {
+    return ResponseEntity.ok(sskcookService.modifySskcook(request, file));
+  }
+
 }
