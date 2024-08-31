@@ -7,6 +7,7 @@ import com.ite.cookeat.domain.member.dto.PostLoginReq;
 import com.ite.cookeat.domain.member.dto.PostLoginRes;
 import com.ite.cookeat.domain.member.dto.PostMemberOneLinerReq;
 import com.ite.cookeat.domain.member.dto.PostSignUpReq;
+import com.ite.cookeat.domain.member.dto.PostSubscriptionReq;
 import com.ite.cookeat.domain.member.service.MemberService;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.exception.ErrorCode;
@@ -90,7 +91,7 @@ public class MemberController {
       @RequestParam Integer page) {
     return ResponseEntity.ok(memberService.findMemberNotices(username, page));
   }
-
+  
   @GetMapping("/verify/{username}")
   public ResponseEntity<String> memberVerifyStatus(@PathVariable String username) {
     return ResponseEntity.ok(memberService.findMemberVerifiedStatus(username));
@@ -100,5 +101,10 @@ public class MemberController {
   public ResponseEntity<PaginatedRes<GetSubscriptionMemberDetailsRes>> findMemberSubscriptionList(
       @RequestParam Integer page) {
     return ResponseEntity.ok(memberService.findMemberSubscriptionList(page));
+  }
+
+  @PostMapping("/subscription")
+  public ResponseEntity<Integer> memberSubscription(@RequestBody PostSubscriptionReq req) {
+    return ResponseEntity.ok(memberService.addSubscription(req));
   }
 }

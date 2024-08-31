@@ -12,26 +12,34 @@
             'ROLE_USER', null)
     ]]>
     </insert>
-
+  
   <resultMap id="subscriptionsResultMap" type="GetSubscriptionMemberDetailsRes">
     <result column="username" property="username"/>
     <result column="profileImage" property="profileImage"/>
   </resultMap>
-
-  <select id="selectUsername" parameterType="String"
-    resultType="Member">
+  
+  <insert id="insertSubscription" parameterType="PostSubscriptionReq">
+    <selectKey keyProperty="subscriptionId" order="BEFORE" resultType="Integer">
+      <![CDATA[
+      SELECT subscription_seq.nextval AS subscriptionId FROM dual
+      ]]>
+    </selectKey>
     <![CDATA[
-    SELECT member_id as         memberId,
-           username,
-           password,
-           roles,
-           TO_CHAR(profile_img) profileImage,
-           nickname
-    FROM member
-    WHERE username = #{username}
-      AND deletedate IS NULL
+    INSERT INTO subscription (subscription_id, follower_id, following_id)
+    SELECT #{subscriptionId}, m1.member_id AS follower_id, m2.member_id AS following_id
+    FROM member m1
+    JOIN member m2 ON m2.username = #{followingUsername} AND m2.status = 'ACTIVE' AND m2.DELETEDATE IS NULL
+    WHERE m1.username = #{followerUsername}
+      AND m1.status = 'ACTIVE'
+      AND m1.DELETEDATE IS NULL
+      AND NOT EXISTS (
+        SELECT 1
+        FROM subscription s
+        WHERE s.follower_id = m1.member_id
+          AND s.following_id = m2.member_id
+      )
     ]]>
-	</select>
+  </insert>
 
   <select id="selectUserDetails" parameterType="String" resultType="GetUserDetailsRes">
         <![CDATA[
@@ -127,6 +135,21 @@
       AND deletedate IS NULL
   </select>
 
+  <select id="selectUsername" parameterType="String"
+    resultType="Member">
+    <![CDATA[
+    SELECT member_id as         memberId,
+           username,
+           password,
+           roles,
+           TO_CHAR(profile_img) profileImage,
+           nickname
+    FROM member
+    WHERE username = #{username}
+      AND deletedate IS NULL
+    ]]>
+	</select>
+
   <update id="updateMemberOneLiner" parameterType="PostMemberOneLinerReq">
   <![CDATA[
     UPDATE member
@@ -142,7 +165,6 @@
         status     = 'INACTIVE'
     ]]>
   </update>
-
   <update id="updateVerifiedStatus">
     <![CDATA[
     UPDATE member
