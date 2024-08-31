@@ -19,6 +19,7 @@ public class GetSskcookDetailsRes {
   private String storeStatus;
   private String followStatus;
   private String nickname;
+  private String username;
   private String profileImage;
   private Integer likeCount;
 }
