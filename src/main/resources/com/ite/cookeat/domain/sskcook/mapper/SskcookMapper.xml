@@ -260,7 +260,8 @@
     SELECT COUNT(a.sskcook_id)
     FROM sskcook a
            INNER JOIN member b ON a.member_id = b.member_id
-    WHERE #{username} = b.username
+    WHERE deletedate IS NULL
+      AND #{username} = b.username
     ]]>
   </select>
 
@@ -333,7 +334,8 @@
   <update id="updateSskcookDeletedate" parameterType="Integer">
 <![CDATA[
     UPDATE sskcook
-    SET deletedate = CURRENT_TIMESTAMP
+    SET deletedate = CURRENT_TIMESTAMP,
+        status     = 'INACTIVE'
     WHERE sskcook_id = #{sskcookId}
     ]]>
   </update>
