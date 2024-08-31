@@ -129,6 +129,7 @@ public class MemberServiceImpl implements MemberService {
   @Override
   @Transactional
   public Integer addSubscription(PostSubscriptionReq req) {
+    req.setFollowerUsername(SecurityUtils.getCurrentUsername());
     memberMapper.insertSubscription(req);
     return req.getResult();
   }
