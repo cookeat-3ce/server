@@ -1,7 +1,6 @@
 package com.ite.cookeat.domain.member.service;
 
 import static com.ite.cookeat.exception.ErrorCode.MEMBER_NOT_FOUND;
-import static com.ite.cookeat.exception.ErrorCode.SUBSCRIPTION_CONFLICT;
 import static com.ite.cookeat.exception.ErrorCode.VERIFYING_FAILED;
 
 import com.ite.cookeat.domain.member.dto.GetMemberNoticeRes;
@@ -130,11 +129,9 @@ public class MemberServiceImpl implements MemberService {
   @Override
   @Transactional
   public Integer addSubscription(PostSubscriptionReq req) {
-    Integer result = memberMapper.insertSubscription(req);
-    if (result <= 0) {
-      throw new CustomException(SUBSCRIPTION_CONFLICT);
-    }
-    return result;
+    req.setFollowerUsername(SecurityUtils.getCurrentUsername());
+    memberMapper.insertSubscription(req);
+    return req.getResult();
   }
 
   @Transactional(readOnly = true)

@@ -13,8 +13,9 @@ import lombok.Setter;
 public class PostSubscriptionReq {
 
   @Setter
-  private Integer subscriptionId;
+  private Integer result;
   // 팔로워
+  @Setter
   private String followerUsername;
   // 팔로잉
   private String followingUsername;
