@@ -12,34 +12,15 @@
             'ROLE_USER', null)
     ]]>
     </insert>
-  
+
+  <insert id="insertSubscription" parameterType="PostSubscriptionReq" statementType="CALLABLE">
+    CALL PROC_INSERT_SUBSCRIPTION(#{followerUsername, mode=IN, jdbcType=VARCHAR}, #{followingUsername, mode=IN, jdbcType=VARCHAR}, #{result, mode=OUT, jdbcType=INTEGER})
+  </insert>
+
   <resultMap id="subscriptionsResultMap" type="GetSubscriptionMemberDetailsRes">
     <result column="username" property="username"/>
     <result column="profileImage" property="profileImage"/>
   </resultMap>
-  
-  <insert id="insertSubscription" parameterType="PostSubscriptionReq">
-    <selectKey keyProperty="subscriptionId" order="BEFORE" resultType="Integer">
-      <![CDATA[
-      SELECT subscription_seq.nextval AS subscriptionId FROM dual
-      ]]>
-    </selectKey>
-    <![CDATA[
-    INSERT INTO subscription (subscription_id, follower_id, following_id)
-    SELECT #{subscriptionId}, m1.member_id AS follower_id, m2.member_id AS following_id
-    FROM member m1
-    JOIN member m2 ON m2.username = #{followingUsername} AND m2.status = 'ACTIVE' AND m2.DELETEDATE IS NULL
-    WHERE m1.username = #{followerUsername}
-      AND m1.status = 'ACTIVE'
-      AND m1.DELETEDATE IS NULL
-      AND NOT EXISTS (
-        SELECT 1
-        FROM subscription s
-        WHERE s.follower_id = m1.member_id
-          AND s.following_id = m2.member_id
-      )
-    ]]>
-  </insert>
 
   <select id="selectUserDetails" parameterType="String" resultType="GetUserDetailsRes">
         <![CDATA[
