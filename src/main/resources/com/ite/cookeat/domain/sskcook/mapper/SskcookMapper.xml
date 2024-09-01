@@ -44,6 +44,7 @@
     <result column="sskcookUrl" property="sskcookUrl"/>
     <result column="recipe" property="recipe"/>
     <result column="title" property="title"/>
+    <result column="reportStatus" property="reportStatus"/>
     <result column="likeStatus" property="likeStatus"/>
     <result column="storeStatus" property="storeStatus"/>
     <result column="followStatus" property="followStatus"/>
