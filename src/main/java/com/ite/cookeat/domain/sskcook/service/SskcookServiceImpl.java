@@ -209,13 +209,8 @@ public class SskcookServiceImpl implements SskcookService {
 
     try {
       putSskcookReq = objectMapper.readValue(request, PutSskcookReq.class);
-
-      // 스-윽쿡 영상이 수정되었을 경우에만 S3에 업로드
-      if (file != null && !sskcookMapper.selectSskcookUrl(putSskcookReq.getSskcookId())
-          .equals(putSskcookReq.getSskcookUrl())) {
-        sskcookUrl = s3UploadService.saveFile(file);
-        putSskcookReq.setSskcookUrl(sskcookUrl);
-      }
+      sskcookUrl = s3UploadService.saveFile(file);
+      putSskcookReq.setSskcookUrl(sskcookUrl);
 
       String ingredientsJson = objectMapper.writeValueAsString(putSskcookReq.getIngredient());
       String hashtagsJson = objectMapper.writeValueAsString(putSskcookReq.getHashtag());

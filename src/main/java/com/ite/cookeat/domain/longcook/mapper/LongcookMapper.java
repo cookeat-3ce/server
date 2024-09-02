@@ -3,6 +3,7 @@ package com.ite.cookeat.domain.longcook.mapper;
 import com.ite.cookeat.domain.longcook.dto.GetLongcookDetailRes;
 import com.ite.cookeat.domain.longcook.dto.PostLongcookReq;
 import com.ite.cookeat.domain.longcook.dto.PutLongcookReq;
+import com.ite.cookeat.domain.sskcook.dto.PutSskcookReq;
 import com.ite.cookeat.global.dto.Criteria;
 import java.util.List;
 import java.util.Optional;
@@ -26,9 +27,7 @@ public interface LongcookMapper {
 
   Integer updateLongcookDeletedate(Integer longcookId);
 
-  Integer updateLongcook(PutLongcookReq putLongcookReq);
-
-  String selectLongcookUrl(Integer longcookId);
-
   void addLongcookWithDetails(PostLongcookReq req);
+
+  Integer updateLongcookWithDetails(PutLongcookReq putLongcookReq);
 }

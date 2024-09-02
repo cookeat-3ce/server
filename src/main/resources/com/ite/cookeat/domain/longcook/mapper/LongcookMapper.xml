@@ -127,4 +127,15 @@
       #{longcookId, mode=OUT, jdbcType=INTEGER}
            ) }
   </select>
+
+  <select id="updateLongcookWithDetails" resultType="Integer" statementType="CALLABLE">
+    { CALL update_longcook_with_details(
+      #{longcookId, mode=IN, jdbcType=INTEGER},
+      #{title, mode=IN, jdbcType=VARCHAR},
+      #{recipe, mode=IN, jdbcType=VARCHAR},
+      #{longcookUrl, mode=IN, jdbcType=VARCHAR},
+      #{ingredientsJson, mode=IN, jdbcType=CLOB},
+      #{updatedCount, mode=OUT, jdbcType=INTEGER}
+           ) }
+  </select>
 </mapper>

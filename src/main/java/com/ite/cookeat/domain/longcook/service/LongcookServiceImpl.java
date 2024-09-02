@@ -79,22 +79,21 @@ public class LongcookServiceImpl implements LongcookService {
   @Override
   @Transactional
   public Integer modifyLongcook(String request, MultipartFile file) {
-
     PutLongcookReq putLongcookReq = null;
+    String longcookUrl = null;
+
     try {
       putLongcookReq = objectMapper.readValue(request, PutLongcookReq.class);
-      if (!longcookMapper.selectLongcookUrl(putLongcookReq.getLongcookId())
-          .equals(putLongcookReq.getLongcookUrl())) {
-        putLongcookReq.setLongcookUrl(s3UploadService.saveFile(file));
-      }
+      longcookUrl = s3UploadService.saveFile(file);
+      putLongcookReq.setLongcookUrl(longcookUrl);
+
+      String ingredientsJson = objectMapper.writeValueAsString(putLongcookReq.getIngredient());
+      putLongcookReq.setIngredientsJson(ingredientsJson);
     } catch (IOException e) {
       throw new CustomException(FILE_UPLOAD_FAIL);
     }
-    Integer result = longcookMapper.updateLongcook(putLongcookReq);
-    if (result <= 0) {
-      throw new CustomException(LONGCOOK_NOT_FOUND);
-    }
-    return result;
+    longcookMapper.updateLongcookWithDetails(putLongcookReq);
+    return putLongcookReq.getUpdatedCount();
   }
 
 
