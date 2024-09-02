@@ -4,15 +4,22 @@ import static com.ite.cookeat.exception.ErrorCode.FILE_UPLOAD_FAIL;
 import static com.ite.cookeat.exception.ErrorCode.LONGCOOK_NOT_FOUND;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ite.cookeat.domain.longcook.dto.GetLongcookDetailRes;
+import com.ite.cookeat.domain.longcook.dto.GetLongcookDetailsReq;
+import com.ite.cookeat.domain.longcook.dto.GetLongcookRes;
+import com.ite.cookeat.domain.longcook.dto.GetNullLongcookDetailsReq;
+import com.ite.cookeat.domain.longcook.dto.GetTotalLongcookDetailsRes;
 import com.ite.cookeat.domain.longcook.dto.PostLongcookReq;
 import com.ite.cookeat.domain.longcook.dto.PutLongcookReq;
 import com.ite.cookeat.domain.longcook.mapper.LongcookMapper;
 import com.ite.cookeat.domain.member.service.MemberService;
+import com.ite.cookeat.domain.sskcook.dto.GetNullSskcookDetailsReq;
+import com.ite.cookeat.domain.sskcook.dto.GetSskcookDetailsReq;
+import com.ite.cookeat.domain.sskcook.dto.GetTotalSskcookDetailsRes;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.global.dto.Criteria;
 import com.ite.cookeat.global.dto.PaginatedRes;
 import com.ite.cookeat.s3.service.S3UploadService;
+import com.ite.cookeat.util.SecurityUtils;
 import java.io.IOException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -33,12 +40,12 @@ public class LongcookServiceImpl implements LongcookService {
 
   @Override
   @Transactional
-  public PaginatedRes<GetLongcookDetailRes> findCreatorLongcookList(String username, Integer page) {
+  public PaginatedRes<GetLongcookRes> findCreatorLongcookList(String username, Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(PAGE_SIZE)
         .pageNum(page)
         .build();
-    return PaginatedRes.<GetLongcookDetailRes>builder()
+    return PaginatedRes.<GetLongcookRes>builder()
         .cri(cri)
         .total(longcookMapper.selectLongcookListCount(username))
         .data(longcookMapper.selectLongcookList(cri, username))
@@ -47,23 +54,16 @@ public class LongcookServiceImpl implements LongcookService {
 
   @Override
   @Transactional
-  public PaginatedRes<GetLongcookDetailRes> findRecentLongcookList(String keyword, Integer page) {
+  public PaginatedRes<GetLongcookRes> findRecentLongcookList(String keyword, Integer page) {
     Criteria cri = Criteria.builder()
         .pageSize(PAGE_SIZE)
         .pageNum(page)
         .build();
-    return PaginatedRes.<GetLongcookDetailRes>builder()
+    return PaginatedRes.<GetLongcookRes>builder()
         .cri(cri)
         .total(longcookMapper.selectRecentLongcookListCount(keyword))
         .data(longcookMapper.selectRecentLongcookList(cri, keyword))
         .build();
-  }
-
-  @Override
-  @Transactional(readOnly = true)
-  public GetLongcookDetailRes findLongcook(Integer longcookId) {
-    Optional<GetLongcookDetailRes> result = longcookMapper.selectLongcook(longcookId);
-    return result.orElseThrow(() -> new CustomException(LONGCOOK_NOT_FOUND));
   }
 
   @Override
@@ -115,5 +115,35 @@ public class LongcookServiceImpl implements LongcookService {
     postLongcookReq.setMemberId(memberSerivce.findMemberId(postLongcookReq.getUsername()));
     longcookMapper.addLongcookWithDetails(postLongcookReq);
     return postLongcookReq.getLongcookId();
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public GetTotalLongcookDetailsRes findLongcookTotalDetails(Integer longcookId) {
+
+    String username = SecurityUtils.getCurrentUsername();
+
+    if (username == null) {
+      GetNullLongcookDetailsReq req = GetNullLongcookDetailsReq.builder()
+          .longcookId(longcookId)
+          .build();
+      longcookMapper.selectNullLongcookDetails(req);
+      return GetTotalLongcookDetailsRes.builder()
+          .details(req.getDetails())
+          .ingredients(req.getIngredients())
+          .build();
+    }
+
+    GetLongcookDetailsReq req = GetLongcookDetailsReq.builder()
+        .username(username)
+        .longcookId(longcookId)
+        .build();
+
+    longcookMapper.selectLongcookDetails(req);
+
+    return GetTotalLongcookDetailsRes.builder()
+        .details(req.getDetails())
+        .ingredients(req.getIngredients())
+        .build();
   }
 }

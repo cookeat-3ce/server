@@ -14,7 +14,7 @@
     AND m.status = 'ACTIVE'
   </insert>
 
-  <select id="selectLongcookList" parameterType="Map" resultType="GetLongcookDetailRes">
+  <select id="selectLongcookList" parameterType="Map" resultType="GetLongcookRes">
     <![CDATA[
     SELECT a.longcook_id          AS longcookId,
            b.username             AS username,
@@ -40,7 +40,7 @@
       AND b.status != 'BLOCKED'
     ]]>
   </select>
-  <select id="selectRecentLongcookList" parameterType="Map" resultType="GetLongcookDetailRes">
+  <select id="selectRecentLongcookList" parameterType="Map" resultType="GetLongcookRes">
     SELECT a.longcook_id AS longcookId,
     b.username AS username,
     b.nickname AS nickname,
@@ -74,7 +74,7 @@
       )
     </if>
   </select>
-  <select id="selectLongcook" parameterType="Integer" resultType="GetLongcookDetailRes">
+  <select id="selectLongcook" parameterType="Integer" resultType="GetLongcookRes">
     <![CDATA[
     SELECT l.longcook_id          AS longcookId,
            m.username             AS username,
@@ -128,6 +128,22 @@
            ) }
   </select>
 
+  <select id="selectNullLongcookDetails" parameterType="GetNullLongcookDetailsReq"
+    statementType="CALLABLE">
+    {CALL PROC_GET_NULL_LONGCOOK_DETAILS(
+      #{longcookId, mode = IN, jdbcType=INTEGER},
+      #{details, mode=OUT, jdbcType=CURSOR, resultMap=detailsResultMapAtSelectLongcook},
+      #{ingredients, mode=OUT, jdbcType=CURSOR, resultMap=ingredientsResultMapAtSelectLongcook})}
+  </select>
+
+  <select id="selectLongcookDetails" parameterType="GetLongcookDetailsReq" statementType="CALLABLE">
+    { CALL PROC_GET_LONGCOOK_DETAILS(
+      #{username, mode=IN, jdbcType=VARCHAR},
+      #{longcookId, mode=IN, jdbcType=INTEGER},
+      #{details, mode=OUT, jdbcType=CURSOR, resultMap=detailsResultMapAtSelectLongcook},
+      #{ingredients, mode=OUT, jdbcType=CURSOR, resultMap=ingredientsResultMapAtSelectLongcook})}
+  </select>
+
   <select id="updateLongcookWithDetails" resultType="Integer" statementType="CALLABLE">
     { CALL update_longcook_with_details(
       #{longcookId, mode=IN, jdbcType=INTEGER},
@@ -138,4 +154,18 @@
       #{updatedCount, mode=OUT, jdbcType=INTEGER}
            ) }
   </select>
+  <!-- selectSskcookDetails - details 매핑 -->
+  <resultMap id="detailsResultMapAtSelectLongcook" type="GetLongcookDetailsRes">
+    <result column="longcookId" property="longcookId"/>
+    <result column="longcookUrl" property="longcookUrl"/>
+    <result column="recipe" property="recipe"/>
+    <result column="title" property="title"/>
+  </resultMap>
+
+  <!-- selectLongcookDetails - ingredients 매핑 -->
+  <resultMap id="ingredientsResultMapAtSelectLongcook" type="GetLongcookIngredientsRes">
+    <result column="name" property="name"/>
+    <result column="amount" property="amount"/>
+  </resultMap>
+
 </mapper>

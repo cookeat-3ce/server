@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Getter
-public class GetLongcookDetailRes {
+public class GetLongcookRes {
 
   private Integer longcookId;
   private String username;
