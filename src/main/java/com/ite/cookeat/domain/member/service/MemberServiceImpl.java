@@ -6,6 +6,7 @@ import static com.ite.cookeat.exception.ErrorCode.VERIFYING_FAILED;
 import com.ite.cookeat.domain.member.dto.GetMemberNoticeRes;
 import com.ite.cookeat.domain.member.dto.GetSubscriptionMemberDetailsRes;
 import com.ite.cookeat.domain.member.dto.GetSubscriptionMemberReq;
+import com.ite.cookeat.domain.member.dto.GetUserDetailsReq;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.Member;
 import com.ite.cookeat.domain.member.dto.PostLoginReq;
@@ -45,13 +46,40 @@ public class MemberServiceImpl implements MemberService {
   @Transactional(readOnly = true)
   public GetUserDetailsRes findUserDetailsByUsername(String username) {
 
-    GetUserDetailsRes getUserDetailsRes = memberMapper.selectUserDetails(username);
+    String cur_username = SecurityUtils.getCurrentUsername();
 
-    if (getUserDetailsRes == null) {
-      throw new CustomException(MEMBER_NOT_FOUND);
+    if (cur_username == null) {
+      GetUserDetailsReq req = GetUserDetailsReq.builder()
+          .followingname(username)
+          .build();
+      memberMapper.selectNullUserDetails(req);
+      return GetUserDetailsRes.builder()
+          .oneLiner(req.getOneLiner())
+          .followStatus(req.getFollowStatus())
+          .sskcookCount(req.getSskcookCount())
+          .subscriptionCount(req.getSubscriptionCount())
+          .nickname(req.getNickname())
+          .profileImage(req.getProfileImage())
+          .build();
     }
 
-    return getUserDetailsRes;
+    GetUserDetailsReq req = GetUserDetailsReq.builder()
+        .followingname(username)
+        .followername(cur_username)
+        .build();
+
+    memberMapper.selectUserDetails(req);
+
+    return GetUserDetailsRes.builder()
+        .oneLiner(req.getOneLiner())
+        .followStatus(req.getFollowStatus())
+        .sskcookCount(req.getSskcookCount())
+        .subscriptionCount(req.getSubscriptionCount())
+        .nickname(req.getNickname())
+        .profileImage(req.getProfileImage())
+        .build();
+
+
   }
 
   @Override
@@ -134,6 +162,7 @@ public class MemberServiceImpl implements MemberService {
     return req.getResult();
   }
 
+  @Override
   @Transactional(readOnly = true)
   public PaginatedRes<GetSubscriptionMemberDetailsRes> findMemberSubscriptionList(Integer page) {
     Criteria cri = Criteria.builder()

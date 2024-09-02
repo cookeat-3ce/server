@@ -2,6 +2,7 @@ package com.ite.cookeat.domain.member.mapper;
 
 import com.ite.cookeat.domain.member.dto.GetMemberNoticeRes;
 import com.ite.cookeat.domain.member.dto.GetSubscriptionMemberReq;
+import com.ite.cookeat.domain.member.dto.GetUserDetailsReq;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.Member;
 import com.ite.cookeat.domain.member.dto.PostMemberOneLinerReq;
@@ -15,7 +16,9 @@ import org.apache.ibatis.annotations.Param;
 public interface MemberMapper {
 
 
-  GetUserDetailsRes selectUserDetails(String username);
+  void selectUserDetails(GetUserDetailsReq req);
+
+  void selectNullUserDetails(GetUserDetailsReq req);
 
   Optional<Member> selectUsername(String username);
 
@@ -38,8 +41,6 @@ public interface MemberMapper {
   Integer updateMemberOneLiner(PostMemberOneLinerReq req);
 
   void selectMemberSubscriptionList(GetSubscriptionMemberReq req);
-
-  Integer selectMemberSubscriptionListCount(String username);
 
   Integer updateMemberDeletedate(String username);
 
