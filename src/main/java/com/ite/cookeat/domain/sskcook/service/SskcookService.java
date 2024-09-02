@@ -12,7 +12,7 @@ public interface SskcookService {
 
   GetTotalSskcookDetailsRes findSskcookTotalDetails(Integer sskcookId);
 
-  List<GetFridgeRecipeRes> findMyFridgeRecipe(String username);
+  List<GetFridgeRecipeRes> findMyFridgeRecipe();
 
   Integer addSskcook(String request, MultipartFile file);
 

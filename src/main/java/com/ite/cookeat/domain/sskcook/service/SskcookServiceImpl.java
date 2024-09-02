@@ -223,10 +223,10 @@ public class SskcookServiceImpl implements SskcookService {
 
   @Override
   @Transactional(readOnly = true)
-  public List<GetFridgeRecipeRes> findMyFridgeRecipe(String username) {
-
+  public List<GetFridgeRecipeRes> findMyFridgeRecipe() {
+    Integer memberId = memberService.findMemberId(SecurityUtils.getCurrentUsername());
     // Flask API의 URL 구성
-    String url = "http://localhost:5000/recommend/" + username;
+    String url = "http://localhost:5000/recommend/" + memberId;
 
     // Flask API 호출 및 JSON 응답 받기
     ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
