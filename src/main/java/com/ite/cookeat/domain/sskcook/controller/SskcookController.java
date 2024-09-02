@@ -33,10 +33,9 @@ public class SskcookController {
     return ResponseEntity.ok(sskcookService.findSskcookTotalDetails(sskcookId));
   }
 
-  @GetMapping("/fridge/{username}")
-  public ResponseEntity<List<GetFridgeRecipeRes>> recommendFridgeList(
-      @PathVariable String username) {
-    return ResponseEntity.ok(sskcookService.findMyFridgeRecipe(username));
+  @GetMapping("/fridge")
+  public ResponseEntity<List<GetFridgeRecipeRes>> recommendFridgeList() {
+    return ResponseEntity.ok(sskcookService.findMyFridgeRecipe());
   }
 
   @PostMapping(consumes = {"multipart/form-data"})
