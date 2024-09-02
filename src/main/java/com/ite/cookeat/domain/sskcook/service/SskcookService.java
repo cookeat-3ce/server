@@ -36,5 +36,11 @@ public interface SskcookService {
 
   Integer findLikes(PostLikesReq req);
 
-  Integer modifySskcook(String request, MultipartFile file);  
+  void addReport(PostLikesReq postLikesReq);
+
+  void removeReport(PostLikesReq postLikesReq);
+
+  Integer findReport(PostLikesReq postLikesReq);
+
+  Integer modifySskcook(String request, MultipartFile file);
 }

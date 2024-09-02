@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ite.cookeat.domain.sskcook.mapper.SskcookMapper">
+
   <delete id="deleteLikes" parameterType="PostLikesReq">
     <![CDATA[
     DELETE
@@ -10,6 +11,20 @@
       AND #{sskcookId} = sskcook_id
     ]]>
   </delete>
+  <delete id="deleteReport" parameterType="PostLikesReq">
+    <![CDATA[
+    DELETE
+    FROM report
+    WHERE #{memberId} = member_id
+      AND #{sskcookId} = sskcook_id
+    ]]>
+  </delete>
+  <insert id="insertReport" parameterType="PostLikesReq">
+ <![CDATA[
+    INSERT INTO report(report_id, member_id, sskcook_id, report_date)
+    VALUES (report_seq.nextval, #{memberId}, #{sskcookId}, CURRENT_TIMESTAMP)
+    ]]>
+  </insert>
 
   <insert id="insertLikes" parameterType="PostLikesReq">
   <![CDATA[
@@ -29,6 +44,7 @@
     <result column="sskcookUrl" property="sskcookUrl"/>
     <result column="recipe" property="recipe"/>
     <result column="title" property="title"/>
+    <result column="reportStatus" property="reportStatus"/>
     <result column="likeStatus" property="likeStatus"/>
     <result column="storeStatus" property="storeStatus"/>
     <result column="followStatus" property="followStatus"/>
@@ -74,6 +90,15 @@
       #{ingredients, mode=OUT, jdbcType=CURSOR, resultMap=ingredientsResultMapAtSelectSskcook})}
   </select>
 
+  <select id="selectNullSskcookDetails" parameterType="GetNullSskcookDetailsReq"
+    statementType="CALLABLE">
+    {CALL PROC_GET_NULL_SSKCOOK_DETAILS(
+      #{sskcookId, mode = IN, jdbcType=INTEGER},
+      #{tags, mode=OUT, jdbcType=CURSOR, resultMap=tagsResultMapAtSelectSskcook},
+      #{details, mode=OUT, jdbcType=CURSOR, resultMap=detailsResultMapAtSelectSskcook},
+      #{ingredients, mode=OUT, jdbcType=CURSOR, resultMap=ingredientsResultMapAtSelectSskcook})}
+  </select>
+
   <select id="updateSskcookWithDetails" resultType="Integer" statementType="CALLABLE">
     { CALL update_sskcook_with_details(
       #{sskcookId, mode=IN, jdbcType=INTEGER},
@@ -96,6 +121,14 @@
     <![CDATA[
     SELECT COUNT(member_id)
     FROM likes
+    WHERE member_id = #{memberId}
+      AND sskcook_id = #{sskcookId}
+    ]]>
+  </select>
+  <select id="selectReportCount" parameterType="PostLikesReq" resultType="Integer">
+    <![CDATA[
+    SELECT COUNT(member_id)
+    FROM report
     WHERE member_id = #{memberId}
       AND sskcook_id = #{sskcookId}
     ]]>

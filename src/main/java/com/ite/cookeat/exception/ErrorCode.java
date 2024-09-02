@@ -34,6 +34,8 @@ public enum ErrorCode {
   NOTICE_NOT_FOUND(NOT_FOUND, "공지 정보를 찾을 수 없습니다."),
   MEMBER_SSKCOOK_DELETE_FAIL(NOT_FOUND, "삭제 실패했습니다."),
   MEMBER_SSKCOOK_INSERT_FAIL(NOT_FOUND, "보관 실패했습니다."),
+  REPORT_DELETE_FAIL(NOT_FOUND, "신고 취소 실패했습니다."),
+  REPORT_INSERT_FAIL(NOT_FOUND, "신고 실패했습니다."),
 
   /* code: 409 */
   ADD_MEMBER_TO_ALERT_CONFLICT(CONFLICT, "알림받기 등록에 실패했습니다."),

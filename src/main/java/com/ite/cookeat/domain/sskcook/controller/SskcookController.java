@@ -96,6 +96,18 @@ public class SskcookController {
     return ResponseEntity.ok("likes added");
   }
 
+  @PostMapping("/report")
+  public ResponseEntity<String> sskcookReportSave(@RequestBody PostLikesReq postLikesReq) {
+    int cnt = sskcookService.findReport(postLikesReq);
+    System.out.println(cnt);
+    if (cnt > 0) {
+      sskcookService.removeReport(postLikesReq);
+      return ResponseEntity.ok("report deleted");
+    }
+    sskcookService.addReport(postLikesReq);
+    return ResponseEntity.ok("report added");
+  }
+
   @PutMapping(consumes = {"multipart/form-data"})
   public ResponseEntity<?> sskcookModify(
       @RequestPart("file") MultipartFile file,
