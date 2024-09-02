@@ -8,6 +8,7 @@ import com.ite.cookeat.domain.longcook.dto.GetLongcookDetailRes;
 import com.ite.cookeat.domain.longcook.dto.PostLongcookReq;
 import com.ite.cookeat.domain.longcook.dto.PutLongcookReq;
 import com.ite.cookeat.domain.longcook.mapper.LongcookMapper;
+import com.ite.cookeat.domain.member.service.MemberService;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.global.dto.Criteria;
 import com.ite.cookeat.global.dto.PaginatedRes;
@@ -26,6 +27,7 @@ public class LongcookServiceImpl implements LongcookService {
   private static final int PAGE_SIZE = 9;
 
   private final LongcookMapper longcookMapper;
+  private final MemberService memberSerivce;
   private final S3UploadService s3UploadService;
   private final ObjectMapper objectMapper;
 
@@ -104,12 +106,15 @@ public class LongcookServiceImpl implements LongcookService {
     try {
       postLongcookReq = objectMapper.readValue(request, PostLongcookReq.class);
       longcookUrl = s3UploadService.saveFile(file);
+
+      String ingredientsJson = objectMapper.writeValueAsString(postLongcookReq.getIngredient());
+      postLongcookReq.setIngredientsJson(ingredientsJson);
     } catch (IOException e) {
       throw new CustomException(FILE_UPLOAD_FAIL);
     }
     postLongcookReq.setLongcookUrl(longcookUrl);
-
-    longcookMapper.insertLongcook(postLongcookReq);
+    postLongcookReq.setMemberId(memberSerivce.findMemberId(postLongcookReq.getUsername()));
+    longcookMapper.addLongcookWithDetails(postLongcookReq);
     return postLongcookReq.getLongcookId();
   }
 }

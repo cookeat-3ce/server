@@ -28,7 +28,7 @@ public interface LongcookMapper {
 
   Integer updateLongcook(PutLongcookReq putLongcookReq);
 
-  void insertLongcook(PostLongcookReq postLongcookReq);
-
   String selectLongcookUrl(Integer longcookId);
+
+  void addLongcookWithDetails(PostLongcookReq req);
 }

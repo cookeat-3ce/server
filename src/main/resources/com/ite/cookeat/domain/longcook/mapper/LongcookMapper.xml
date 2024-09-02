@@ -113,4 +113,18 @@
     WHERE longcook_id = #{longcookId}
     ]]>
   </update>
+  <resultMap id="ingredientResultMapAtAddLongcook" type="PostLongcookIngredientReq">
+    <result column="name" property="name"/>
+    <result column="amount" property="amount"/>
+  </resultMap>
+  <select id="addLongcookWithDetails" statementType="CALLABLE">
+    { CALL add_longcook_with_details(
+      #{memberId, mode=IN, jdbcType=INTEGER},
+      #{title, mode=IN, jdbcType=VARCHAR},
+      #{recipe, mode=IN, jdbcType=VARCHAR},
+      #{longcookUrl, mode=IN, jdbcType=VARCHAR},
+      #{ingredientsJson, mode=IN, jdbcType=CLOB},
+      #{longcookId, mode=OUT, jdbcType=INTEGER}
+           ) }
+  </select>
 </mapper>
