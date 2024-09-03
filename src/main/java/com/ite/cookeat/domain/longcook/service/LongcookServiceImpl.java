@@ -96,7 +96,8 @@ public class LongcookServiceImpl implements LongcookService {
     return putLongcookReq.getUpdatedCount();
   }
 
-
+  @Override
+  @Transactional
   public Integer addLongcook(String request, MultipartFile file) {
 
     String longcookUrl = null;
