@@ -1,6 +1,7 @@
 package com.ite.cookeat.domain.longcook.controller;
 
-import com.ite.cookeat.domain.longcook.dto.GetLongcookDetailRes;
+import com.ite.cookeat.domain.longcook.dto.GetLongcookRes;
+import com.ite.cookeat.domain.longcook.dto.GetTotalLongcookDetailsRes;
 import com.ite.cookeat.domain.longcook.service.LongcookService;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.exception.ErrorCode;
@@ -26,18 +27,18 @@ public class LongcookController {
   private final LongcookService longcookService;
 
   @GetMapping("/list/{username}")
-  public ResponseEntity<PaginatedRes<GetLongcookDetailRes>> findLongcookList(
+  public ResponseEntity<PaginatedRes<GetLongcookRes>> findLongcookList(
       @PathVariable("username") String username, @RequestParam(defaultValue = "1") Integer page) {
     return ResponseEntity.ok(longcookService.findCreatorLongcookList(username, page));
   }
 
   @GetMapping("/{longcookId}")
-  public ResponseEntity<GetLongcookDetailRes> longcookDetail(@PathVariable Integer longcookId) {
-    return ResponseEntity.ok(longcookService.findLongcook(longcookId));
+  public ResponseEntity<GetTotalLongcookDetailsRes> longcookDetails(@PathVariable Integer longcookId) {
+    return ResponseEntity.ok(longcookService.findLongcookTotalDetails(longcookId));
   }
 
   @GetMapping
-  public ResponseEntity<PaginatedRes<GetLongcookDetailRes>> findLongcookRecentList(
+  public ResponseEntity<PaginatedRes<GetLongcookRes>> findLongcookRecentList(
       @RequestParam(required = false) String keyword,
       @RequestParam(defaultValue = "latest") String sort,
       @RequestParam(defaultValue = "1") Integer page) {
