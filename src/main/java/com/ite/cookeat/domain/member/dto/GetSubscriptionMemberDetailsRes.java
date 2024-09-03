@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 public class GetSubscriptionMemberDetailsRes {
 
   private String username;
+  private String nickname;
   private String profileImage;
 }

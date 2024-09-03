@@ -3,7 +3,6 @@ package com.ite.cookeat.domain.sskcook.mapper;
 import com.ite.cookeat.domain.sskcook.dto.GetNullSskcookDetailsReq;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSskcookDetailsReq;
-import com.ite.cookeat.domain.sskcook.dto.GetSskcookIngredientsRes;
 import com.ite.cookeat.domain.sskcook.dto.PostLikesReq;
 import com.ite.cookeat.domain.sskcook.dto.PostSskcookReq;
 import com.ite.cookeat.domain.sskcook.dto.PutSskcookReq;
@@ -56,10 +55,6 @@ public interface SskcookMapper {
   Integer insertReport(PostLikesReq postLikesReq);
 
   Integer selectReportCount(PostLikesReq postLikesReq);
-
-  List<GetSskcookIngredientsRes> selectSskcookIngredients(Integer sskcookId);
-
-  List<String> selectSskcookTags(Integer sskcookId);
 
   void selectSskcookDetails(GetSskcookDetailsReq req);
 
