@@ -11,4 +11,6 @@ public interface LiveService {
   PaginatedRes<GetLiveRes> findLiveList(String keyword, Integer page);
 
   void updateLiveEnddate(Integer liveId);
+
+  GetLiveRes findLiveDetail(String sessionId);
 }

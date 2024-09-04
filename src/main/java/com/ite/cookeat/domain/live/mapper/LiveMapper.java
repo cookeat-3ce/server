@@ -4,6 +4,7 @@ import com.ite.cookeat.domain.live.dto.GetLiveRes;
 import com.ite.cookeat.domain.live.dto.PostLiveReq;
 import com.ite.cookeat.global.dto.Criteria;
 import java.util.List;
+import java.util.Optional;
 import org.apache.ibatis.annotations.Param;
 
 public interface LiveMapper {
@@ -17,4 +18,6 @@ public interface LiveMapper {
       @Param("keyword") String keyword);
 
   Integer modifyLiveEnddate(Integer liveId);
+
+  Optional<GetLiveRes> selectLiveDetail(String sessionId);
 }
