@@ -14,6 +14,20 @@
     AND m.status = 'ACTIVE'
   </insert>
 
+  <resultMap id="ingredientResultMapAtAddLongcook" type="PostLongcookIngredientReq">
+    <result column="name" property="name"/>
+    <result column="amount" property="amount"/>
+  </resultMap>
+  <resultMap id="detailsResultMapAtSelectLongcook" type="GetLongcookDetailsRes">
+    <result column="longcookId" property="longcookId"/>
+    <result column="longcookUrl" property="longcookUrl"/>
+    <result column="recipe" property="recipe"/>
+    <result column="title" property="title"/>
+  </resultMap>
+  <resultMap id="ingredientsResultMapAtSelectLongcook" type="GetLongcookIngredientsRes">
+    <result column="name" property="name"/>
+    <result column="amount" property="amount"/>
+  </resultMap>
   <select id="selectLongcookList" parameterType="Map" resultType="GetLongcookRes">
     <![CDATA[
     SELECT a.longcook_id          AS longcookId,
@@ -27,6 +41,7 @@
            INNER JOIN member b ON b.member_id = a.member_id
     WHERE b.username = #{username}
       AND b.status = 'ACTIVE'
+      AND a.deletedate IS NULL
     ORDER BY a.regdate DESC
     OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
     ]]>
@@ -38,6 +53,7 @@
            INNER JOIN member b ON b.member_id = a.member_id
     WHERE #{username} = b.username
       AND b.status != 'BLOCKED'
+      AND a.deletedate IS NULL
     ]]>
   </select>
   <select id="selectRecentLongcookList" parameterType="Map" resultType="GetLongcookRes">
@@ -51,6 +67,8 @@
     FROM longcook a
     INNER JOIN member b ON b.member_id = a.member_id
     WHERE b.status != 'BLOCKED'
+
+    AND a.deletedate IS NULL
     <if test="keyword != null and keyword != ''">
       AND (
       LOWER (b.nickname) LIKE '%' || LOWER (#{keyword}) || '%'
@@ -61,11 +79,13 @@
     ORDER BY a.regdate DESC
     OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
   </select>
+
   <select id="selectRecentLongcookListCount" resultType="Integer">
     SELECT COUNT(l.longcook_id)
     FROM longcook l
     INNER JOIN member m ON m.member_id = l.member_id
     WHERE l.deletedate IS NULL
+    AND m.status != 'BLOCKED'
     <if test="keyword != null and keyword != ''">
       AND (
       LOWER (m.nickname) LIKE '%' || LOWER (#{keyword}) || '%'
@@ -93,30 +113,6 @@
     FROM longcook
     WHERE longcook_id = #{longcookId}
   </select>
-
-  <update id="updateLongcook" parameterType="PutLongcookReq">
-    <![CDATA[
-    UPDATE longcook l
-    SET title        = #{title},
-        longcook_url = #{longcookUrl}
-    WHERE longcook_id = #{longcookId}
-      AND EXISTS (SELECT 1
-                  FROM member m
-                  WHERE m.member_id = l.member_id
-                    AND m.status = 'ACTIVE')
-    ]]>
-</update>
-  <update id="updateLongcookDeletedate" parameterType="Integer">
-    <![CDATA[
-    UPDATE longcook
-    SET deletedate = CURRENT_TIMESTAMP
-    WHERE longcook_id = #{longcookId}
-    ]]>
-  </update>
-  <resultMap id="ingredientResultMapAtAddLongcook" type="PostLongcookIngredientReq">
-    <result column="name" property="name"/>
-    <result column="amount" property="amount"/>
-  </resultMap>
   <select id="addLongcookWithDetails" statementType="CALLABLE">
     { CALL add_longcook_with_details(
       #{memberId, mode=IN, jdbcType=INTEGER},
@@ -155,17 +151,26 @@
            ) }
   </select>
   <!-- selectSskcookDetails - details 매핑 -->
-  <resultMap id="detailsResultMapAtSelectLongcook" type="GetLongcookDetailsRes">
-    <result column="longcookId" property="longcookId"/>
-    <result column="longcookUrl" property="longcookUrl"/>
-    <result column="recipe" property="recipe"/>
-    <result column="title" property="title"/>
-  </resultMap>
+  <update id="updateLongcook" parameterType="PutLongcookReq">
+    <![CDATA[
+    UPDATE longcook l
+    SET title        = #{title},
+        longcook_url = #{longcookUrl}
+    WHERE longcook_id = #{longcookId}
+      AND EXISTS (SELECT 1
+                  FROM member m
+                  WHERE m.member_id = l.member_id
+                    AND m.status = 'ACTIVE')
+    ]]>
+</update>
 
   <!-- selectLongcookDetails - ingredients 매핑 -->
-  <resultMap id="ingredientsResultMapAtSelectLongcook" type="GetLongcookIngredientsRes">
-    <result column="name" property="name"/>
-    <result column="amount" property="amount"/>
-  </resultMap>
+  <update id="updateLongcookDeletedate" parameterType="Integer">
+    <![CDATA[
+    UPDATE longcook
+    SET deletedate = CURRENT_TIMESTAMP
+    WHERE longcook_id = #{longcookId}
+    ]]>
+  </update>
 
 </mapper>
