@@ -9,4 +9,6 @@ public interface LiveService {
   Integer saveLive(PostLiveReq dto);
 
   PaginatedRes<GetLiveRes> findLiveList(String keyword, Integer page);
+
+  void updateLiveEnddate(Integer liveId);
 }

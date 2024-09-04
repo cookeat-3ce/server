@@ -45,4 +45,10 @@
     </if>
     l.enddate IS NULL
   </select>
+
+  <update id="modifyLiveEnddate" parameterType="Integer">
+    UPDATE live
+    SET enddate = CURRENT_TIMESTAMP
+    WHERE live_id = #{liveId}
+  </update>
 </mapper>

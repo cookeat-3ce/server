@@ -1,9 +1,12 @@
 package com.ite.cookeat.domain.live.service;
 
+import static com.ite.cookeat.exception.ErrorCode.LIVE_NOT_FOUND;
+
 import com.ite.cookeat.domain.live.dto.GetLiveRes;
 import com.ite.cookeat.domain.live.dto.PostLiveReq;
 import com.ite.cookeat.domain.live.mapper.LiveMapper;
 import com.ite.cookeat.domain.member.service.MemberService;
+import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.global.dto.Criteria;
 import com.ite.cookeat.global.dto.PaginatedRes;
 import lombok.RequiredArgsConstructor;
@@ -45,4 +48,12 @@ public class LiveServiceImpl implements LiveService {
         .build();
   }
 
+  @Override
+  @Transactional
+  public void updateLiveEnddate(Integer liveId) {
+    Integer result = liveMapper.modifyLiveEnddate(liveId);
+    if (result <= 0) {
+      throw new CustomException(LIVE_NOT_FOUND);
+    }
+  }
 }

@@ -15,4 +15,6 @@ public interface LiveMapper {
   List<GetLiveRes> selectLiveListByKeyword(
       @Param("cri") Criteria cri,
       @Param("keyword") String keyword);
+
+  Integer modifyLiveEnddate(Integer liveId);
 }
