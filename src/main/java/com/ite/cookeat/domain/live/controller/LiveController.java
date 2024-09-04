@@ -36,10 +36,10 @@ public class LiveController {
 
   @DeleteMapping("/{liveId}")
   public ResponseEntity<?> liveRemove(@PathVariable Integer liveId) {
-    liveService.updateLiveEnddate(liveId);
+    liveService.modifyLiveEnddate(liveId);
     return ResponseEntity.noContent().build();
   }
-  
+
   @GetMapping("/{sessionId}")
   public ResponseEntity<GetLiveRes> getLive(@PathVariable String sessionId) {
     return ResponseEntity.ok(liveService.findLiveDetail(sessionId));
