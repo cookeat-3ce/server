@@ -22,4 +22,5 @@ public class PostLiveReq {
   private Integer people;
   private String thumbnail;
   private String sessionId;
+  private Integer type;
 }

@@ -10,12 +10,12 @@
       ]]>
     </selectKey>
     <![CDATA[
-        INSERT INTO live (live_id, member_id, title, people, thumbnail, regdate, session_id)
-        VALUES (#{liveId}, #{memberId}, #{title}, #{people}, UTL_RAW.CAST_TO_RAW(#{thumbnail}), CURRENT_TIMESTAMP, #{sessionId})
+        INSERT INTO live (live_id, member_id, title, people, thumbnail, regdate, session_id, type)
+        VALUES (#{liveId}, #{memberId}, #{title}, #{people}, UTL_RAW.CAST_TO_RAW(#{thumbnail}), CURRENT_TIMESTAMP, #{sessionId}, #{type})
     ]]>
   </insert>
   <select id="selectLiveListByKeyword" parameterType="Map" resultType="GetLiveRes">
-    SELECT l.live_id AS liveId, m.nickname, l.people, l.title
+    SELECT l.live_id AS liveId, m.nickname, m.username, l.people, l.title
     FROM live l
     INNER JOIN member m ON m.member_id = l.member_id
     WHERE
@@ -44,5 +44,17 @@
       ) AND
     </if>
     l.enddate IS NULL
+  </select>
+
+  <select id="selectLiveDetail" parameterType="String" resultType="GetLiveRes">
+    SELECT l.live_id AS liveId,
+           m.nickname,
+           m.username,
+           l.people,
+           l.title
+    FROM live l
+           INNER JOIN member m ON m.member_id = l.member_id
+      AND l.session_id = #{sessionId}
+      AND l.enddate IS NULL
   </select>
 </mapper>

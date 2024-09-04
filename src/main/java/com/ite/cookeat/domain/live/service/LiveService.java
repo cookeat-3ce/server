@@ -9,4 +9,6 @@ public interface LiveService {
   Integer saveLive(PostLiveReq dto);
 
   PaginatedRes<GetLiveRes> findLiveList(String keyword, Integer page);
+
+  GetLiveRes findLiveDetail(String sessionId);
 }

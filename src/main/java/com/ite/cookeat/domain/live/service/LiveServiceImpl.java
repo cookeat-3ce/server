@@ -1,11 +1,15 @@
 package com.ite.cookeat.domain.live.service;
 
+import static com.ite.cookeat.exception.ErrorCode.LIVE_NOT_FOUND;
+
 import com.ite.cookeat.domain.live.dto.GetLiveRes;
 import com.ite.cookeat.domain.live.dto.PostLiveReq;
 import com.ite.cookeat.domain.live.mapper.LiveMapper;
 import com.ite.cookeat.domain.member.service.MemberService;
+import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.global.dto.Criteria;
 import com.ite.cookeat.global.dto.PaginatedRes;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -45,4 +49,10 @@ public class LiveServiceImpl implements LiveService {
         .build();
   }
 
+  @Override
+  @Transactional(readOnly = true)
+  public GetLiveRes findLiveDetail(String sessionId) {
+    Optional<GetLiveRes> result = liveMapper.selectLiveDetail(sessionId);
+    return result.orElseThrow(() -> new CustomException(LIVE_NOT_FOUND));
+  }
 }
