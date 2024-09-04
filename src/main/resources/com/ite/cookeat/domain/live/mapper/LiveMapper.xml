@@ -57,4 +57,10 @@
       AND l.session_id = #{sessionId}
       AND l.enddate IS NULL
   </select>
+
+  <update id="updateLiveEnddate" parameterType="Integer">
+    UPDATE live
+    SET enddate = CURRENT_TIMESTAMP
+    WHERE live_id = #{liveId}
+  </update>
 </mapper>

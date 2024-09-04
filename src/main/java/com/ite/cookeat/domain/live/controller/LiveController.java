@@ -6,6 +6,7 @@ import com.ite.cookeat.domain.live.service.LiveService;
 import com.ite.cookeat.global.dto.PaginatedRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +32,12 @@ public class LiveController {
       @RequestParam(value = "keyword", required = false) String keyword,
       @RequestParam(defaultValue = "1") Integer page) {
     return ResponseEntity.ok(liveService.findLiveList(keyword, page));
+  }
+
+  @DeleteMapping("/{liveId}")
+  public ResponseEntity<?> liveRemove(@PathVariable Integer liveId) {
+    liveService.modifyLiveEnddate(liveId);
+    return ResponseEntity.noContent().build();
   }
 
   @GetMapping("/{sessionId}")

@@ -17,5 +17,7 @@ public interface LiveMapper {
       @Param("cri") Criteria cri,
       @Param("keyword") String keyword);
 
+  Integer updateLiveEnddate(Integer liveId);
+
   Optional<GetLiveRes> selectLiveDetail(String sessionId);
 }

@@ -50,6 +50,15 @@ public class LiveServiceImpl implements LiveService {
   }
 
   @Override
+  @Transactional
+  public void modifyLiveEnddate(Integer liveId) {
+    Integer result = liveMapper.updateLiveEnddate(liveId);
+    if (result <= 0) {
+      throw new CustomException(LIVE_NOT_FOUND);
+    }
+  }
+
+  @Override
   @Transactional(readOnly = true)
   public GetLiveRes findLiveDetail(String sessionId) {
     Optional<GetLiveRes> result = liveMapper.selectLiveDetail(sessionId);
