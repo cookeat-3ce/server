@@ -40,7 +40,7 @@
     FROM longcook a
            INNER JOIN member b ON b.member_id = a.member_id
     WHERE b.username = #{username}
-      AND b.status = 'ACTIVE'
+      AND b.status != 'BLOCKED'
       AND a.deletedate IS NULL
     ORDER BY a.regdate DESC
     OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
