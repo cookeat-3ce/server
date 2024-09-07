@@ -1,10 +1,12 @@
 package com.ite.cookeat.domain.admin.controller;
 
 import com.ite.cookeat.domain.admin.dto.GetReportSskcookRes;
+import com.ite.cookeat.domain.admin.dto.GetTopSskcookRes;
 import com.ite.cookeat.domain.admin.dto.GetVerifyRequestRes;
 import com.ite.cookeat.domain.admin.dto.PostVerifyRequestReq;
 import com.ite.cookeat.domain.admin.service.AdminService;
 import com.ite.cookeat.global.dto.PaginatedRes;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -47,5 +49,10 @@ public class AdminController {
   @DeleteMapping("/sskcook/{sskcookId}")
   public ResponseEntity<Integer> reportSskcookStatusModify(@PathVariable Integer sskcookId) {
     return ResponseEntity.ok(adminService.modifyReportSskcookStatus(sskcookId));
+  }
+
+  @GetMapping("/sskcook/top/{yearMonth}")
+  public ResponseEntity<List<GetTopSskcookRes>> topSskcooksList(@PathVariable String yearMonth) {
+    return ResponseEntity.ok(adminService.findTopSskcookList(yearMonth));
   }
 }

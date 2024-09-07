@@ -2,6 +2,7 @@ package com.ite.cookeat.domain.admin.mapper;
 
 import com.ite.cookeat.domain.admin.dto.DeleteReportSskcookReq;
 import com.ite.cookeat.domain.admin.dto.GetReportSskcookRes;
+import com.ite.cookeat.domain.admin.dto.GetTopSskcookRes;
 import com.ite.cookeat.domain.admin.dto.GetVerifyRequestRes;
 import com.ite.cookeat.global.dto.Criteria;
 import java.util.List;
@@ -21,4 +22,6 @@ public interface AdminMapper {
   Integer selectReportSskcookCount();
 
   Integer updateReportSskcookStatus(DeleteReportSskcookReq req);
+
+  List<GetTopSskcookRes> selectTopSskcookList(String yearMonth);
 }

@@ -5,12 +5,14 @@ import static com.ite.cookeat.exception.ErrorCode.VERIFY_REQUEST_NOT_FOUND;
 
 import com.ite.cookeat.domain.admin.dto.DeleteReportSskcookReq;
 import com.ite.cookeat.domain.admin.dto.GetReportSskcookRes;
+import com.ite.cookeat.domain.admin.dto.GetTopSskcookRes;
 import com.ite.cookeat.domain.admin.dto.GetVerifyRequestRes;
 import com.ite.cookeat.domain.admin.dto.PostVerifyRequestReq;
 import com.ite.cookeat.domain.admin.mapper.AdminMapper;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.global.dto.Criteria;
 import com.ite.cookeat.global.dto.PaginatedRes;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -73,6 +75,11 @@ public class AdminServiceImpl implements AdminService {
         .total(adminMapper.selectReportSskcookCount())
         .data(adminMapper.selectReportSskcookList(cri))
         .build();
+  }
+
+  @Override
+  public List<GetTopSskcookRes> findTopSskcookList(String yearMonth) {
+    return adminMapper.selectTopSskcookList(yearMonth);
   }
 
   @Override
