@@ -18,6 +18,8 @@ public class GetSearchSskcookRes {
   private String nickname;
   private String sskcookUrl;
   private String title;
+  private String profileImage;
+  private String username;
   @JsonSerialize(using = KSTDateSerializer.class)
   private Date regdate;
   private Integer countLikes;
