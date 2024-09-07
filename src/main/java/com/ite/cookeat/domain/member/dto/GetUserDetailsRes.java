@@ -17,4 +17,5 @@ public class GetUserDetailsRes {
   private String oneLiner;
   private Integer subscriptionCount;
   private Integer sskcookCount;
+  private String followStatus;
 }

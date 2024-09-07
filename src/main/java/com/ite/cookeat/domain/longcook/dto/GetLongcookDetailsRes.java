@@ -1,18 +1,18 @@
 package com.ite.cookeat.domain.longcook.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@NoArgsConstructor
 @Getter
-public class GetLongcookReq {
+public class GetLongcookDetailsRes {
 
-  private Integer page;
+  private Integer longcookId;
+  private String longcookUrl;
+  private String recipe;
+  private String title;
   private String username;
-  @Builder.Default
-  private Integer pageSize = 9;
+
 }

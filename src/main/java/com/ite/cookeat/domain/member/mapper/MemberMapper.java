@@ -1,21 +1,24 @@
 package com.ite.cookeat.domain.member.mapper;
 
 import com.ite.cookeat.domain.member.dto.GetMemberNoticeRes;
+import com.ite.cookeat.domain.member.dto.GetSubscriptionMemberReq;
+import com.ite.cookeat.domain.member.dto.GetUserDetailsReq;
 import com.ite.cookeat.domain.member.dto.GetUserDetailsRes;
 import com.ite.cookeat.domain.member.dto.Member;
 import com.ite.cookeat.domain.member.dto.PostMemberOneLinerReq;
-import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
+import com.ite.cookeat.domain.member.dto.PostSubscriptionReq;
 import com.ite.cookeat.global.dto.Criteria;
 import java.util.List;
 import java.util.Optional;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 
-@Mapper
 public interface MemberMapper {
 
-  GetUserDetailsRes selectUserDetails(String username);
+
+  void selectUserDetails(GetUserDetailsReq req);
+
+  void selectNullUserDetails(GetUserDetailsReq req);
 
   Optional<Member> selectUsername(String username);
 
@@ -30,12 +33,20 @@ public interface MemberMapper {
 
   Optional<Integer> selectMemberId(String username);
 
+  List<GetUserDetailsRes> selectSearchMember(@Param("cri") Criteria cri,
+      @Param("keyword") String keyword);
+
+  Integer selectSearchMemberCount(String keyword);
+
   Integer updateMemberOneLiner(PostMemberOneLinerReq req);
 
-  List<GetUserDetailsRes> selectSearchMember(GetSearchSskcookReq getSearchSskcookReq);
+  void selectMemberSubscriptionList(GetSubscriptionMemberReq req);
 
   Integer updateMemberDeletedate(String username);
 
   Integer updateVerifiedStatus(@Param("username") String username, @Param("status") String status);
 
+  String selectMemberVerifiedStatus(String username);
+
+  Integer insertSubscription(PostSubscriptionReq req);
 }

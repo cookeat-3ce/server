@@ -1,6 +1,5 @@
-package com.ite.cookeat.domain.admin.dto;
+package com.ite.cookeat.global.dto;
 
-import com.ite.cookeat.global.dto.Criteria;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class GetVerifyRequestPageRes {
+public class PaginatedRes<T> {
 
   // 이전, 이후 값이 있는 지 없는 지
   private boolean prev, next;
@@ -19,14 +18,14 @@ public class GetVerifyRequestPageRes {
   private Integer total;
   // 페이지 정보
   private Criteria cri;
-  // 공지 리스트
-  private List<GetVerifyRequestRes> requests;
+  // 리스트
+  private List<T> data;
 
   @Builder
-  public GetVerifyRequestPageRes(Integer total, Criteria cri, List<GetVerifyRequestRes> requests) {
+  public PaginatedRes(Integer total, Criteria cri, List<T> data) {
     this.cri = cri;
     this.total = total;
-    this.requests = requests;
+    this.data = data;
 
     int pageSize = cri.getPageSize();
     int pageNum = cri.getPageNum();

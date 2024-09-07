@@ -7,6 +7,7 @@ import com.ite.cookeat.domain.fridge.dto.PostMemberIngredientReq;
 import com.ite.cookeat.domain.fridge.mapper.FridgeMapper;
 import com.ite.cookeat.domain.member.service.MemberService;
 import com.ite.cookeat.exception.CustomException;
+import com.ite.cookeat.util.SecurityUtils;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,9 @@ public class FridgeServiceImpl implements FridgeService {
 
   @Override
   @Transactional(readOnly = true)
-  public List<GetMemberIngredientsRes> findIngredients(String username) {
-    return fridgeMapper.selectIngredients(memberService.findMemberId(username));
+  public List<GetMemberIngredientsRes> findIngredients() {
+    return fridgeMapper.selectIngredients(
+        memberService.findMemberId(SecurityUtils.getCurrentUsername()));
   }
 
   @Override

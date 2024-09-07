@@ -3,6 +3,97 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ite.cookeat.domain.longcook.mapper.LongcookMapper">
 
+  <insert id="insertLongcook" parameterType="PostLongcookReq">
+    <selectKey keyProperty="longcookId" order="BEFORE" resultType="Integer">
+      SELECT longcook_seq.nextval AS longcookId FROM dual
+    </selectKey>
+    INSERT INTO longcook (longcook_id, longcook_url, member_id, title)
+    SELECT #{longcookId}, #{longcookUrl}, m.member_id, #{title}
+    FROM member m
+    WHERE m.username = #{username}
+    AND m.status = 'ACTIVE'
+  </insert>
+
+  <resultMap id="ingredientResultMapAtAddLongcook" type="PostLongcookIngredientReq">
+    <result column="name" property="name"/>
+    <result column="amount" property="amount"/>
+  </resultMap>
+  <resultMap id="detailsResultMapAtSelectLongcook" type="GetLongcookDetailsRes">
+    <result column="longcookId" property="longcookId"/>
+    <result column="longcookUrl" property="longcookUrl"/>
+    <result column="recipe" property="recipe"/>
+    <result column="title" property="title"/>
+  </resultMap>
+  <resultMap id="ingredientsResultMapAtSelectLongcook" type="GetLongcookIngredientsRes">
+    <result column="name" property="name"/>
+    <result column="amount" property="amount"/>
+  </resultMap>
+  <select id="selectLongcookList" parameterType="Map" resultType="GetLongcookRes">
+    <![CDATA[
+    SELECT a.longcook_id          AS longcookId,
+           b.username             AS username,
+           b.nickname             AS nickname,
+           a.title                AS title,
+           a.longcook_url         AS longcookUrl,
+           a.regdate              AS regdate,
+           TO_CHAR(b.profile_img) AS profileImage
+    FROM longcook a
+           INNER JOIN member b ON b.member_id = a.member_id
+    WHERE b.username = #{username}
+      AND b.status != 'BLOCKED'
+      AND a.deletedate IS NULL
+    ORDER BY a.regdate DESC
+    OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
+    ]]>
+  </select>
+  <select id="selectLongcookListCount" parameterType="String" resultType="Integer">
+    <![CDATA[
+    SELECT COUNT(a.longcook_id)
+    FROM longcook a
+           INNER JOIN member b ON b.member_id = a.member_id
+    WHERE #{username} = b.username
+      AND b.status != 'BLOCKED'
+      AND a.deletedate IS NULL
+    ]]>
+  </select>
+  <select id="selectRecentLongcookList" parameterType="Map" resultType="GetLongcookRes">
+    SELECT a.longcook_id AS longcookId,
+    b.username AS username,
+    b.nickname AS nickname,
+    a.title AS title,
+    a.longcook_url AS longcookUrl,
+    a.regdate AS regdate,
+    TO_CHAR(b.profile_img) AS profileImage
+    FROM longcook a
+    INNER JOIN member b ON b.member_id = a.member_id
+    WHERE b.status != 'BLOCKED'
+
+    AND a.deletedate IS NULL
+    <if test="keyword != null and keyword != ''">
+      AND (
+      LOWER (b.nickname) LIKE '%' || LOWER (#{keyword}) || '%'
+      OR
+      LOWER (a.title) LIKE '%' || LOWER (#{keyword}) || '%'
+      )
+    </if>
+    ORDER BY a.regdate DESC
+    OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
+  </select>
+
+  <select id="selectRecentLongcookListCount" resultType="Integer">
+    SELECT COUNT(l.longcook_id)
+    FROM longcook l
+    INNER JOIN member m ON m.member_id = l.member_id
+    WHERE l.deletedate IS NULL
+    AND m.status != 'BLOCKED'
+    <if test="keyword != null and keyword != ''">
+      AND (
+      LOWER (m.nickname) LIKE '%' || LOWER (#{keyword}) || '%'
+      OR
+      LOWER (l.title) LIKE '%' || LOWER (#{keyword}) || '%'
+      )
+    </if>
+  </select>
   <select id="selectLongcook" parameterType="Integer" resultType="GetLongcookRes">
     <![CDATA[
     SELECT l.longcook_id          AS longcookId,
@@ -17,24 +108,63 @@
     WHERE l.longcook_id = #{longcookId}
     ]]>
   </select>
-
-  <select id="selectLongcookList" parameterType="GetLongcookReq" resultType="GetLongcookRes">
-    <![CDATA[
-    SELECT a.longcook_id          AS longcookId,
-           b.username             AS username,
-           b.nickname             AS nickname,
-           a.title                AS title,
-           a.longcook_url         AS longcookUrl,
-           a.regdate              AS regdate,
-           TO_CHAR(b.profile_img) AS profileImage
-    FROM longcook a
-           INNER JOIN member b ON b.member_id = a.member_id
-    WHERE b.username = #{username}
-      AND b.status = 'ACTIVE'
-    ORDER BY a.regdate DESC
-    OFFSET (#{page} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
-    ]]>
+  <select id="selectLongcookUrl" parameterType="Integer" resultType="String">
+    SELECT longcook_url
+    FROM longcook
+    WHERE longcook_id = #{longcookId}
   </select>
+  <select id="addLongcookWithDetails" statementType="CALLABLE">
+    { CALL add_longcook_with_details(
+      #{memberId, mode=IN, jdbcType=INTEGER},
+      #{title, mode=IN, jdbcType=VARCHAR},
+      #{recipe, mode=IN, jdbcType=VARCHAR},
+      #{longcookUrl, mode=IN, jdbcType=VARCHAR},
+      #{ingredientsJson, mode=IN, jdbcType=CLOB},
+      #{longcookId, mode=OUT, jdbcType=INTEGER}
+           ) }
+  </select>
+
+  <select id="selectNullLongcookDetails" parameterType="GetNullLongcookDetailsReq"
+    statementType="CALLABLE">
+    {CALL PROC_GET_NULL_LONGCOOK_DETAILS(
+      #{longcookId, mode = IN, jdbcType=INTEGER},
+      #{details, mode=OUT, jdbcType=CURSOR, resultMap=detailsResultMapAtSelectLongcook},
+      #{ingredients, mode=OUT, jdbcType=CURSOR, resultMap=ingredientsResultMapAtSelectLongcook})}
+  </select>
+
+  <select id="selectLongcookDetails" parameterType="GetLongcookDetailsReq" statementType="CALLABLE">
+    { CALL PROC_GET_LONGCOOK_DETAILS(
+      #{username, mode=IN, jdbcType=VARCHAR},
+      #{longcookId, mode=IN, jdbcType=INTEGER},
+      #{details, mode=OUT, jdbcType=CURSOR, resultMap=detailsResultMapAtSelectLongcook},
+      #{ingredients, mode=OUT, jdbcType=CURSOR, resultMap=ingredientsResultMapAtSelectLongcook})}
+  </select>
+
+  <select id="updateLongcookWithDetails" resultType="Integer" statementType="CALLABLE">
+    { CALL update_longcook_with_details(
+      #{longcookId, mode=IN, jdbcType=INTEGER},
+      #{title, mode=IN, jdbcType=VARCHAR},
+      #{recipe, mode=IN, jdbcType=VARCHAR},
+      #{longcookUrl, mode=IN, jdbcType=VARCHAR},
+      #{ingredientsJson, mode=IN, jdbcType=CLOB},
+      #{updatedCount, mode=OUT, jdbcType=INTEGER}
+           ) }
+  </select>
+  <!-- selectSskcookDetails - details 매핑 -->
+  <update id="updateLongcook" parameterType="PutLongcookReq">
+    <![CDATA[
+    UPDATE longcook l
+    SET title        = #{title},
+        longcook_url = #{longcookUrl}
+    WHERE longcook_id = #{longcookId}
+      AND EXISTS (SELECT 1
+                  FROM member m
+                  WHERE m.member_id = l.member_id
+                    AND m.status = 'ACTIVE')
+    ]]>
+</update>
+
+  <!-- selectLongcookDetails - ingredients 매핑 -->
   <update id="updateLongcookDeletedate" parameterType="Integer">
     <![CDATA[
     UPDATE longcook
@@ -42,4 +172,5 @@
     WHERE longcook_id = #{longcookId}
     ]]>
   </update>
+
 </mapper>

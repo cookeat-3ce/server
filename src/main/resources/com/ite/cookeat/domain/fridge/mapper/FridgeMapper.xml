@@ -10,8 +10,8 @@
       ]]>
     </selectKey>
     <![CDATA[
-    INSERT INTO ingredient_member (ingredient_id, member_id, name, amount, icon, regdate)
-    VALUES (#{ingredientId}, #{memberId}, #{name}, #{amount}, #{icon}, CURRENT_TIMESTAMP)
+    INSERT INTO ingredient_member (ingredient_id, member_id, name, amount, icon, expdate, regdate)
+    VALUES (#{ingredientId}, #{memberId}, #{name}, #{amount}, #{icon}, #{expdate}, CURRENT_TIMESTAMP)
     ]]>
   </insert>
 

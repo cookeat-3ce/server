@@ -1,6 +1,5 @@
 package com.ite.cookeat.domain.live.dto;
 
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,10 +22,5 @@ public class PostLiveReq {
   private Integer people;
   private String thumbnail;
   private String sessionId;
-
-  @Override
-  public String toString() {
-    return "liveId=" + liveId + ", memberId=" + memberId + ", username=" + username + ", title="
-        + title;
-  }
+  private Integer type;
 }

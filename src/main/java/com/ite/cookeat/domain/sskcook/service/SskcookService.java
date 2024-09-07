@@ -1,30 +1,46 @@
 package com.ite.cookeat.domain.sskcook.service;
 
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
-import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookReq;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
+import com.ite.cookeat.domain.sskcook.dto.GetTotalSskcookDetailsRes;
+import com.ite.cookeat.domain.sskcook.dto.PostLikesReq;
+import com.ite.cookeat.global.dto.PaginatedRes;
 import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface SskcookService {
 
-  List<GetFridgeRecipeRes> findMyFridgeRecipe(String username);
+  GetTotalSskcookDetailsRes findSskcookTotalDetails(Integer sskcookId);
 
-  Integer addSskcook(String postSskcookReq, MultipartFile file);
+  List<GetFridgeRecipeRes> findMyFridgeRecipe();
 
-  List<GetSearchSskcookRes> findSearchRecentSskcook(GetSearchSskcookReq getSearchSskcookReq);
+  Integer addSskcook(String request, MultipartFile file);
 
-  List<GetSearchSskcookRes> findSearchLikesSskcook(GetSearchSskcookReq getSearchSskcookReq);
+  PaginatedRes<GetSearchSskcookRes> findSearchRecentSskcookList(String keyword, Integer page);
 
-  List<GetSearchSskcookRes> findRecentSskcook(GetSearchSskcookReq getSearchSskcookReq);
+  PaginatedRes<GetSearchSskcookRes> findSearchLikesSskcookList(String keyword, Integer page);
+
+  PaginatedRes<GetSearchSskcookRes> findRecentSskcookList(Integer page);
+
+  PaginatedRes<GetSearchSskcookRes> findMonthlySskcookList(String date, Integer page);
+
+  PaginatedRes<GetSearchSskcookRes> findUserSskcookList(String username, Integer page);
+
+  PaginatedRes<GetSearchSskcookRes> findTagSskcookList(String tag, Integer page);
 
   Integer modifySskcookDeletedate(Integer sskcookId);
 
-  List<GetSearchSskcookRes> findMonthlySskcook(GetSearchSskcookReq getSearchSskcookReq);
+  void addLikes(PostLikesReq req);
 
-  void addLikes(String username, Integer sskcookId);
+  void removeLikes(PostLikesReq req);
 
-  void removeLikes(String username, Integer sskcookId);
+  Integer findLikes(PostLikesReq req);
 
-  Integer findLikes(String username, Integer sskcookId);
+  void addReport(PostLikesReq postLikesReq);
+
+  void removeReport(PostLikesReq postLikesReq);
+
+  Integer findReport(PostLikesReq postLikesReq);
+
+  Integer modifySskcook(String request, MultipartFile file);
 }

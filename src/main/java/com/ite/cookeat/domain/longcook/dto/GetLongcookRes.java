@@ -3,7 +3,6 @@ package com.ite.cookeat.domain.longcook.dto;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.ite.cookeat.util.KSTDateSerializer;
 import java.util.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
