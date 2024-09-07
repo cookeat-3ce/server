@@ -51,8 +51,8 @@ public class AdminController {
     return ResponseEntity.ok(adminService.modifyReportSskcookStatus(sskcookId));
   }
 
-  @GetMapping("/sskcook/top/{yearMonth}")
-  public ResponseEntity<List<GetTopSskcookRes>> topSskcooksList(@PathVariable String yearMonth) {
-    return ResponseEntity.ok(adminService.findTopSskcookList(yearMonth));
+  @GetMapping("/sskcook/top")
+  public ResponseEntity<List<GetTopSskcookRes>> topSskcooksList(@RequestParam String date) {
+    return ResponseEntity.ok(adminService.findTopSskcookList(date));
   }
 }
