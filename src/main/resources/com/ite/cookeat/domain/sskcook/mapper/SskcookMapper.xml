@@ -136,11 +136,13 @@
   <select id="selectSearchRecentSskcook" parameterType="Map"
     resultType="GetSearchSskcookRes">
         <![CDATA[
-    SELECT a.sskcook_url as sskcookUrl,
-           a.sskcook_id  as sskcookId,
+    SELECT a.sskcook_url          as sskcookUrl,
+           a.sskcook_id           as sskcookId,
            a.regdate,
            b.nickname,
            a.member_id,
+           TO_CHAR(b.profile_img) as profileImage,
+           b.username,
            a.title
     FROM (SELECT s.title,
                  s.sskcook_url,
@@ -169,13 +171,15 @@
   <select id="selectSearchLikesSskcookList" parameterType="Map"
     resultType="GetSearchSskcookRes">
         <![CDATA[
-    SELECT c.sskcook_url        AS sskcookUrl,
-           c.sskcook_id         AS sskcookId,
+    SELECT c.sskcook_url          AS sskcookUrl,
+           c.sskcook_id           AS sskcookId,
            c.regdate,
            b.nickname,
+           b.username,
+           TO_CHAR(b.profile_img) as profileImage,
            c.member_id,
            c.title,
-           NVL(a.countLikes, 0) AS countLikes
+           NVL(a.countLikes, 0)   AS countLikes
     FROM (SELECT sskcook_id,
                  sskcook_url,
                  title,
@@ -197,13 +201,14 @@
   <select id="selectRecentSskcookList" parameterType="Map"
     resultType="GetSearchSskcookRes">
         <![CDATA[
-    SELECT a.sskcook_url as sskcookUrl,
-           a.sskcook_id  as sskcookId,
+    SELECT a.sskcook_url          as sskcookUrl,
+           a.sskcook_id           as sskcookId,
            a.title,
            a.regdate,
            a.member_id,
            b.nickname,
-           b.profile_img
+           TO_CHAR(b.profile_img) as profileImage,
+           b.username
     FROM sskcook a
            INNER JOIN member b ON a.member_id = b.member_id
     WHERE a.status = 'ACTIVE'
@@ -222,13 +227,15 @@
   <select id="selectMonthlySskcookList" parameterType="Map"
     resultType="GetSearchSskcookRes">
 <![CDATA[
-    SELECT c.sskcook_url        AS sskcookUrl,
-           c.sskcook_id         AS sskcookId,
+    SELECT c.sskcook_url          AS sskcookUrl,
+           c.sskcook_id           AS sskcookId,
            c.regdate,
+           TO_CHAR(b.profile_img) as profileImage,
            b.nickname,
+           b.username,
            c.member_id,
            c.title,
-           NVL(a.countLikes, 0) AS countLikes
+           NVL(a.countLikes, 0)   AS countLikes
     FROM (SELECT sskcook_id,
                  sskcook_url,
                  title,
@@ -265,6 +272,7 @@
            c.sskcook_id         AS sskcookId,
            c.title,
            b.nickname,
+           b.username,
            NVL(a.countLikes, 0) AS countLikes
     FROM (SELECT sskcook_id,
                  sskcook_url,
@@ -300,12 +308,14 @@
 
   <select id="selectTagSskcookList" parameterType="Map" resultType="GetSearchSskcookRes">
     <![CDATA[
-    SELECT c.sskcook_url        AS sskcookUrl,
-           c.sskcook_id         AS sskcookId,
+    SELECT c.sskcook_url          AS sskcookUrl,
+           c.sskcook_id           AS sskcookId,
            c.title,
            b.nickname,
+           b.username,
+           TO_CHAR(b.profile_img) as profileImage,
            c.regdate,
-           NVL(a.countLikes, 0) AS countLikes
+           NVL(a.countLikes, 0)   AS countLikes
     FROM sskcook c
            LEFT JOIN (SELECT COUNT(sskcook_id) AS countLikes,
                              sskcook_id
