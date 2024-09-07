@@ -1,5 +1,6 @@
 package com.ite.cookeat.domain.admin.controller;
 
+import com.ite.cookeat.domain.admin.dto.PostEventReq;
 import com.ite.cookeat.domain.admin.dto.GetReportSskcookRes;
 import com.ite.cookeat.domain.admin.dto.GetVerifyRequestRes;
 import com.ite.cookeat.domain.admin.dto.PostVerifyRequestReq;
@@ -47,5 +48,10 @@ public class AdminController {
   @DeleteMapping("/sskcook/{sskcookId}")
   public ResponseEntity<Integer> reportSskcookStatusModify(@PathVariable Integer sskcookId) {
     return ResponseEntity.ok(adminService.modifyReportSskcookStatus(sskcookId));
+  }
+
+  @PostMapping("/event")
+  public ResponseEntity<Integer> eventAdd(@RequestBody PostEventReq req) {
+    return ResponseEntity.ok(adminService.addEvent(req));
   }
 }

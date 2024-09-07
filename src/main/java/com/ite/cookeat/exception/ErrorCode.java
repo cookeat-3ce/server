@@ -41,6 +41,7 @@ public enum ErrorCode {
   /* code: 409 */
   ADD_MEMBER_TO_ALERT_CONFLICT(CONFLICT, "알림받기 등록에 실패했습니다."),
   REPORTED_SSKCOOK_CONFLICT(CONFLICT, "신고된 슥쿡에 대한 삭제처리가 실패했습니다."),
+  EVENT_CONFLICT(CONFLICT, "이벤트 등록에 실패했습니다."),
   SUBSCRIPTION_CONFLICT(CONFLICT, "구독에 실패했습니다.");
   /* code: 500 */
 

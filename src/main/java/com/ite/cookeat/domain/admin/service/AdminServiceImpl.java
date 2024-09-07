@@ -1,11 +1,13 @@
 package com.ite.cookeat.domain.admin.service;
 
+import static com.ite.cookeat.exception.ErrorCode.EVENT_CONFLICT;
 import static com.ite.cookeat.exception.ErrorCode.REPORTED_SSKCOOK_CONFLICT;
 import static com.ite.cookeat.exception.ErrorCode.VERIFY_REQUEST_NOT_FOUND;
 
 import com.ite.cookeat.domain.admin.dto.DeleteReportSskcookReq;
 import com.ite.cookeat.domain.admin.dto.GetReportSskcookRes;
 import com.ite.cookeat.domain.admin.dto.GetVerifyRequestRes;
+import com.ite.cookeat.domain.admin.dto.PostEventReq;
 import com.ite.cookeat.domain.admin.dto.PostVerifyRequestReq;
 import com.ite.cookeat.domain.admin.mapper.AdminMapper;
 import com.ite.cookeat.exception.CustomException;
@@ -91,6 +93,16 @@ public class AdminServiceImpl implements AdminService {
     Integer result = req.getResult();
     if (result == null || result <= 0) {
       throw new CustomException(REPORTED_SSKCOOK_CONFLICT);
+    }
+    return result;
+  }
+
+  @Override
+  @Transactional
+  public Integer addEvent(PostEventReq req) {
+    Integer result = adminMapper.insertEvent(req);
+    if (result <= 0) {
+      throw new CustomException(EVENT_CONFLICT);
     }
     return result;
   }
