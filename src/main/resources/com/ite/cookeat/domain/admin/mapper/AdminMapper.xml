@@ -40,14 +40,6 @@
     OFFSET (#{pageNum} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
   </select>
 
-  <select id="selectVerifyRequestCount" resultType="Integer">
-    SELECT COUNT(m.member_id)
-    FROM member m
-    WHERE m.status = 'ACTIVE'
-      AND m.deletedate IS NULL
-      AND m.verified_status = 'REQUEST_VERIFY'
-  </select>
-
   <select id="selectReportSskcookList" parameterType="Criteria" resultType="GetReportSskcookRes">
     SELECT s.sskcook_id       AS sskcookId,
            s.title            AS title,
