@@ -17,7 +17,7 @@
 
   <select id="selectIngredients" parameterType="Integer" resultType="GetMemberIngredientsRes">
     <![CDATA[
-    SELECT ingredient_id AS ingredientId, name, amount, icon
+    SELECT ingredient_id AS ingredientId, name, amount, icon, expdate
     FROM ingredient_member
     WHERE member_id = #{memberId}
       AND deletedate IS NULL
