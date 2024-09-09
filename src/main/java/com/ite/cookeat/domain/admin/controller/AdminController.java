@@ -1,5 +1,6 @@
 package com.ite.cookeat.domain.admin.controller;
 
+import com.ite.cookeat.domain.admin.dto.PostEventReq;
 import com.ite.cookeat.domain.admin.dto.GetReportSskcookRes;
 import com.ite.cookeat.domain.admin.dto.GetTopSskcookRes;
 import com.ite.cookeat.domain.admin.dto.GetVerifyRequestRes;
@@ -54,5 +55,10 @@ public class AdminController {
   @GetMapping("/sskcook/top")
   public ResponseEntity<List<GetTopSskcookRes>> topSskcooksList(@RequestParam String date) {
     return ResponseEntity.ok(adminService.findTopSskcookList(date));
+  }
+  
+  @PostMapping("/event")
+  public ResponseEntity<Integer> eventAdd(@RequestBody PostEventReq req) {
+    return ResponseEntity.ok(adminService.addEvent(req));
   }
 }

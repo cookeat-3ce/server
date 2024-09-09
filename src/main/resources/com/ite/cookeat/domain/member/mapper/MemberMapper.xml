@@ -25,6 +25,7 @@
 
   <select id="selectNullUserDetails" parameterType="GetUserDetailsReq" statementType="CALLABLE">
     CALL PROC_GET_NULL_USER_DETAILS( #{followingname, mode=IN, jdbcType=VARCHAR},
+      #{username, mode=OUT, jdbcType=VARCHAR},
       #{nickname, mode=OUT, jdbcType=VARCHAR},
       #{profileImage, mode=OUT, jdbcType=VARCHAR},
       #{oneLiner, mode=OUT, jdbcType=VARCHAR},
@@ -37,6 +38,7 @@
   <select id="selectUserDetails" parameterType="GetUserDetailsReq" statementType="CALLABLE">
     CALL PROC_GET_USER_DETAILS( #{followingname, mode=IN, jdbcType=VARCHAR},
       #{followername, mode=IN, jdbcType=VARCHAR},
+      #{username, mode=OUT, jdbcType=VARCHAR},
       #{nickname, mode=OUT, jdbcType=VARCHAR},
       #{profileImage, mode=OUT, jdbcType=VARCHAR},
       #{oneLiner, mode=OUT, jdbcType=VARCHAR},

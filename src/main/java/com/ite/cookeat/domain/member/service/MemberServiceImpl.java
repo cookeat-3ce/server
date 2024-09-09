@@ -54,6 +54,7 @@ public class MemberServiceImpl implements MemberService {
           .build();
       memberMapper.selectNullUserDetails(req);
       return GetUserDetailsRes.builder()
+          .username(req.getUsername())
           .oneLiner(req.getOneLiner())
           .followStatus(req.getFollowStatus())
           .sskcookCount(req.getSskcookCount())
@@ -71,6 +72,7 @@ public class MemberServiceImpl implements MemberService {
     memberMapper.selectUserDetails(req);
 
     return GetUserDetailsRes.builder()
+        .username(req.getUsername())
         .oneLiner(req.getOneLiner())
         .followStatus(req.getFollowStatus())
         .sskcookCount(req.getSskcookCount())

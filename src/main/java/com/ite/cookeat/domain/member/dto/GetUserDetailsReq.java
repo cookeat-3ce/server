@@ -16,6 +16,8 @@ public class GetUserDetailsReq {
   private String followername;
 
   @Setter
+  private String username;
+  @Setter
   private String nickname;
   @Setter
   private String profileImage;
