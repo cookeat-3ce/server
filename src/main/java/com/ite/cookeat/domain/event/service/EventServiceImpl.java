@@ -17,7 +17,7 @@ public class EventServiceImpl implements EventService {
   @Override
   public PaginatedRes<GetEventRes> findEventList(Integer page) {
     Criteria cri = Criteria.builder()
-        .pageSize(10)
+        .pageSize(6)
         .pageNum(page)
         .build();
 
