@@ -30,11 +30,12 @@
 
   <select id="selectMemberSskcookList" parameterType="Map" resultType="GetMemberSskcookRes">
     <![CDATA[
-    SELECT c.sskcook_url        AS sskcookUrl,
-           c.sskcook_id         AS sskcookId,
+    SELECT c.sskcook_url          AS sskcookUrl,
+           c.sskcook_id           AS sskcookId,
            c.title,
            b.nickname,
-           NVL(a.countLikes, 0) AS countLikes
+           TO_CHAR(b.profile_img) as profileImage,
+           NVL(a.countLikes, 0)   AS countLikes
     FROM (SELECT sskcook_id,
                  sskcook_url,
                  title,
