@@ -10,8 +10,9 @@ import lombok.Setter;
 @Getter
 public class PostEventAlertMemberReq {
 
-  @Setter
-  private Integer alertId;
   private String username;
   private Integer eventId;
+
+  @Setter
+  private Integer result;
 }

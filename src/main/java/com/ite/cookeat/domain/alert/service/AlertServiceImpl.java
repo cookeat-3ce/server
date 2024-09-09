@@ -18,10 +18,10 @@ public class AlertServiceImpl implements AlertService {
   @Override
   @Transactional
   public Integer addEventAlertMember(PostEventAlertMemberReq req) {
-    Integer result = alertMapper.insertEventAlertMember(req);
-    if (result <= 0) {
+    alertMapper.insertEventAlertMember(req);
+    if (req.getResult() <= 0) {
       throw new CustomException(ADD_MEMBER_TO_ALERT_CONFLICT);
     }
-    return result;
+    return req.getResult();
   }
 }
