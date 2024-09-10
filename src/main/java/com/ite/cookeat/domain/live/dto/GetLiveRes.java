@@ -14,4 +14,7 @@ public class GetLiveRes {
   private String username;
   private Integer people;
   private String title;
+  private String thumbnail;
+  private String sessionId;
+  private Integer type;
 }
