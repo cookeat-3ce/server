@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -22,8 +23,9 @@ public class FridgeController {
   private final FridgeService fridgeService;
 
   @GetMapping
-  public ResponseEntity<List<GetMemberIngredientsRes>> ingredientsList() {
-    return ResponseEntity.ok(fridgeService.findIngredients());
+  public ResponseEntity<List<GetMemberIngredientsRes>> ingredientsList(
+      @RequestParam(required = false) String filtering) {
+    return ResponseEntity.ok(fridgeService.findIngredients(filtering));
   }
 
   @PostMapping
