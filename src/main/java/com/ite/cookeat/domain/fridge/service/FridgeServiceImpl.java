@@ -12,13 +12,17 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
 public class FridgeServiceImpl implements FridgeService {
 
+  private final RestTemplate restTemplate;
   private final MemberService memberService;
   private final FridgeMapper fridgeMapper;
+
+  private final String flaskUrl = "http://localhost:5000";
 
   @Override
   @Transactional(readOnly = true)
@@ -32,6 +36,7 @@ public class FridgeServiceImpl implements FridgeService {
   public Integer saveIngredient(PostMemberIngredientReq req) {
     req.setMemberId(memberService.findMemberId(req.getUsername()));
     fridgeMapper.insertIngredient(req);
+    restTemplate.postForEntity(flaskUrl + "/ingredient", "", String.class);
     return req.getIngredientId();
   }
 
@@ -41,5 +46,6 @@ public class FridgeServiceImpl implements FridgeService {
     if (fridgeMapper.updateIngredientDeletedate(ingredientId) <= 0) {
       throw new CustomException(INGREDIENT_NOT_FOUND);
     }
+    restTemplate.postForEntity(flaskUrl + "/ingredient", "", String.class);
   }
 }
