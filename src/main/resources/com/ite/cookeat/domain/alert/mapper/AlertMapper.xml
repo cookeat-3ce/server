@@ -7,4 +7,10 @@
     statementType="CALLABLE">
     CALL PROC_INSERT_ALERT(#{username, mode=IN, jdbcType=VARCHAR}, #{eventId, mode=IN, jdbcType=INTEGER}, #{result, mode=OUT, jdbcType=INTEGER})
   </insert>
+
+  <select id="selectEventMember" parameterType="Integer" resultType="Integer">
+    SELECT member_id
+    FROM alert
+    WHERE event_id = #{eventId}
+  </select>
 </mapper>
