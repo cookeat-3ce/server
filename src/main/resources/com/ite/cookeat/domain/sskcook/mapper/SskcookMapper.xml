@@ -345,7 +345,14 @@
                     AND h.hashtag_name = #{tag})
     ]]>
   </select>
-
+  <select id="selectMemberSskcookDetailsBySskcookId" parameterType="Integer" resultType="GetFridgeRecipeRes">
+    <![CDATA[
+    SELECT s.sskcook_id as sskcookId, s.sskcook_url as sskcookUrl, s.title, m.nickname, TO_CHAR(m.profile_img) as profileImage
+    FROM sskcook s
+           INNER JOIN member m ON s.member_id = m.member_id
+    WHERE s.sskcook_id = #{sskcookId}
+    ]]>
+  </select>
   <select id="selectSskcookTags" parameterType="Integer" resultType="String">
 <![CDATA[
     SELECT a.hashtag_name

@@ -24,6 +24,8 @@ import com.ite.cookeat.s3.service.S3UploadService;
 import com.ite.cookeat.util.SecurityUtils;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -40,6 +42,8 @@ public class SskcookServiceImpl implements SskcookService {
   private final S3UploadService s3UploadService;
   private final ObjectMapper objectMapper;
   private final MemberService memberService;
+
+  private final String flaskUrl = "http://localhost:5000/";
 
   @Override
   @Transactional
@@ -147,22 +151,26 @@ public class SskcookServiceImpl implements SskcookService {
   @Transactional
   public void addLikes(PostLikesReq req) {
     req.setMemberId(memberService.findMemberId(SecurityUtils.getCurrentUsername()));
+    req.setAction("like");
     int cnt = sskcookMapper.insertLikes(req);
 
     if (cnt == 0) {
       throw new CustomException(ErrorCode.LIKES_INSERT_FAIL);
     }
+    restTemplate.postForEntity(flaskUrl + "like", req, String.class);
   }
 
   @Override
   @Transactional
   public void removeLikes(PostLikesReq req) {
     req.setMemberId(memberService.findMemberId(SecurityUtils.getCurrentUsername()));
+    req.setAction("unlike");
     int cnt = sskcookMapper.deleteLikes(req);
 
     if (cnt == 0) {
       throw new CustomException(ErrorCode.LIKES_DELETE_FAIL);
     }
+    restTemplate.postForEntity(flaskUrl + "like", req, String.class);
   }
 
   @Override
@@ -262,18 +270,16 @@ public class SskcookServiceImpl implements SskcookService {
   @Transactional(readOnly = true)
   public List<GetFridgeRecipeRes> findMyFridgeRecipe() {
     Integer memberId = memberService.findMemberId(SecurityUtils.getCurrentUsername());
-    // Flask API의 URL 구성
-    String url = "http://localhost:5000/recommend/" + memberId;
 
-    // Flask API 호출 및 JSON 응답 받기
-    ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+    ResponseEntity<String> response = restTemplate.getForEntity(flaskUrl +"recommend/"+ memberId, String.class);
 
     try {
-      // JSON 문자열을 Recommendation 객체 리스트로 변환
       ObjectMapper mapper = new ObjectMapper();
-      return mapper.readValue(response.getBody(),
-          new TypeReference<>() {
-          });
+      List<Map<String, Object>> recommendListMap = mapper.readValue(response.getBody(), new TypeReference<>() {});
+
+      return recommendListMap.stream().map(
+          map -> sskcookMapper.selectMemberSskcookDetailsBySskcookId((Integer) map.get("sskcookId")))
+          .collect(Collectors.toList());
     } catch (Exception e) {
       throw new CustomException(FIND_FAIL_SSKCOOK);
     }

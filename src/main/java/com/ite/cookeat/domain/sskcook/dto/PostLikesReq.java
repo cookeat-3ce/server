@@ -16,4 +16,6 @@ public class PostLikesReq {
 
   @Setter
   private Integer memberId;
+  @Setter
+  private String action;
 }
