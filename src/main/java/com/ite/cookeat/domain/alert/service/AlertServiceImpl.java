@@ -61,6 +61,7 @@ public class AlertServiceImpl implements AlertService {
   }
 
   @Override
+  @Transactional
   public SseEmitter createSseEmitter() {
     SseEmitter emitter = new SseEmitter(TIMEOUT);
     Integer memberId = memberService.findMemberId(SecurityUtils.getCurrentUsername());
