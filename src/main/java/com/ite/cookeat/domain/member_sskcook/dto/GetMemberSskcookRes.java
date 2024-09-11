@@ -16,4 +16,5 @@ public class GetMemberSskcookRes {
   private String sskcookUrl;
   private String title;
   private Integer countLikes;
+  private String profileImage;
 }
