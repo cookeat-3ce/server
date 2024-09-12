@@ -22,12 +22,14 @@
       <param-name>forceEncoding</param-name>
       <param-value>true</param-value>
     </init-param>
+    <async-supported>true</async-supported>
   </filter>
 
   <!-- UTF-8 필터 -->
   <filter>
     <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
     <filter-name>springSecurityFilterChain</filter-name>
+    <async-supported>true</async-supported>
   </filter>
   <filter-mapping>
     <filter-name>encodingFilter</filter-name>
@@ -63,14 +65,12 @@
       <max-request-size>209715200</max-request-size>
     </multipart-config>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-
     <servlet-name>appServlet</servlet-name>
+    <async-supported>true</async-supported>
   </servlet>
 
   <servlet-mapping>
     <servlet-name>appServlet</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
-
-
 </web-app>
