@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +43,8 @@ public class SskcookServiceImpl implements SskcookService {
   private final ObjectMapper objectMapper;
   private final MemberService memberService;
 
-  private final String flaskUrl = "http://localhost:5000/";
+  @Value("${flask.api.url}")
+  private String flaskUrl;
 
   @Override
   @Transactional
