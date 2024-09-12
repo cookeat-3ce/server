@@ -2,7 +2,6 @@ package com.ite.cookeat.domain.sskcook.service;
 
 import static com.ite.cookeat.exception.ErrorCode.FILE_UPLOAD_FAIL;
 import static com.ite.cookeat.exception.ErrorCode.FIND_FAIL_SSKCOOK;
-import static com.ite.cookeat.exception.ErrorCode.SSKCOOK_NOT_FOUND;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -109,12 +108,11 @@ public class SskcookServiceImpl implements SskcookService {
 
   @Override
   @Transactional
-  public Integer modifySskcookDeletedate(Integer sskcookId) {
-    Integer result = sskcookMapper.updateSskcookDeletedate(sskcookId);
-    if (result <= 0) {
-      throw new CustomException(SSKCOOK_NOT_FOUND);
-    }
-    return sskcookId;
+  public void modifySskcookDeletedate(Integer sskcookId) {
+    sskcookMapper.updateSskcookDeletedate(sskcookId);
+//    if (result <= 0) {
+//      throw new CustomException(SSKCOOK_NOT_FOUND);
+//    }
   }
 
   @Override
@@ -271,14 +269,18 @@ public class SskcookServiceImpl implements SskcookService {
   public List<GetFridgeRecipeRes> findMyFridgeRecipe() {
     Integer memberId = memberService.findMemberId(SecurityUtils.getCurrentUsername());
 
-    ResponseEntity<String> response = restTemplate.getForEntity(flaskUrl +"recommend/"+ memberId, String.class);
+    ResponseEntity<String> response = restTemplate.getForEntity(flaskUrl + "recommend/" + memberId,
+        String.class);
 
     try {
       ObjectMapper mapper = new ObjectMapper();
-      List<Map<String, Object>> recommendListMap = mapper.readValue(response.getBody(), new TypeReference<>() {});
+      List<Map<String, Object>> recommendListMap = mapper.readValue(response.getBody(),
+          new TypeReference<>() {
+          });
 
       return recommendListMap.stream().map(
-          map -> sskcookMapper.selectMemberSskcookDetailsBySskcookId((Integer) map.get("sskcookId")))
+              map -> sskcookMapper.selectMemberSskcookDetailsBySskcookId(
+                  (Integer) map.get("sskcookId")))
           .collect(Collectors.toList());
     } catch (Exception e) {
       throw new CustomException(FIND_FAIL_SSKCOOK);
