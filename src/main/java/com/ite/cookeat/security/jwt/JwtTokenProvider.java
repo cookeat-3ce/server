@@ -34,7 +34,7 @@ public class JwtTokenProvider implements InitializingBean {
 
   private static final String AUTHORITIES_KEY = "auth";
   private static final String PREFIX = "Bearer";
-  private static long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30; // 30분
+  private static long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 120; // 120분
   private final PrincipalDetailsService principalDetailsService;
   @Value("${jwt.secret}")
   private String secret;

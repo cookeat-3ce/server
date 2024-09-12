@@ -28,7 +28,7 @@ public interface SskcookService {
 
   PaginatedRes<GetSearchSskcookRes> findTagSskcookList(String tag, Integer page);
 
-  Integer modifySskcookDeletedate(Integer sskcookId);
+  void modifySskcookDeletedate(Integer sskcookId);
 
   void addLikes(PostLikesReq req);
 

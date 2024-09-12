@@ -43,7 +43,7 @@ public interface SskcookMapper {
 
   Integer selectTagSskcookListCount(String tag);
 
-  Integer updateSskcookDeletedate(Integer sskcookId);
+  void updateSskcookDeletedate(Integer sskcookId);
 
   Integer deleteLikes(PostLikesReq postLikesReq);
 
