@@ -10,6 +10,7 @@ import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.util.SecurityUtils;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -22,7 +23,8 @@ public class FridgeServiceImpl implements FridgeService {
   private final MemberService memberService;
   private final FridgeMapper fridgeMapper;
 
-  private final String flaskUrl = "http://localhost:5000";
+  @Value("${flask.api.url}")
+  private String flaskUrl;
 
   @Override
   @Transactional(readOnly = true)
