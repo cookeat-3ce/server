@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface FridgeService {
 
-  List<GetMemberIngredientsRes> findIngredients();
+  List<GetMemberIngredientsRes> findIngredients(String filtering);
 
   Integer saveIngredient(PostMemberIngredientReq req);
 

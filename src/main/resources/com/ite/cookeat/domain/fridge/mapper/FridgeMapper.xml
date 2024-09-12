@@ -15,17 +15,20 @@
     ]]>
   </insert>
 
-  <select id="selectIngredients" parameterType="Integer" resultType="GetMemberIngredientsRes">
-    <![CDATA[
+  <select id="selectIngredients" parameterType="Map" resultType="GetMemberIngredientsRes">
     SELECT ingredient_id AS ingredientId, name, amount, icon, expdate
     FROM ingredient_member
     WHERE member_id = #{memberId}
-      AND deletedate IS NULL
+    AND deletedate IS NULL
+    <if test="filtering == 'valid'">
+      <![CDATA[
+      AND expdate > CURRENT_DATE
     ]]>
+    </if>
   </select>
 
   <update id="updateIngredientDeletedate" parameterType="Integer">
-    <![CDATA[
+<![CDATA[
     UPDATE ingredient_member
     SET deletedate = CURRENT_TIMESTAMP
     WHERE ingredient_id = #{ingredientId}

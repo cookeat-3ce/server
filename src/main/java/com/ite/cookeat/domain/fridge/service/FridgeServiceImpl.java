@@ -26,9 +26,9 @@ public class FridgeServiceImpl implements FridgeService {
 
   @Override
   @Transactional(readOnly = true)
-  public List<GetMemberIngredientsRes> findIngredients() {
+  public List<GetMemberIngredientsRes> findIngredients(String filtering) {
     return fridgeMapper.selectIngredients(
-        memberService.findMemberId(SecurityUtils.getCurrentUsername()));
+        memberService.findMemberId(SecurityUtils.getCurrentUsername()), filtering);
   }
 
   @Override
