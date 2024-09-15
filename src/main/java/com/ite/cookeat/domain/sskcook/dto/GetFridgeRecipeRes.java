@@ -15,4 +15,5 @@ public class GetFridgeRecipeRes {
   private String profileImage;
   private String nickname;
   private String title;
+  private String username;
 }
