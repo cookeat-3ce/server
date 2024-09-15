@@ -38,7 +38,7 @@ public class FridgeServiceImpl implements FridgeService {
   public Integer saveIngredient(PostMemberIngredientReq req) {
     req.setMemberId(memberService.findMemberId(req.getUsername()));
     fridgeMapper.insertIngredient(req);
-    restTemplate.postForEntity(flaskUrl + "/ingredient", "", String.class);
+    restTemplate.postForEntity(flaskUrl + "ingredient", "", String.class);
     return req.getIngredientId();
   }
 
@@ -48,6 +48,6 @@ public class FridgeServiceImpl implements FridgeService {
     if (fridgeMapper.updateIngredientDeletedate(ingredientId) <= 0) {
       throw new CustomException(INGREDIENT_NOT_FOUND);
     }
-    restTemplate.postForEntity(flaskUrl + "/ingredient", "", String.class);
+    restTemplate.postForEntity(flaskUrl + "ingredient", "", String.class);
   }
 }
