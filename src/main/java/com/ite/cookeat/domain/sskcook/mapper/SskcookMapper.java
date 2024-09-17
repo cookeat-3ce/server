@@ -1,5 +1,6 @@
 package com.ite.cookeat.domain.sskcook.mapper;
 
+import com.ite.cookeat.domain.admin.dto.GetTopSskcookRes;
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
 import com.ite.cookeat.domain.sskcook.dto.GetNullSskcookDetailsReq;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
@@ -66,4 +67,6 @@ public interface SskcookMapper {
   String selectSskcookUrl(Integer sskcookId);
 
   GetFridgeRecipeRes selectMemberSskcookDetailsBySskcookId(Integer sskcookId);
+
+  List<GetTopSskcookRes> selectTopSskcookList(String yearMonth);
 }

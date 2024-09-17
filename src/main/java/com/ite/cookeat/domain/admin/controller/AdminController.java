@@ -1,13 +1,11 @@
 package com.ite.cookeat.domain.admin.controller;
 
-import com.ite.cookeat.domain.admin.dto.PostEventReq;
 import com.ite.cookeat.domain.admin.dto.GetReportSskcookRes;
-import com.ite.cookeat.domain.admin.dto.GetTopSskcookRes;
 import com.ite.cookeat.domain.admin.dto.GetVerifyRequestRes;
+import com.ite.cookeat.domain.admin.dto.PostEventReq;
 import com.ite.cookeat.domain.admin.dto.PostVerifyRequestReq;
 import com.ite.cookeat.domain.admin.service.AdminService;
 import com.ite.cookeat.global.dto.PaginatedRes;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -52,11 +50,6 @@ public class AdminController {
     return ResponseEntity.ok(adminService.modifyReportSskcookStatus(sskcookId));
   }
 
-  @GetMapping("/sskcook/top")
-  public ResponseEntity<List<GetTopSskcookRes>> topSskcooksList(@RequestParam String date) {
-    return ResponseEntity.ok(adminService.findTopSskcookList(date));
-  }
-  
   @PostMapping("/event")
   public ResponseEntity<Integer> eventAdd(@RequestBody PostEventReq req) {
     return ResponseEntity.ok(adminService.addEvent(req));

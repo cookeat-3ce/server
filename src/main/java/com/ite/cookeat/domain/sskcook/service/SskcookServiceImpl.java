@@ -6,6 +6,7 @@ import static com.ite.cookeat.exception.ErrorCode.SSKCOOK_NOT_FOUND;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ite.cookeat.domain.admin.dto.GetTopSskcookRes;
 import com.ite.cookeat.domain.member.service.MemberService;
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
 import com.ite.cookeat.domain.sskcook.dto.GetNullSskcookDetailsReq;
@@ -271,14 +272,18 @@ public class SskcookServiceImpl implements SskcookService {
   public List<GetFridgeRecipeRes> findMyFridgeRecipe() {
     Integer memberId = memberService.findMemberId(SecurityUtils.getCurrentUsername());
 
-    ResponseEntity<String> response = restTemplate.getForEntity(flaskUrl +"recommend/"+ memberId, String.class);
+    ResponseEntity<String> response = restTemplate.getForEntity(flaskUrl + "recommend/" + memberId,
+        String.class);
 
     try {
       ObjectMapper mapper = new ObjectMapper();
-      List<Map<String, Object>> recommendListMap = mapper.readValue(response.getBody(), new TypeReference<>() {});
+      List<Map<String, Object>> recommendListMap = mapper.readValue(response.getBody(),
+          new TypeReference<>() {
+          });
 
       return recommendListMap.stream().map(
-          map -> sskcookMapper.selectMemberSskcookDetailsBySskcookId((Integer) map.get("sskcookId")))
+              map -> sskcookMapper.selectMemberSskcookDetailsBySskcookId(
+                  (Integer) map.get("sskcookId")))
           .collect(Collectors.toList());
     } catch (Exception e) {
       throw new CustomException(FIND_FAIL_SSKCOOK);
@@ -312,4 +317,10 @@ public class SskcookServiceImpl implements SskcookService {
     return postSskcookReq.getSskcookId();
 
   }
+
+  @Override
+  public List<GetTopSskcookRes> findTopSskcookList(String yearMonth) {
+    return sskcookMapper.selectTopSskcookList(yearMonth);
+  }
+
 }
