@@ -20,5 +20,6 @@ public class GetTopSskcookRes {
   private Date regdate;
   private String sskcookUrl;
   private String title;
+  private String nickname;
   private String username;
 }
