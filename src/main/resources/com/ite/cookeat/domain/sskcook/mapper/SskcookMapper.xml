@@ -390,4 +390,19 @@
   <update id="updateSskcookDeletedate" statementType="CALLABLE">
     CALL DELETE_SSKCOOK(#{sskcookId, mode=IN, jdbcType=INTEGER})
   </update>
+
+  <select id="selectTopSskcookList" resultType="GetTopSskcookRes">
+    SELECT s.sskcook_id AS sskcookId,
+           t.like_count AS likeCounts,
+           t.year_month AS yearMonth,
+           TO_CHAR(m.profile_img) as profileImage,
+           s.regdate AS regdate,
+           s.sskcook_url AS sskcookUrl,
+           s.title AS title,
+           m.username AS username
+    FROM monthly_top_sskcook t
+        INNER JOIN sskcook s ON t.sskcook_id = s.sskcook_id
+        INNER JOIN member m ON s.member_id = m.member_id
+    WHERE year_month = #{yearMonth}
+  </select>
 </mapper>
