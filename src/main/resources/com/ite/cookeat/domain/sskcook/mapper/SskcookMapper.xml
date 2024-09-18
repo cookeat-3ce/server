@@ -405,5 +405,6 @@
         INNER JOIN sskcook s ON t.sskcook_id = s.sskcook_id
         INNER JOIN member m ON s.member_id = m.member_id
     WHERE year_month = #{yearMonth}
+    ORDER BY likeCounts DESC
   </select>
 </mapper>
