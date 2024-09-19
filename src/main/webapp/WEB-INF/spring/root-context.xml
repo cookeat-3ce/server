@@ -66,6 +66,5 @@
 
   <mybatis-spring:scan base-package="com.ite.cookeat.domain.**.mapper"/>
 
-  <mybatis-spring:scan base-package="com.ite.cookeat.domain.**.mapper"/>
 
 </beans>

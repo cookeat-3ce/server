@@ -1,5 +1,8 @@
 package com.ite.cookeat.domain.sskcook.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.ite.cookeat.util.KSTDateSerializer;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,4 +26,6 @@ public class GetSskcookDetailsRes {
   private String username;
   private String profileImage;
   private Integer likeCount;
+  @JsonSerialize(using = KSTDateSerializer.class)
+  private Date regdate;
 }
