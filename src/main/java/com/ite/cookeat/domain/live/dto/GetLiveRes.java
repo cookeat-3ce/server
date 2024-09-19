@@ -12,6 +12,7 @@ public class GetLiveRes {
   private Integer liveId;
   private String nickname;
   private String username;
+  private String profileImage;
   private Integer people;
   private String title;
   private String thumbnail;

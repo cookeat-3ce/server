@@ -18,6 +18,7 @@
     SELECT l.live_id AS liveId,
     m.nickname,
     m.username,
+    TO_CHAR(m.profile_img) as profileImage,
     l.people,
     l.title,
     l.session_id AS sessionId,
@@ -56,6 +57,7 @@
   <select id="selectLiveDetail" parameterType="String" resultType="GetLiveRes">
     SELECT l.live_id AS liveId,
            m.nickname,
+           TO_CHAR(m.profile_img) as profileImage,
            m.username,
            l.people,
            l.title

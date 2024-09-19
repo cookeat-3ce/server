@@ -1,5 +1,6 @@
 package com.ite.cookeat.domain.sskcook.controller;
 
+import com.ite.cookeat.domain.admin.dto.GetTopSskcookRes;
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
 import com.ite.cookeat.domain.sskcook.dto.GetTotalSskcookDetailsRes;
@@ -115,4 +116,8 @@ public class SskcookController {
     return ResponseEntity.ok(sskcookService.modifySskcook(request, file));
   }
 
+  @GetMapping("/top")
+  public ResponseEntity<List<GetTopSskcookRes>> topSskcooksList(@RequestParam String date) {
+    return ResponseEntity.ok(sskcookService.findTopSskcookList(date));
+  }
 }

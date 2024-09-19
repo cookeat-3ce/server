@@ -5,6 +5,7 @@ import static com.ite.cookeat.exception.ErrorCode.FIND_FAIL_SSKCOOK;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ite.cookeat.domain.admin.dto.GetTopSskcookRes;
 import com.ite.cookeat.domain.member.service.MemberService;
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
 import com.ite.cookeat.domain.sskcook.dto.GetNullSskcookDetailsReq;
@@ -316,4 +317,10 @@ public class SskcookServiceImpl implements SskcookService {
     return postSskcookReq.getSskcookId();
 
   }
+
+  @Override
+  public List<GetTopSskcookRes> findTopSskcookList(String yearMonth) {
+    return sskcookMapper.selectTopSskcookList(yearMonth);
+  }
+
 }

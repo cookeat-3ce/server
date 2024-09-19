@@ -59,12 +59,6 @@
     WHERE s.deletedate IS NULL
   </select>
 
-  <select id="selectTopSskcookList" resultType="GetTopSskcookRes">
-    SELECT sskcook_id AS sskcookId, like_count AS likeCounts, year_month AS yearMonth
-    FROM monthly_top_sskcook
-    WHERE year_month = #{yearMonth}
-  </select>
-
   <update id="updateReportSskcookStatus" parameterType="DeleteReportSskcookReq"
     statementType="CALLABLE">
     CALL update_and_delete_report_sskcook(#{sskcookId, mode=IN, jdbcType=INTEGER},

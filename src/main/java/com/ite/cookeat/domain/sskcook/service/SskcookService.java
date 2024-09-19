@@ -1,5 +1,6 @@
 package com.ite.cookeat.domain.sskcook.service;
 
+import com.ite.cookeat.domain.admin.dto.GetTopSskcookRes;
 import com.ite.cookeat.domain.sskcook.dto.GetFridgeRecipeRes;
 import com.ite.cookeat.domain.sskcook.dto.GetSearchSskcookRes;
 import com.ite.cookeat.domain.sskcook.dto.GetTotalSskcookDetailsRes;
@@ -43,4 +44,6 @@ public interface SskcookService {
   Integer findReport(PostLikesReq postLikesReq);
 
   Integer modifySskcook(String request, MultipartFile file);
+
+  List<GetTopSskcookRes> findTopSskcookList(String yearMonth);
 }
