@@ -133,32 +133,39 @@
       AND sskcook_id = #{sskcookId}
     ]]>
   </select>
-  <select id="selectSearchRecentSskcook" parameterType="Map"
-    resultType="GetSearchSskcookRes">
-        <![CDATA[
-    SELECT a.sskcook_url          as sskcookUrl,
-           a.sskcook_id           as sskcookId,
-           a.regdate,
-           b.nickname,
-           a.member_id,
-           TO_CHAR(b.profile_img) as profileImage,
-           b.username,
-           a.title
+  <select id="selectSearchRecentSskcook" parameterType="Map" resultType="GetSearchSskcookRes">
+  <![CDATA[
+    SELECT sskcookData.sskcook_url         AS sskcookUrl,
+           sskcookData.sskcook_id          AS sskcookId,
+           sskcookData.regdate,
+           memberData.nickname,
+           sskcookData.member_id,
+           TO_CHAR(memberData.profile_img) AS profileImage,
+           memberData.username,
+           sskcookData.title,
+           NVL(likeData.countLikes, 0)     AS countLikes
     FROM (SELECT s.title,
                  s.sskcook_url,
                  s.sskcook_id,
                  s.regdate,
                  s.member_id,
                  s.status,
-                 ROW_NUMBER() OVER (ORDER BY s.regdate DESC) as row_num
+                 ROW_NUMBER() OVER (ORDER BY s.regdate DESC) AS row_num
           FROM sskcook s
           WHERE LOWER(s.title) LIKE '%' || LOWER(#{keyword}) || '%'
-            AND s.status = 'ACTIVE') a
-           INNER JOIN member b ON a.member_id = b.member_id
-    ORDER BY a.regdate DESC
+            AND s.status = 'ACTIVE') sskcookData
+           LEFT JOIN (SELECT COUNT(l.sskcook_id) AS countLikes,
+                             l.sskcook_id
+                      FROM likes l
+                      GROUP BY l.sskcook_id) likeData
+                     ON sskcookData.sskcook_id = likeData.sskcook_id
+           INNER JOIN member memberData ON sskcookData.member_id = memberData.member_id
+    ORDER BY sskcookData.regdate DESC
     OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
     ]]>
-  </select>
+</select>
+
+
   <select id="selectSearchSskcookListCount" parameterType="String" resultType="Integer">
     <![CDATA[
     SELECT COUNT(a.sskcook_id)
@@ -168,15 +175,14 @@
       AND a.status = 'ACTIVE'
     ]]>
   </select>
-  <select id="selectSearchLikesSskcookList" parameterType="Map"
-    resultType="GetSearchSskcookRes">
-        <![CDATA[
+  <select id="selectSearchLikesSskcookList" parameterType="Map" resultType="GetSearchSskcookRes">
+  <![CDATA[
     SELECT c.sskcook_url          AS sskcookUrl,
            c.sskcook_id           AS sskcookId,
            c.regdate,
            b.nickname,
            b.username,
-           TO_CHAR(b.profile_img) as profileImage,
+           TO_CHAR(b.profile_img) AS profileImage,
            c.member_id,
            c.title,
            NVL(a.countLikes, 0)   AS countLikes
@@ -197,7 +203,8 @@
     ORDER BY countLikes DESC, c.regdate DESC
     OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
     ]]>
-    </select>
+</select>
+
   <select id="selectRecentSskcookList" parameterType="Map"
     resultType="GetSearchSskcookRes">
         <![CDATA[
@@ -376,6 +383,23 @@
     WHERE #{sskcookId} = sskcook_id
     ]]>
   </select>
+  <select id="selectTopSskcookList" resultType="GetTopSskcookRes">
+    SELECT s.sskcook_id           AS sskcookId,
+           t.like_count           AS likeCounts,
+           t.year_month           AS yearMonth,
+           TO_CHAR(m.profile_img) as profileImage,
+           s.regdate              AS regdate,
+           s.sskcook_url          AS sskcookUrl,
+           s.title                AS title,
+           m.username             AS username,
+           m.nickname             AS nickname
+    FROM monthly_top_sskcook t
+           INNER JOIN sskcook s ON t.sskcook_id = s.sskcook_id
+           INNER JOIN member m ON s.member_id = m.member_id
+    WHERE year_month = #{yearMonth}
+    ORDER BY likeCounts DESC
+  </select>
+
   <update id="updateSskcookCount" parameterType="Integer">
 <![CDATA[
     UPDATE member
@@ -390,21 +414,4 @@
   <update id="updateSskcookDeletedate" statementType="CALLABLE">
     CALL DELETE_SSKCOOK(#{sskcookId, mode=IN, jdbcType=INTEGER})
   </update>
-
-  <select id="selectTopSskcookList" resultType="GetTopSskcookRes">
-    SELECT s.sskcook_id AS sskcookId,
-           t.like_count AS likeCounts,
-           t.year_month AS yearMonth,
-           TO_CHAR(m.profile_img) as profileImage,
-           s.regdate AS regdate,
-           s.sskcook_url AS sskcookUrl,
-           s.title AS title,
-           m.username AS username,
-           m.nickname AS nickname
-    FROM monthly_top_sskcook t
-        INNER JOIN sskcook s ON t.sskcook_id = s.sskcook_id
-        INNER JOIN member m ON s.member_id = m.member_id
-    WHERE year_month = #{yearMonth}
-    ORDER BY likeCounts DESC
-  </select>
 </mapper>
