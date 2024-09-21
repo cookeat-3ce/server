@@ -20,6 +20,7 @@ public class PostLiveReq {
   private String username;
   private String title;
   private Integer people;
+  @Setter
   private String thumbnail;
   private String sessionId;
   private Integer type;

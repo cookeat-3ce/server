@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,9 +24,11 @@ public class LiveController {
 
   private final LiveService liveService;
 
-  @PostMapping
-  public ResponseEntity<Integer> liveAdd(@RequestBody PostLiveReq req) {
-    return ResponseEntity.ok(liveService.saveLive(req));
+  @PostMapping(consumes = {"multipart/form-data"})
+  public ResponseEntity<Integer> liveAdd(
+      @RequestPart("live") String req,
+      @RequestPart("file") MultipartFile file) {
+    return ResponseEntity.ok(liveService.saveLive(req, file));
   }
 
   @GetMapping
