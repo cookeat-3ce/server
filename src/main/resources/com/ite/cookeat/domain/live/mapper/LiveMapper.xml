@@ -11,7 +11,7 @@
     </selectKey>
     <![CDATA[
         INSERT INTO live (live_id, member_id, title, people, thumbnail, regdate, session_id, type)
-        VALUES (#{liveId}, #{memberId}, #{title}, #{people}, UTL_RAW.CAST_TO_RAW(#{thumbnail}), CURRENT_TIMESTAMP, #{sessionId}, #{type})
+        VALUES (#{liveId}, #{memberId}, #{title}, #{people}, #{thumbnail}, CURRENT_TIMESTAMP, #{sessionId}, #{type})
     ]]>
   </insert>
   <select id="selectLiveListByKeyword" parameterType="Map" resultType="GetLiveRes">

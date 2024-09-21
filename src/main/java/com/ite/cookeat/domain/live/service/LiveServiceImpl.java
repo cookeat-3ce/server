@@ -1,19 +1,25 @@
 package com.ite.cookeat.domain.live.service;
 
+import static com.ite.cookeat.exception.ErrorCode.FILE_UPLOAD_FAIL;
 import static com.ite.cookeat.exception.ErrorCode.LIVE_NOT_FOUND;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ite.cookeat.domain.live.dto.GetLiveRes;
 import com.ite.cookeat.domain.live.dto.PostLiveReq;
 import com.ite.cookeat.domain.live.mapper.LiveMapper;
 import com.ite.cookeat.domain.member.service.MemberService;
+import com.ite.cookeat.domain.sskcook.dto.PostSskcookReq;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.global.dto.Criteria;
 import com.ite.cookeat.global.dto.PaginatedRes;
+import com.ite.cookeat.s3.service.S3UploadService;
+import java.io.IOException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -24,14 +30,24 @@ public class LiveServiceImpl implements LiveService {
 
   private final LiveMapper liveMapper;
   private final MemberService memberService;
+  private final S3UploadService s3UploadService;
+  private final ObjectMapper objectMapper;
 
   @Override
   @Transactional
-  public Integer saveLive(PostLiveReq req) {
-    req.setMemberId(memberService.findMemberId(req.getUsername()));
-    log.info("Insert live : {}", req);
-    liveMapper.insertLive(req);
-    return req.getLiveId();
+  public Integer saveLive(String req, MultipartFile file) {
+    String thumbnailUrl = null;
+    PostLiveReq postLiveReq = null;
+    try {
+      postLiveReq = objectMapper.readValue(req, PostLiveReq.class);
+      thumbnailUrl = s3UploadService.saveFile(file);
+    } catch (IOException e) {
+      throw new CustomException(FILE_UPLOAD_FAIL);
+    }
+    postLiveReq.setThumbnail(thumbnailUrl);
+    postLiveReq.setMemberId(memberService.findMemberId(postLiveReq.getUsername()));
+    liveMapper.insertLive(postLiveReq);
+    return postLiveReq.getLiveId();
   }
 
   @Override
