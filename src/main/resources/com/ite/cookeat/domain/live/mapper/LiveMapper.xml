@@ -23,7 +23,7 @@
     l.title,
     l.session_id AS sessionId,
     l.type,
-    TO_CHAR(l.thumbnail) AS thumbnail
+    l.thumbnail
     FROM live l
     INNER JOIN member m ON m.member_id = l.member_id
     WHERE
