@@ -18,6 +18,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * @author 김지수
+ * @version 1.0
+ * @since 2024.08.25
+ *
+ *
+ * <pre>
+ * 수정일          수정자         내용
+ * ------------- ----------- ---------------------------------
+ * 2024.08.25    김지수       최초 생성, 사용자 인증
+ * 2024.08.26    김지수       이벤트 등록, 신고된 영상 목록 조회 및 BLOCKED 처리, 사용자 인증 요청 상태 변경(승인, 반려)
+ * </pre>
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -25,6 +38,12 @@ public class AdminServiceImpl implements AdminService {
 
   private final AdminMapper adminMapper;
 
+  /**
+   * 사용자 인증 요청 목록 조회(페이징)
+   *
+   * @param page
+   * @return 들어온 사용자 인증 요청 목록의 페이징 데이터
+   */
   @Override
   @Transactional(readOnly = true)
   public PaginatedRes<GetVerifyRequestRes> findVerifyRequestList(Integer page) {
@@ -40,6 +59,12 @@ public class AdminServiceImpl implements AdminService {
         .build();
   }
 
+  /**
+   * 사용자 인증 요청 승인
+   *
+   * @param req (인증 요청한 사용자 정보)
+   * @return 1 이상이면 승인 처리 요청 성공
+   */
   @Override
   @Transactional
   public Integer modifyVerifyMemberStatusVerified(PostVerifyRequestReq req) {
@@ -51,6 +76,12 @@ public class AdminServiceImpl implements AdminService {
     return result;
   }
 
+  /**
+   * 사용자 인증 요청 반려
+   *
+   * @param username (인증 요청한 사용자의 username)
+   * @return 1 이상이면 승인 처리 요청 성공
+   */
   @Override
   @Transactional
   public Integer modifyVerifyMemberStatusUnverified(String username) {
@@ -62,6 +93,12 @@ public class AdminServiceImpl implements AdminService {
     return result;
   }
 
+  /**
+   * 신고된 슥쿡 목록 조회(페이징)
+   *
+   * @param page
+   * @return 신고된 슥쿡 목록의 페이징 데이터
+   */
   @Override
   @Transactional(readOnly = true)
   public PaginatedRes<GetReportSskcookRes> findReportSskcookList(Integer page) {
@@ -77,19 +114,22 @@ public class AdminServiceImpl implements AdminService {
         .build();
   }
 
+  /**
+   * 신고된 슥쿡 영상 BLOCKED 처리
+   *
+   * @param sskcookId
+   * @return 1 이상이면 BLOCKED 요청 처리 성공
+   */
   @Override
   @Transactional
   public Integer modifyReportSskcookStatus(Integer sskcookId) {
-    // DTO 객체 생성
     DeleteReportSskcookReq req = DeleteReportSskcookReq.builder()
         .sskcookId(sskcookId)  // IN 파라미터 설정
         .result(null)          // OUT 파라미터 초기화
         .build();
 
-    // 매퍼 메서드 호출
     adminMapper.updateReportSskcookStatus(req);
 
-    // OUT 파라미터 값 확인
     Integer result = req.getResult();
     if (result == null || result <= 0) {
       throw new CustomException(REPORTED_SSKCOOK_CONFLICT);
@@ -97,6 +137,12 @@ public class AdminServiceImpl implements AdminService {
     return result;
   }
 
+  /**
+   * 이벤트 등록
+   *
+   * @param req (등록할 이벤트 정보)
+   * @return 1 이상이면 이벤트 등록 요청 성공
+   */
   @Override
   @Transactional
   public Integer addEvent(PostEventReq req) {

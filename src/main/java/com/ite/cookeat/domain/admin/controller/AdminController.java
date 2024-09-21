@@ -17,6 +17,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 관리자 (이벤트 등록, 사용자 인증 조회 및 처리, 신고된 슥쿡 관리 등)
+ *
+ * @author 김지수
+ * @version 1.0
+ *
+ *
+ * <pre>
+ * 수정일          수정자         내용
+ * ------------- ----------- ---------------------------------
+ * 2024.08.25    김지수       최초 생성, 사용자 인증
+ * 2024.08.26    김지수       사용자 인증 요청 목록 조회, 인증 요청 반려, 신고한 슥쿡 BLOCKED 처리
+ * </pre>
+ * @since 2024.08.25
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/admin")
