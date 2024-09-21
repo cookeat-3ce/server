@@ -17,7 +17,7 @@ import org.apache.ibatis.annotations.Param;
  *
  * @author 박유진
  * @version 1.0
- * @since 2024.08.23
+ * @since 2024.08.19
  *
  *
  * <pre>
