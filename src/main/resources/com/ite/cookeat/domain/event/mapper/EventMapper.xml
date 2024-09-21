@@ -13,12 +13,17 @@
            regdate
     FROM event
     WHERE deletedate IS NULL
+    ]]>
+    <if test="filtering == 'recipe'">
+          AND title like '%레시피%'
+        </if>
+<![CDATA[
     ORDER BY regdate DESC,
              CASE
                WHEN enddate >= CURRENT_DATE THEN 0
                ELSE 1
                END
-    OFFSET (#{pageNum} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+    OFFSET (#{cri.pageNum} - 1) * #{cri.pageSize} ROWS FETCH NEXT #{cri.pageSize} ROWS ONLY
     ]]>
   </select>
 
