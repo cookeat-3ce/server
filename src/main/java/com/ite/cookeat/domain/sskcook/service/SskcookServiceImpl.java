@@ -34,6 +34,23 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * 슥쿡 등록 및 조회, 상세 기능(좋아요, 저장, 신고) 등을 처리하는 Service
+ *
+ * @author 박유진
+ * @version 1.0
+ * @since 2024.08.19
+ *
+ *
+ * <pre>
+ * 수정일          수정자         내용
+ * ------------- ----------- ---------------------------------
+ * 2024.08.19    박유진       최초 생성
+ * 2024.08.23    박유진       냉장고 속 슥쿡 추천
+ * 2024.08.24    박유진       슥쿡 삭제 및 등록
+ * 2024.08.27    박유진       슥쿡 수정
+ * </pre>
+ */
 @Service
 @RequiredArgsConstructor
 public class SskcookServiceImpl implements SskcookService {
@@ -210,6 +227,13 @@ public class SskcookServiceImpl implements SskcookService {
     return sskcookMapper.selectReportCount(postLikesReq);
   }
 
+  /**
+   * 기존 슥쿡 수정
+   *
+   * @param request (슥쿡 수정 요청 JSON)
+   * @param file (수정할 슥쿡 영상)
+   * @return 수정된 항목 수
+   */
   @Override
   @Transactional
   public Integer modifySskcook(String request, MultipartFile file) {
@@ -267,6 +291,11 @@ public class SskcookServiceImpl implements SskcookService {
         .build();
   }
 
+  /**
+   * 냉장고 속 재료로 추천된 슥쿡 레시피 목록 조회
+   *
+   * @return 추천된 슥쿡 레시피 목록
+   */
   @Override
   @Transactional(readOnly = true)
   public List<GetFridgeRecipeRes> findMyFridgeRecipe() {
@@ -290,6 +319,13 @@ public class SskcookServiceImpl implements SskcookService {
     }
   }
 
+  /**
+   * 새로운 슥쿡 등록
+   *
+   * @param request (슥쿡 등록 요청 JSON)
+   * @param file (슥쿡 영상)
+   * @return 등록된 슥쿡 ID
+   */
   @Override
   @Transactional
   public Integer addSskcook(String request, MultipartFile file) {

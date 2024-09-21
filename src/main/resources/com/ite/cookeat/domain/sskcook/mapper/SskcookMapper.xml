@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    파일명 : SskcookMapper.xml
+    설  명 : 슥쿡 페이지
+    == 개정이력 ========================================
+    수정일         수정자     수정내용
+    ==========   =======   ================================
+    2024.08.19    박유진       최초 생성
+    2024.08.23    박유진       냉장고 속 슥쿡 추천
+    2024.08.24    박유진       슥쿡 삭제 및 등록
+    2024.08.27    박유진       슥쿡 수정
+-->
+
 <mapper namespace="com.ite.cookeat.domain.sskcook.mapper.SskcookMapper">
 
   <delete id="deleteLikes" parameterType="PostLikesReq">
