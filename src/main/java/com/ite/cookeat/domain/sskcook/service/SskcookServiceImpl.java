@@ -48,7 +48,20 @@ import org.springframework.web.multipart.MultipartFile;
  * 2024.08.19    박유진       최초 생성
  * 2024.08.23    박유진       냉장고 속 슥쿡 추천
  * 2024.08.24    박유진       슥쿡 삭제 및 등록
+ * 2024.08.24    양재혁       최신 순 슥쿡 검색 페이징 조회
+ * 2024.08.24    양재혁       좋아요 순 슥쿡 검색 페이징 조회
+ * 2024.08.24    양재혁       최신 순 슥쿡 리스트 페이징 조회
+ * 2024.08.24    양재혁       저번 달 좋아요 순 슥쿡 리스트 페이징 조회
+ * 2024.08.25    양재혁       멤버 별 슥쿡 리스트 페이징 조회
+ * 2024.08.25    양재혁       태그 별 슥쿡 리스트 페이징 조회
+ * 2024.08.25    양재혁       좋아요
+ * 2024.08.25    양재혁       좋아요 취소
  * 2024.08.27    박유진       슥쿡 수정
+ * 2024.08.30    양재혁       슥쿡 상세 정보 조회
+ * 2024.08.31    양재혁       신고
+ * 2024.08.31    양재혁       신고 취소
+ * 2024.08.31    양재혁       신고 조회
+ * 2024.09.12    양재혁       슥쿡 삭제 시 MEMBER테이블 내 슥쿡 개수 -1
  * </pre>
  */
 @Service
@@ -64,6 +77,13 @@ public class SskcookServiceImpl implements SskcookService {
   @Value("${flask.api.url}")
   private String flaskUrl;
 
+  /**
+   * 최신 순 슥쿡 검색 페이징 조회
+   *
+   * @param keyword
+   * @param page
+   * @return 최신 순 슥쿡 리스트 페이징 데이터
+   */
   @Override
   @Transactional
   public PaginatedRes<GetSearchSskcookRes> findSearchRecentSskcookList(
@@ -81,6 +101,13 @@ public class SskcookServiceImpl implements SskcookService {
         .build();
   }
 
+  /**
+   * 좋아요 순 슥쿡 검색 페이징 조회
+   *
+   * @param keyword
+   * @param page
+   * @return 좋아요 순 슥쿡 리스트 페이징 데이터
+   */
   @Override
   @Transactional
   public PaginatedRes<GetSearchSskcookRes> findSearchLikesSskcookList(
@@ -97,6 +124,12 @@ public class SskcookServiceImpl implements SskcookService {
         .build();
   }
 
+  /**
+   * 최신 순 슥쿡 리스트 페이징 조회
+   *
+   * @param page
+   * @return 최신 순 슥쿡 리스트 페이징 데이터
+   */
   @Override
   @Transactional
   public PaginatedRes<GetSearchSskcookRes> findRecentSskcookList(Integer page) {
@@ -111,6 +144,13 @@ public class SskcookServiceImpl implements SskcookService {
         .build();
   }
 
+  /**
+   * 저번 달 좋아요 순 슥쿡 리스트 페이징 조회
+   *
+   * @param date
+   * @param page
+   * @return 저번 달 좋아요 순 슥쿡 리스트 페이징 데이터
+   */
   @Override
   @Transactional
   public PaginatedRes<GetSearchSskcookRes> findMonthlySskcookList(String date, Integer page) {
@@ -126,6 +166,11 @@ public class SskcookServiceImpl implements SskcookService {
         .build();
   }
 
+  /**
+   * 슥쿡 삭제 시 MEMBER테이블 내 슥쿡 개수 -1
+   *
+   * @param sskcookId
+   */
   @Override
   @Transactional
   public void modifySskcookDeletedate(Integer sskcookId) {
@@ -135,6 +180,13 @@ public class SskcookServiceImpl implements SskcookService {
 //    }
   }
 
+  /**
+   * 멤버 별 슥쿡 리스트 페이징 조회
+   *
+   * @param username
+   * @param page
+   * @return 멤버 별 슥쿡 리스트 페이징 데이터
+   */
   @Override
   @Transactional
   public PaginatedRes<GetSearchSskcookRes> findUserSskcookList(String username, Integer page) {
@@ -149,6 +201,13 @@ public class SskcookServiceImpl implements SskcookService {
         .build();
   }
 
+  /**
+   * 태그 별 슥쿡 리스트 페이징 조회
+   *
+   * @param tag
+   * @param page
+   * @return 태그 별 슥쿡 리스트 페이징 데이터
+   */
   @Override
   @Transactional
   public PaginatedRes<GetSearchSskcookRes> findTagSskcookList(String tag, Integer page) {
@@ -165,6 +224,11 @@ public class SskcookServiceImpl implements SskcookService {
         .build();
   }
 
+  /**
+   * 좋아요
+   *
+   * @param req
+   */
   @Override
   @Transactional
   public void addLikes(PostLikesReq req) {
@@ -178,6 +242,11 @@ public class SskcookServiceImpl implements SskcookService {
     restTemplate.postForEntity(flaskUrl + "like", req, String.class);
   }
 
+  /**
+   * 좋아요 취소
+   *
+   * @param req
+   */
   @Override
   @Transactional
   public void removeLikes(PostLikesReq req) {
@@ -198,6 +267,11 @@ public class SskcookServiceImpl implements SskcookService {
     return sskcookMapper.selectLikesCount(req);
   }
 
+  /**
+   * 신고
+   *
+   * @param postLikesReq
+   */
   @Override
   @Transactional
   public void addReport(PostLikesReq postLikesReq) {
@@ -209,6 +283,11 @@ public class SskcookServiceImpl implements SskcookService {
     }
   }
 
+  /**
+   * 신고 취소
+   *
+   * @param postLikesReq
+   */
   @Override
   @Transactional
   public void removeReport(PostLikesReq postLikesReq) {
@@ -220,6 +299,12 @@ public class SskcookServiceImpl implements SskcookService {
     }
   }
 
+  /**
+   * 신고 조회
+   *
+   * @param postLikesReq
+   * @return 신고한 횟수
+   */
   @Override
   @Transactional(readOnly = true)
   public Integer findReport(PostLikesReq postLikesReq) {
@@ -231,7 +316,7 @@ public class SskcookServiceImpl implements SskcookService {
    * 기존 슥쿡 수정
    *
    * @param request (슥쿡 수정 요청 JSON)
-   * @param file (수정할 슥쿡 영상)
+   * @param file    (수정할 슥쿡 영상)
    * @return 수정된 항목 수
    */
   @Override
@@ -259,6 +344,12 @@ public class SskcookServiceImpl implements SskcookService {
 
   }
 
+  /**
+   * 슥쿡 상세 정보 조회
+   *
+   * @param sskcookId
+   * @return 슥쿡 상세 정보 데이터
+   */
   @Override
   @Transactional(readOnly = true)
   public GetTotalSskcookDetailsRes findSskcookTotalDetails(Integer sskcookId) {
@@ -323,7 +414,7 @@ public class SskcookServiceImpl implements SskcookService {
    * 새로운 슥쿡 등록
    *
    * @param request (슥쿡 등록 요청 JSON)
-   * @param file (슥쿡 영상)
+   * @param file    (슥쿡 영상)
    * @return 등록된 슥쿡 ID
    */
   @Override

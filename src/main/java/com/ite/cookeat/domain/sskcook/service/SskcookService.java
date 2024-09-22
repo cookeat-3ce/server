@@ -24,6 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
  * 2024.08.23    박유진       냉장고 속 슥쿡 추천
  * 2024.08.24    박유진       슥쿡 삭제 및 등록
  * 2024.08.27    박유진       슥쿡 수정
+ * 2024.08.31    양재혁       슥쿡 신고
+ * 2024.09.12    양재혁       슥쿡 삭제 시 MEMBER 테이블 내 슥쿡 개수 -1
  * </pre>
  */
 public interface SskcookService {
