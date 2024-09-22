@@ -12,6 +12,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Getter
+/**
+ * 스윽쿡 상세 조회를 위한 DTO
+ *
+ * @author 양재혁
+ * @version 1.0
+ * @since 2024.08.24
+ *
+ *
+ * <pre>
+ * 수정일          수정자         내용
+ * ------------- ----------- ---------------------------------
+ * 2024.08.24    양재혁       최초 생성
+ * </pre>
+ */
 public class GetLongcookRes {
 
   private Integer longcookId;

@@ -12,16 +12,12 @@ import com.ite.cookeat.domain.longcook.dto.PostLongcookReq;
 import com.ite.cookeat.domain.longcook.dto.PutLongcookReq;
 import com.ite.cookeat.domain.longcook.mapper.LongcookMapper;
 import com.ite.cookeat.domain.member.service.MemberService;
-import com.ite.cookeat.domain.sskcook.dto.GetNullSskcookDetailsReq;
-import com.ite.cookeat.domain.sskcook.dto.GetSskcookDetailsReq;
-import com.ite.cookeat.domain.sskcook.dto.GetTotalSskcookDetailsRes;
 import com.ite.cookeat.exception.CustomException;
 import com.ite.cookeat.global.dto.Criteria;
 import com.ite.cookeat.global.dto.PaginatedRes;
 import com.ite.cookeat.s3.service.S3UploadService;
 import com.ite.cookeat.util.SecurityUtils;
 import java.io.IOException;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +35,8 @@ import org.springframework.web.multipart.MultipartFile;
  * 수정일          수정자         내용
  * ------------- ----------- ---------------------------------
  * 2024.08.19    박유진       최초 생성
+ * 2024.08.23    양재혁       멤버 별 스윽쿡 리스트 조회
+ * 2024.08.24    양재혁       최신 순 스윽쿡 조회
  * 2024.08.25    박유진       스윽쿡 삭제
  * 2024.08.26    박유진       슥윽쿡 수정 및 등록
  * 2024.08.26    박유진       슥윽쿡 검색 및 조회
@@ -58,6 +56,13 @@ public class LongcookServiceImpl implements LongcookService {
   private final S3UploadService s3UploadService;
   private final ObjectMapper objectMapper;
 
+  /**
+   * 멤버 별 스윽쿡 리스트 페이징 조회
+   *
+   * @param username
+   * @param page
+   * @return 멤버 별 스윽쿡 리스트 페이징 데이터
+   */
   @Override
   @Transactional
   public PaginatedRes<GetLongcookRes> findCreatorLongcookList(String username, Integer page) {
@@ -72,6 +77,13 @@ public class LongcookServiceImpl implements LongcookService {
         .build();
   }
 
+  /**
+   * 최신 순 스윽쿡 리스트 페이징 조회
+   *
+   * @param keyword
+   * @param page
+   * @return 최신 순 스윽쿡 리스트 페이징 데이터
+   */
   @Override
   @Transactional
   public PaginatedRes<GetLongcookRes> findRecentLongcookList(String keyword, Integer page) {
@@ -106,7 +118,7 @@ public class LongcookServiceImpl implements LongcookService {
    * 기존 스윽쿡 수정
    *
    * @param request (스윽쿡 수정 요청 JSON)
-   * @param file (수정할 스윽쿡 영상)
+   * @param file    (수정할 스윽쿡 영상)
    * @return 수정된 항목 수
    */
   @Override
@@ -133,7 +145,7 @@ public class LongcookServiceImpl implements LongcookService {
    * 새로운 스윽쿡 등록
    *
    * @param request (스윽쿡 등록 요청 JSON)
-   * @param file (스윽쿡 영상)
+   * @param file    (스윽쿡 영상)
    * @return 등록된 스윽쿡 ID
    */
   @Override

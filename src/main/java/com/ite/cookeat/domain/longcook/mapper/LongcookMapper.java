@@ -7,7 +7,6 @@ import com.ite.cookeat.domain.longcook.dto.PostLongcookReq;
 import com.ite.cookeat.domain.longcook.dto.PutLongcookReq;
 import com.ite.cookeat.global.dto.Criteria;
 import java.util.List;
-import java.util.Optional;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,6 +22,8 @@ import org.apache.ibatis.annotations.Param;
  * 수정일          수정자         내용
  * ------------- ----------- ---------------------------------
  * 2024.08.19    박유진       최초 생성
+ * 2024.08.23    양재혁       멤버 별 스윽쿡 리스트 조회
+ * 2024.08.24    양재혁       최신 순 스윽쿡 조회
  * 2024.08.25    박유진       스윽쿡 삭제
  * 2024.08.26    박유진       슥윽쿡 수정 및 등록
  * 2024.08.26    박유진       슥윽쿡 검색 및 조회
@@ -36,6 +37,7 @@ public interface LongcookMapper {
   List<GetLongcookRes> selectLongcookList(@Param("cri") Criteria cri,
       @Param("username") String username);
 
+  // 스윽쿡 리스트 카운트
   Integer selectLongcookListCount(String username);
 
   // 스윽쿡 검색 조회

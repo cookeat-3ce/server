@@ -31,6 +31,8 @@ import org.springframework.web.multipart.MultipartFile;
  * 수정일          수정자         내용
  * ------------- ----------- ---------------------------------
  * 2024.08.19    박유진       최초 생성
+ * 2024.08.23    양재혁       멤버 별 스윽쿡 리스트 조회 API
+ * 2024.08.24    양재혁       최신 순 스윽쿡 조회 API
  * 2024.08.25    박유진       스윽쿡 삭제 API
  * 2024.08.26    박유진       슥윽쿡 수정 및 등록 API
  * 2024.08.26    박유진       슥윽쿡 검색 및 조회 API
@@ -51,7 +53,8 @@ public class LongcookController {
   }
 
   @GetMapping("/{longcookId}")
-  public ResponseEntity<GetTotalLongcookDetailsRes> longcookDetails(@PathVariable Integer longcookId) {
+  public ResponseEntity<GetTotalLongcookDetailsRes> longcookDetails(
+      @PathVariable Integer longcookId) {
     return ResponseEntity.ok(longcookService.findLongcookTotalDetails(longcookId));
   }
 
