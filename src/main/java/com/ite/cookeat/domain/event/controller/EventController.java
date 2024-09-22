@@ -20,13 +20,14 @@ public class EventController {
   private final EventService eventService;
 
   @GetMapping("/{eventId}")
-  public ResponseEntity<GetEventDetailRes> eventList(@PathVariable Integer eventId) {
+  public ResponseEntity<GetEventDetailRes> eventDetail(@PathVariable Integer eventId) {
     return ResponseEntity.ok(eventService.findEventDetail(eventId));
   }
 
   @GetMapping
-  public ResponseEntity<PaginatedRes<GetEventRes>> eventDetail(
-      @RequestParam(defaultValue = "1") Integer page) {
-    return ResponseEntity.ok(eventService.findEventList(page));
+  public ResponseEntity<PaginatedRes<GetEventRes>> eventList(
+      @RequestParam(defaultValue = "1") Integer page,
+      @RequestParam(required = false) String filtering) {
+    return ResponseEntity.ok(eventService.findEventList(page, filtering));
   }
 }

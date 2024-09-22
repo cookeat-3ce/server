@@ -6,7 +6,7 @@ import com.ite.cookeat.global.dto.PaginatedRes;
 
 public interface EventService {
 
-  PaginatedRes<GetEventRes> findEventList(Integer page);
+  PaginatedRes<GetEventRes> findEventList(Integer page, String filtering);
 
   GetEventDetailRes findEventDetail(Integer eventId);
 }
