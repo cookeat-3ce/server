@@ -12,6 +12,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 이벤트 (이벤트 목록 및 상세 조회)
+ *
+ * @author 김지수
+ * @version 1.0
+ *
+ *
+ * <pre>
+ * 수정일          수정자         내용
+ * ------------- ----------- ---------------------------------
+ * 2024.08.25    김지수       최초 생성, 이벤트 목록 및 상세 조회 API
+ * 2024.09.21    김지수       이벤트 목록 조회 API에 filtering 조건 추가
+ * </pre>
+ * @since 2024.08.25
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/event")
