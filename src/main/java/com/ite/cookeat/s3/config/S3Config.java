@@ -9,6 +9,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
+/**
+ * S3 이미지 업로더 설정
+ *
+ * @author 박유진
+ * @version 1.0
+ * @since 2024.08.24
+ *
+ *
+ * <pre>
+ * 수정일          수정자         내용
+ * ------------- ----------- ---------------------------------
+ * 2024.08.24    박유진       최초 생성
+ * </pre>
+ */
 @PropertySource("classpath:application.properties")
 @Configuration
 public class S3Config {
