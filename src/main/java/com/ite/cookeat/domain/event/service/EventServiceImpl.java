@@ -19,7 +19,7 @@ public class EventServiceImpl implements EventService {
   @Transactional(readOnly = true)
   public PaginatedRes<GetEventRes> findEventList(Integer page, String filtering) {
     Criteria cri = Criteria.builder()
-        .pageSize(filtering.equals("recipe") ? 3 : 6)
+        .pageSize(filtering != null && filtering.equals("recipe") ? 3 : 6)
         .pageNum(page)
         .build();
 
