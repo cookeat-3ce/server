@@ -13,6 +13,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+/**
+ * 관리자 (이벤트 등록, 사용자 인증 조회 및 처리, 신고된 슥쿡 관리 등)
+ *
+ * @author 김지수
+ * @version 1.0
+ *
+ *
+ * <pre>
+ * 수정일          수정자         내용
+ * ------------- ----------- ---------------------------------
+ * 2024.08.26    김지수       최초 생성, 이벤트 알림 신청
+ * 2024.09.11    김지수       SSE 연결 및 이벤트 전송
+ * </pre>
+ * @since 2024.08.26
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/alert")
