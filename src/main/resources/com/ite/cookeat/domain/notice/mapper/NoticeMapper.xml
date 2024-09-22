@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    파일명 : NoticeMapper.xml
+    설  명 : 사용자 공지
+    == 개정이력 ========================================
+    수정일         수정자     수정내용
+    ==========   =======   ================================
+ * 2024.08.23    김지수       최초 생성, 공지 등록, 삭제
+-->
 <mapper namespace="com.ite.cookeat.domain.notice.mapper.NoticeMapper">
   <insert id="insertNotice" parameterType="PostNoticeReq">
     <selectKey keyProperty="noticeId" order="BEFORE" resultType="Integer">
