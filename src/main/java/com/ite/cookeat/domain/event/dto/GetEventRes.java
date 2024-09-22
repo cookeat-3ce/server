@@ -7,6 +7,20 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 이벤트 목록 조회 DTO
+ *
+ * @author 김지수
+ * @version 1.0
+ *
+ *
+ * <pre>
+ * 수정일          수정자         내용
+ * ------------- ----------- ---------------------------------
+ * 2024.08.25    김지수       최초 생성
+ * </pre>
+ * @since 2024.08.25
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
