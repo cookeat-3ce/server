@@ -22,6 +22,23 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * 슥쿡 등록 및 조회, 상세 기능(좋아요, 저장, 신고) API
+ *
+ * @author 박유진
+ * @version 1.0
+ * @since 2024.08.19
+ *
+ *
+ * <pre>
+ * 수정일          수정자         내용
+ * ------------- ----------- ---------------------------------
+ * 2024.08.19    박유진       최초 생성
+ * 2024.08.23    박유진       냉장고 속 슥쿡 추천 API
+ * 2024.08.24    박유진       슥쿡 삭제 및 등록 API
+ * 2024.08.27    박유진       슥쿡 수정 API
+ * </pre>
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/sskcook")
