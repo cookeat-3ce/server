@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    파일명 : FridgeMapper.xml
+    설  명 : 사용자 냉장고 페이지
+
+    == 개정이력 ========================================
+    수정일         수정자     수정내용
+    ==========   =======   ================================
+ * 2024.08.23    김지수       최초 생성, 식재료 조회
+ * 2024.08.24    김지수       식재료 등록, 삭제
+ * 2024.09.11    김지수       식재료 조회 시 filtering 조건 추가
+-->
 <mapper namespace="com.ite.cookeat.domain.fridge.mapper.FridgeMapper">
 
   <insert id="insertIngredient" parameterType="PostMemberIngredientReq">
