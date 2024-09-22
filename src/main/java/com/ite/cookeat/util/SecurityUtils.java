@@ -4,6 +4,19 @@ import com.ite.cookeat.security.PrincipalDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+/**
+ * Spring Security의 인증 컨텍스트에서 현재 인증된 사용자의 정보 조회
+ *
+ * @author 김지수
+ * @version 1.0
+ * @since 2024.08.29
+ *
+ * <pre>
+ * 수정일          수정자         내용
+ * ------------- ----------- ---------------------------------
+ * 2024.08.29    김지수       최초 생성
+ * </pre>
+ */
 public class SecurityUtils {
 
   /**
