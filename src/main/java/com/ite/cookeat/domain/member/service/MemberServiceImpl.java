@@ -150,6 +150,12 @@ public class MemberServiceImpl implements MemberService {
         .build();
   }
 
+  /**
+   * username으로 member ID 조회
+   *
+   * @param username (서비스 ID)
+   * @return 사용자 member ID
+   */
   @Override
   @Transactional(readOnly = true)
   public Integer findMemberId(String username) {
@@ -182,6 +188,12 @@ public class MemberServiceImpl implements MemberService {
         .build();
   }
 
+  /**
+   * 한줄 소개 등록
+   *
+   * @param req (한줄 소개, 등록하는 사용자 정보)
+   * @return 1 이상이면, 공지 등록 요청 성공
+   */
   @Override
   @Transactional
   public Integer modifyMemberOneLiner(PostMemberOneLinerReq req) {
@@ -192,6 +204,12 @@ public class MemberServiceImpl implements MemberService {
     return result;
   }
 
+  /**
+   * 사용자 구독
+   *
+   * @param req (구독하는, 구독 당하는 사용자 정보)
+   * @return 1 이상이면, 구독 요청 성공
+   */
   @Override
   @Transactional
   public Integer addSubscription(PostSubscriptionReq req) {
@@ -230,6 +248,11 @@ public class MemberServiceImpl implements MemberService {
         .build();
   }
 
+  /**
+   * 회원 탈퇴
+   *
+   * @param username (서비스 ID)
+   */
   @Override
   @Transactional
   public void modifyMemberDeletedate(String username) {
@@ -239,6 +262,13 @@ public class MemberServiceImpl implements MemberService {
     }
   }
 
+  /**
+   * 사용자 인증 상태 변경
+   *
+   * @param username (서비스 ID)
+   * @param status   (바꿀 상태)
+   * @return 1 이상이면, 사용자 인증 상태 변경 요청 성공
+   */
   @Override
   @Transactional
   public Integer modifyVerifyStatus(String username, String status) {
@@ -249,6 +279,12 @@ public class MemberServiceImpl implements MemberService {
     return result;
   }
 
+  /**
+   * 사용자 인증 상태 조회
+   *
+   * @param username (서비스 ID)
+   * @return 인증 상태
+   */
   @Override
   @Transactional
   public String findMemberVerifiedStatus(String username) {
@@ -259,6 +295,13 @@ public class MemberServiceImpl implements MemberService {
     return result;
   }
 
+  /**
+   * 사용자 공지 페이징된 데이터
+   *
+   * @param username (서비스 ID)
+   * @param page     (페이지)
+   * @return 페이징 처리된 사용자 공지
+   */
   @Override
   @Transactional(readOnly = true)
   public PaginatedRes<GetMemberNoticeRes> findMemberNotices(String username, Integer page) {

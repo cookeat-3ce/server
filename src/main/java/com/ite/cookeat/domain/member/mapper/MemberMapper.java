@@ -24,6 +24,11 @@ import org.apache.ibatis.annotations.Param;
  * 수정일          수정자         내용
  * ------------- ----------- ---------------------------------
  * 2024.08.22    양재혁       최초 생성
+ * 2024.08.23    김지수       공지 목록 조회
+ * 2024.08.24    김지수       한줄 소개 등록
+ * 2024.08.26    김지수       사용자 인증 상태 조회
+ * 2024.08.27    김지수       사용자 구독
+ * 2024.08.29    김지수       구독 목록 stored procedure 적용
  * </pre>
  */
 
@@ -44,11 +49,14 @@ public interface MemberMapper {
   // 멤버 네임 중복 조회
   Integer selectDuplicatedUsername(String username);
 
+  // 사용자 공지 목록 조회 (페이징)
   List<GetMemberNoticeRes> selectMemberNotices(@Param("cri") Criteria cri,
       @Param("username") String username);
 
+  // 사용자 공지 전체 갯수 조회
   Integer selectMemberNoticeCount(String username);
 
+  // username으로 member ID 조회
   Optional<Integer> selectMemberId(String username);
 
   // 멤버 검색 페이징 조회
@@ -58,15 +66,21 @@ public interface MemberMapper {
   // 멤버 검색 페이징 카운트
   Integer selectSearchMemberCount(String keyword);
 
+  // 사용자 한줄 소개 수정
   Integer updateMemberOneLiner(PostMemberOneLinerReq req);
 
+  // 사용자 구둑 목록 조회
   void selectMemberSubscriptionList(GetSubscriptionMemberReq req);
 
+  // 사용자 탈퇴
   Integer updateMemberDeletedate(String username);
 
+  // 사용자 인증 상태 변경 (기존 -> status)
   Integer updateVerifiedStatus(@Param("username") String username, @Param("status") String status);
 
+  // 사용자 인증 상태 조회
   String selectMemberVerifiedStatus(String username);
 
+  // 사용자 구독
   Integer insertSubscription(PostSubscriptionReq req);
 }
