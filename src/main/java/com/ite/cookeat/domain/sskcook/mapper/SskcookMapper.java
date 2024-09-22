@@ -12,12 +12,27 @@ import com.ite.cookeat.global.dto.Criteria;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
+/**
+ * 슥쿡과 관련된 요청을 처리하는 Mybatis Mapper
+ *
+ * @author 박유진
+ * @version 1.0
+ * @since 2024.08.19
+ *
+ *
+ * <pre>
+ * 수정일          수정자         내용
+ * ------------- ----------- ---------------------------------
+ * 2024.08.19    박유진       최초 생성
+ * </pre>
+ */
 public interface SskcookMapper {
 
 
   List<GetSearchSskcookRes> selectSearchRecentSskcook(@Param("cri") Criteria cri,
       @Param("keyword") String keyword);
 
+  // 슥쿡 등록
   void addSskcookWithDetails(PostSskcookReq req);
 
   List<GetSearchSskcookRes> selectSearchLikesSskcookList(@Param("cri") Criteria cri,
@@ -62,10 +77,10 @@ public interface SskcookMapper {
 
   void selectNullSskcookDetails(GetNullSskcookDetailsReq req);
 
+  // 슥쿡 변경
   Integer updateSskcookWithDetails(PutSskcookReq putSskcookReq);
 
-  String selectSskcookUrl(Integer sskcookId);
-
+  // 슥쿡과 업로드한 사용자 상세 조회
   GetFridgeRecipeRes selectMemberSskcookDetailsBySskcookId(Integer sskcookId);
 
   List<GetTopSskcookRes> selectTopSskcookList(String yearMonth);
