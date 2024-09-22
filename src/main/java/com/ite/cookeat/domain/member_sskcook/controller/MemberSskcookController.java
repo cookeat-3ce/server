@@ -13,6 +13,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * @author 양재혁
+ * @version 1.0
+ * @since 2024.08.21
+ *
+ *
+ * <pre>
+ * 수정일          수정자         내용
+ * ------------- ----------- ---------------------------------
+ * 2024.08.25    양재혁       최초 생성
+ * 2024.08.25    양재혁       보관하기
+ * 2024.08.25    양재혁       보관함 조회
+ * </pre>
+ */
 @RestController
 @RequestMapping("/api/member/sskcook")
 @RequiredArgsConstructor
