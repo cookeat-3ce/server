@@ -13,6 +13,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * @author 양재혁
+ * @version 1.0
+ * @since 2024.08.25
+ *
+ *
+ * <pre>
+ * 수정일          수정자         내용
+ * ------------- ----------- ---------------------------------
+ * 2024.08.25    양재혁       최초 생성
+ * </pre>
+ */
 @Service
 @RequiredArgsConstructor
 public class MemberSskcookServiceImpl implements MemberSskcookService {
@@ -20,6 +32,11 @@ public class MemberSskcookServiceImpl implements MemberSskcookService {
   private final MemberSskcookMapper memberSskcookMapper;
   private final MemberService memberService;
 
+  /**
+   * 보관하기
+   *
+   * @param req
+   */
   @Override
   @Transactional
   public void addMemberSskcook(PostMemberSskcookReq req) {
@@ -31,6 +48,11 @@ public class MemberSskcookServiceImpl implements MemberSskcookService {
     }
   }
 
+  /**
+   * 보관하기 취소
+   *
+   * @param req
+   */
   @Override
   @Transactional
   public void removeMemberSskcook(PostMemberSskcookReq req) {
@@ -41,6 +63,12 @@ public class MemberSskcookServiceImpl implements MemberSskcookService {
     }
   }
 
+  /**
+   * 보관함 내 여부 확인
+   *
+   * @param req
+   * @return 보관함 내 슥쿡 개수
+   */
   @Override
   @Transactional(readOnly = true)
   public Integer findMemberSskcook(PostMemberSskcookReq req) {
@@ -48,6 +76,12 @@ public class MemberSskcookServiceImpl implements MemberSskcookService {
     return memberSskcookMapper.selectMemberSskcookCount(req);
   }
 
+  /**
+   * 보관함 조회
+   *
+   * @param page
+   * @return 보관함 목록 페이징 데이터
+   */
   @Override
   @Transactional(readOnly = true)
   public PaginatedRes<GetMemberSskcookRes> findMemberSskcookList(Integer page) {

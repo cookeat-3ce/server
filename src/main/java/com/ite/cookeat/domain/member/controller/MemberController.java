@@ -24,6 +24,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * @author 양재혁
+ * @version 1.0
+ * @since 2024.08.21
+ *
+ *
+ * <pre>
+ * 수정일          수정자         내용
+ * ------------- ----------- ---------------------------------
+ * 2024.08.21    양재혁       최초 생성
+ * 2024.08.21    양재혁       회원 가입
+ * 2024.08.21    양재혁       로그인
+ * 2024.08.22    양재혁       멤버 정보 조회
+ * 2024.08.23    양재혁       멤버 검색
+ * 2024.08.25    양재혁       구독 멤버 조회
+ * </pre>
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/member")
@@ -91,7 +108,7 @@ public class MemberController {
       @RequestParam Integer page) {
     return ResponseEntity.ok(memberService.findMemberNotices(username, page));
   }
-  
+
   @GetMapping("/verify/{username}")
   public ResponseEntity<String> memberVerifyStatus(@PathVariable String username) {
     return ResponseEntity.ok(memberService.findMemberVerifiedStatus(username));

@@ -30,6 +30,21 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 @Slf4j
+/**
+ * JWT 생성
+ *
+ * @author 양재혁
+ * @version 1.0
+ * @since 2024.08.21
+ *
+ *
+ * <pre>
+ * 수정일          수정자         내용
+ * ------------- ----------- ---------------------------------
+ * 2024.08.21    양재혁       최초 생성
+ * </pre>
+ */
+
 public class JwtTokenProvider implements InitializingBean {
 
   private static final String AUTHORITIES_KEY = "auth";
