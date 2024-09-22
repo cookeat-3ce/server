@@ -5,15 +5,29 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.sql.Blob;
+/**
+ * 로그인 성공 시 응답 DTO
+ *
+ * @author 양재혁
+ * @version 1.0
+ * @since 2024.08.21
+ *
+ *
+ * <pre>
+ * 수정일          수정자         내용
+ * ------------- ----------- ---------------------------------
+ * 2024.08.21    양재혁       최초 생성
+ * </pre>
+ */
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Builder
 public class PostLoginRes {
-    private String username;
-    private String nickname;
-    private String profileImage;
-    private String accessToken;
+
+  private String username;
+  private String nickname;
+  private String profileImage;
+  private String accessToken;
 }

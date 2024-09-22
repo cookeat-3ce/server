@@ -12,6 +12,20 @@ import java.util.List;
 import java.util.Optional;
 import org.apache.ibatis.annotations.Param;
 
+/**
+ * 멤버와 관련된 요청을 처리하는 Mybatis Mapper
+ *
+ * @author 양재혁
+ * @version 1.0
+ * @since 2024.08.22
+ *
+ *
+ * <pre>
+ * 수정일          수정자         내용
+ * ------------- ----------- ---------------------------------
+ * 2024.08.22    양재혁       최초 생성
+ * </pre>
+ */
 
 public interface MemberMapper {
 

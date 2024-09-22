@@ -32,6 +32,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * @author 양재혁
+ * @version 1.0
+ * @since 2024.08.22
+ *
+ *
+ * <pre>
+ * 수정일          수정자         내용
+ * ------------- ----------- ---------------------------------
+ * 2024.08.22    양재혁       최초 생성
+ * </pre>
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -42,6 +54,12 @@ public class MemberServiceImpl implements MemberService {
   private final MemberMapper memberMapper;
   private final JwtTokenProvider jwtTokenProvider;
 
+  /**
+   * 멤버 정보 조회
+   *
+   * @param username
+   * @return 멤버 정보
+   */
   @Override
   @Transactional(readOnly = true)
   public GetUserDetailsRes findUserDetailsByUsername(String username) {
@@ -84,6 +102,11 @@ public class MemberServiceImpl implements MemberService {
 
   }
 
+  /**
+   * 회원 가입
+   *
+   * @param postSignUpReq
+   */
   @Override
   @Transactional
   public void addMember(PostSignUpReq postSignUpReq) {
@@ -101,6 +124,12 @@ public class MemberServiceImpl implements MemberService {
     memberMapper.insertMember(member);
   }
 
+  /**
+   * 로그인
+   *
+   * @param postLoginReq
+   * @return 로그인 성공한 멤버 정보
+   */
   @Override
   @Transactional
   public PostLoginRes login(PostLoginReq postLoginReq) {
@@ -131,6 +160,13 @@ public class MemberServiceImpl implements MemberService {
     return result.get();
   }
 
+  /**
+   * 멤버 검색
+   *
+   * @param keyword
+   * @param page
+   * @return 멤버 목록 페이징 데이터
+   */
   @Override
   @Transactional
   public PaginatedRes<GetUserDetailsRes> findSearchMember(String keyword, Integer page) {
@@ -164,6 +200,12 @@ public class MemberServiceImpl implements MemberService {
     return req.getResult();
   }
 
+  /**
+   * 구독한 멤버 목록
+   *
+   * @param page
+   * @return 구독한 멤버 목록 페이징 데이터
+   */
   @Override
   @Transactional(readOnly = true)
   public PaginatedRes<GetSubscriptionMemberDetailsRes> findMemberSubscriptionList(Integer page) {

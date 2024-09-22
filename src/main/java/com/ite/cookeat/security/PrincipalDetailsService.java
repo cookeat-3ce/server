@@ -14,6 +14,20 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+/**
+ * spring security에서 사용되는 사용자 인터페이스(UserDetails)를 구현한 클래스
+ *
+ * @author 양재혁
+ * @version 1.0
+ * @since 2024.08.21
+ *
+ *
+ * <pre>
+ * 수정일          수정자         내용
+ * ------------- ----------- ---------------------------------
+ * 2024.08.21    양재혁       최초 생성
+ * </pre>
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
