@@ -15,6 +15,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 사용자 냉장고 (식재료 목록 조회, 등록, 삭제)
+ *
+ * @author 김지수
+ * @version 1.0
+ *
+ *
+ * <pre>
+ * 수정일          수정자         내용
+ * ------------- ----------- ---------------------------------
+ * 2024.08.23    김지수       최초 생성, 식재료 목록 조회 API
+ * 2024.08.24    김지수       식재료 등록, 삭제 API
+ * 2024.09.11    김지수       식재료 목록 조회
+ * </pre>
+ * @since 2024.08.23
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/fridge")

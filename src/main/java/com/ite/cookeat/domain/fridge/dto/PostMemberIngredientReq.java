@@ -1,16 +1,28 @@
 package com.ite.cookeat.domain.fridge.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.ite.cookeat.util.KSTDateSerializer;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * 식재료 등록 DTO
+ *
+ * @author 김지수
+ * @version 1.0
+ *
+ *
+ * <pre>
+ * 수정일          수정자         내용
+ * ------------- ----------- ---------------------------------
+ * 2024.08.24    김지수       최초 생성
+ * 2024.09.02    박유진       유효기간 데이터 추가
+ * </pre>
+ * @since 2024.08.23
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
