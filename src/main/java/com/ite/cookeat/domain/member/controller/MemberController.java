@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * 멤버 (회원가입, 로그인, 사용자 정보 조회 등)
+ *
  * @author 양재혁
  * @version 1.0
  * @since 2024.08.21
@@ -38,7 +40,11 @@ import org.springframework.web.bind.annotation.RestController;
  * 2024.08.21    양재혁       로그인
  * 2024.08.22    양재혁       멤버 정보 조회
  * 2024.08.23    양재혁       멤버 검색
+ * 2024.08.23    김지수       사용자 공지 조회
+ * 2024.08.24    김지수       한줄 소개 수정
  * 2024.08.25    양재혁       구독 멤버 조회
+ * 2024.08.26    김지수       사용자 인증 상태 조회
+ * 2024.08.27    김지수       사용자 구독
  * </pre>
  */
 @RestController
