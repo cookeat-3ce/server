@@ -61,6 +61,7 @@ import org.springframework.web.multipart.MultipartFile;
  * 2024.08.31    양재혁       신고
  * 2024.08.31    양재혁       신고 취소
  * 2024.08.31    양재혁       신고 조회
+ * 2024.09.10    박유진       좋아요 시 추천 모델 업데이트 되도록 수정
  * 2024.09.12    양재혁       슥쿡 삭제 시 MEMBER테이블 내 슥쿡 개수 -1
  * </pre>
  */
@@ -445,6 +446,12 @@ public class SskcookServiceImpl implements SskcookService {
 
   }
 
+  /**
+   * 새로운 슥쿡 등록
+   *
+   * @param yearMonth 상위 슥쿡 조회
+   * @return 상위 슥쿡 데이터
+   */
   @Override
   public List<GetTopSskcookRes> findTopSskcookList(String yearMonth) {
     return sskcookMapper.selectTopSskcookList(yearMonth);
